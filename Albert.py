@@ -12,13 +12,14 @@ try:
     from api import apikey
     from tqdm import tqdm as tqdm
     import time
+    import os
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
 
 def progress_bar(duration):
     for i in tqdm(range(int(duration))):
         time.sleep(1)
-
+os.system('clear')
 # logo = repr('''
 # $cayn                                               __     _____     ________    _______   _______  ___________
 # $cayn                                              /""\\    |"  |     |   _ "\\  /"     "| /"     \\("     _   ")
@@ -251,7 +252,7 @@ def list_reject(target = ''):
             write_file(''.join(oops))
         return False
     except shodan.APIError as e:
-
+        os.system('clear')
         logo = '''
 
          ________   __        _______   ______   ______   _________   
@@ -287,19 +288,23 @@ if __name__ == '__main__':
     run = 't'
     while run == 't':
         try:
+            os.system('clear')
             options = str(input("[ + ] Would you like to use:\n"
                        "1.) Shodan\n"
                        "2.) Nmap(Targeted Scanning of host system written out to XML file)\n"
                        "->"))
             if options == '1':
+                os.system('clear')
                 choice = str(input("[ + ] Is this a file list, or a single IP:\n"
                            "1.) File List\n"
                            "2.) Single IP\n"
                            "->"))
                 if choice == '1':
+                    os.system('clear')
                     dest = str(input("[ + ] Please input the name of the file list:\n->"))
                     liz = set()
                     if dest == '':
+                        os.system('clear')
                         print("[ ! ] Hey! Hey! Hey! Need a file name! [ ! ]")
                         run = 'a'
                     reader = open(dest, "r")
@@ -307,14 +312,17 @@ if __name__ == '__main__':
                         line.strip("\n")
                         list_reject(line)
                 if choice == '2':
+                    os.system('clear')
                     choice = str(input("[ + ] Please Input the IP: \n->"))
                     list_reject(choice)
 
             if options == '2':
+                os.system('clear')
                 host = str(input("[ + ] Please input host IP:\n->"))
                 port = str(input("[ + ] Please input port:\n->"))
                 nmapScan(host, port)
             if options == '':
+                os.system('clear')
                 print("[ ! ] Please enter a value! [ ! ]")
                 print("[ ?? ] Exiting! [ ?? ]")
                 sys.exit(1)
