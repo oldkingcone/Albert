@@ -16,6 +16,22 @@ try:
     import platform
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
+albert = random.randint(1, 3)
+if albert == 1:
+    face = open("./albert_face.txt", "r")
+    lulz = face.readlines()
+    for line in lulz:
+        print(line)
+if albert == 2:
+    face = open("./albert_face_2.txt", "r")
+    lulz = face.readlines()
+    for line in lulz:
+        print(line)
+if albert == 3:
+    face = open("./fat_albert_3", "r")
+    lulz = face.readlines()
+    for line in lulz:
+        print(line)
 test = platform.system()
 if test == 'Windows': clear = 'cls'
 elif test == 'Linux': clear = 'clear'
