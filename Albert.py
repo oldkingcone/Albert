@@ -18,7 +18,6 @@ try:
     import platform
     from time import sleep
     from termcolor import cprint
-    import scapy.all.ICMP
     from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
     import dpkt
 except (ImportError) as e:
@@ -116,9 +115,8 @@ def nmapScan(tgtHost, tgtPort):  # Nmap function created
 
 def scapy_selection(scan_hosts):
     RUN_FREQUENCY = 10
-
-    scheduler = sched.scheduler(time.time, time.sleep)
     global scheduler
+    scheduler = sched.scheduler(time.time, time.sleep)
     scheduler.enter(RUN_FREQUENCY, 1, detect_inactive_hosts, (scan_hosts, ))
     inactive_hosts = []
     try:
@@ -158,7 +156,7 @@ if __name__ == '__main__':
             options = str(input("[ + ] Would you like to use:\n"
                        "1.) Shodan\n"
                        "2.) Nmap(Targeted Scanning of host system written out to XML file)\n"
-                       "3.) Subnet Calculation/Detection"
+                       "3.) Inactive(Zombie Host Scapy Scan)"
                        "->"))
             if options == '1':
                 os.system(clear)
