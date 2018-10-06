@@ -19,24 +19,25 @@ except (ImportError) as e:
 
 api = shodan.Shodan(apikey)    
 def albert_faces():
+    alberts = ''
     albert = random.randint(1, 3)
     if albert == 1:alberts = "./albert_face.txt"
     if albert == 2:alberts = "./albert_face_2.txt"
     if albert == 3: alberts = "./fat_albert_3"
     face = open(alberts, "r")
     lulz = face.readlines()
-        for line in lulz:
-            print(line)
-            print("Loading The King Himself Hopefully He Left You Some Exploits....")
-            print("Gr33ts: Chef Gordon, Root, Johnny 5")
-def test_system():
-    test = platform.system()
-    if test == 'Windows': clear = 'cls'
-    elif test == 'Linux': clear = 'clear'
-    elif test == 'Java': clear = 'clear'
-    elif test == '':
-        print("[ ! ] Exiting, you have an unknown system! [ ! ] ")
-        sys.exit(1)
+    for line in lulz:
+        print(line)
+    print("Loading The King Himself Hopefully He Left You Some Exploits....")
+    print("Gr33ts: Chef Gordon, Root, Johnny 5")
+
+test = platform.system()
+if test == 'Windows': clear = 'cls'
+elif test == 'Linux': clear = 'clear'
+elif test == 'Java': clear = 'clear'
+elif test == '':
+    print("[ ! ] Exiting, you have an unknown system! [ ! ] ")
+    sys.exit(1)
 def progress_bar(duration):
     for i in tqdm(range(int(duration))):
         time.sleep(1)
