@@ -2,3 +2,4 @@ nmap
 tqdm
 scapy
 shodan
+termcolor
