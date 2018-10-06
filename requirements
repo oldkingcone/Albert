@@ -2,6 +2,6 @@ nmap
 tqdm
 scapy
 shodan
-cprint
+termcolor
 netaddr
 dpkt
