@@ -153,6 +153,7 @@ if __name__ == '__main__':
     #@todo DNS Dumpster routine
     #@todo, Scapy routine, to create custom icmp messages on the fly. -> going with ARP instead
     #@todo, add packet sniffing on the fly.
+    #@todo, add functionality to dump nmap
     run = 't'
     albert_faces()
     sleep(0.4)
