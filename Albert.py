@@ -14,6 +14,7 @@ try:
     import time
     import os
     import platform
+    import time
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
 
@@ -28,6 +29,7 @@ def albert_faces():
     lulz = face.readlines()
     for line in lulz:
         print(line)
+        time.sleep(1)
     print("Loading The King Himself Hopefully He Left You Some Exploits....")
     print("Gr33ts: Chef Gordon, Root, Johnny 5")
 
