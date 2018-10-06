@@ -113,38 +113,45 @@ def nmapScan(tgtHost, tgtPort):  # Nmap function created
     print("[ ! ]  {}\n TCP: {} \n UP/DOWN: {}\n".format(tgtHost, tgtPort, state))
     return False
 
-def scapy_selection(scan_hosts):
-    RUN_FREQUENCY = 10
-    global scheduler
-    scheduler = sched.scheduler(time.time, time.sleep)
-    scheduler.enter(RUN_FREQUENCY, 1, detect_inactive_hosts, (scan_hosts, ))
-    inactive_hosts = []
-    try:
-        ans, unans = sr(IP(dst=scan_hosts)/ICMP(), retry=0, timeout=1)
-        ans.summary(lambda r : r.sprintf("%IP.src% is alive and well!"))
-        for inactive in unans:
-            print("{} is inactive..".format(inactive.dst))
 
-        print("Total: {} hosts are inactive".format(len(inactive_hosts)))
-    except KeyboardInterrupt:
-        exit(0)
-    return False
 def subnet_discover(ip):
     import netaddr
     question = netaddr.IPAddress(ip).reverse_dns()
-    print("{}".format(question))
-    print("{}".format(netaddr.IPNetwork.cidr(ip)))
-    print("Netmask/HostMask:\n{}\n{}\n{}\n{}\n{}".format(netaddr.IPNetwork.is_private(ip)),
-                                             netaddr.IPNetwork(ip).netmask(),
-                                             netaddr.IPNetwork(ip).broadcast(),
-                                             netaddr.IPNetwork(ip).hostmask(),
-                                             netaddr.IPNetwork(ip).is_multicast())
+    print("Reverse DNS {}".format(netaddr.IPAddress(ip).reverse_dns()))
+    print("Subnet/CIDR: {}".format(netaddr.IPNetwork(ip).cidr()))
+    print("Private? {}".format(netaddr.IPNetwork.is_private(ip)))
+    print("Net Mask: {}".format(netaddr.IPNetwork(ip).netmask()))
+    print("Broad Cast: {}".format(netaddr.IPNetwork(ip).broadcast()))
+    print("Host Mask: {}".format(netaddr.IPNetwork(ip).hostmask()))
+    print("Multicast: {}".format(netaddr.IPNetwork(ip).is_multicast()))
+    return question
+
+def scapy_selection(net):
+    import datetime as dt
+    from scapy.all import srp,ETHER_ANY,ARPHDR_ETHER,conf
+    try:
+        interface = str(input("[ + ] Please choose an interface [ + ]\n->"))
+        ip = net
+        time_start = dt.datetime.now()
+        conf.verb = 0
+        ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=ip), timeout=2, iface=interface, inter=0.1)
+        print("MAC and IP\n")
+        for snd, rcv in ans:
+            print(rcv.sprintf(r"%Ether.src% - %ARP.psrc%"))
+            stop_time = dt.datetime.now()
+            total_time = time_start - stop_time
+            print("[ ** ] Complete! [ ** ]")
+            print("[ ** ] Finished in: {} [ ** ]".format(total_time))
+
+    except:
+        raise
+
 
 if __name__ == '__main__':
     #@todo bring in a honeypot detection routine.
     #@todo a way to avoid docker containers like the plague.
     #@todo DNS Dumpster routine
-    #@todo, Scapy routine, to create custom icmp messages on the fly.
+    #@todo, Scapy routine, to create custom icmp messages on the fly. -> going with ARP instead
     #@todo, add packet sniffing on the fly.
     run = 't'
     albert_faces()
@@ -156,6 +163,7 @@ if __name__ == '__main__':
                        "1.) Shodan\n"
                        "2.) Nmap(Targeted Scanning of host system written out to XML file)\n"
                        "3.) Inactive(Zombie Host Scapy Scan)"
+                       "4.) NMAP Scan of subnet hosts(ARP or ICMP ACK)"
                        "->"))
             if options == '1':
                 os.system(clear)
@@ -189,6 +197,15 @@ if __name__ == '__main__':
                 choice = str(input("[ + ] Please input the subnet to detect [ + ]\n->"))
                 if choice != '':
                     subnet_discover(choice)
+            if options == "4":
+                chance = str(input("[ ** ] Are you choosing\n"
+                                   "1.) ARP\n"
+                                   "2.) ICMP ACK\n->"))
+                if chance == "2":
+                    print("[ !! ] So sorry, not done with that yet... [ !! ]")
+                if chance == "1":
+                    strike = str(input("[ + ] Please enter the IP, we will need to scan the subnet [ + ]"))
+                    scapy_selection(subnet_discover(strike))
             if options == '':
                 os.system(clear)
                 print("[ ! ] Please enter a value! [ ! ]")
