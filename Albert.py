@@ -22,9 +22,12 @@ try:
     import dpkt
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
-if api.apikey() == '':
-    print("Your API Key empty: \n->{}".format(api.apikey()))
+
+ap = apikey
+if ap == '':
+    print("Your API Key empty: \n->{}".format(ap))
     sys.exit(1)
+
 api = shodan.Shodan(apikey)
 
 def albert_faces():
