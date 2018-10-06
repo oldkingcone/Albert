@@ -28,7 +28,7 @@ def albert_faces():
     face = open(alberts, "r")
     lulz = face.readlines()
     for line in lulz:
-        print(line)
+        print(line.strip("\n")
         time.sleep(0.5)
     print("Loading The King Himself Hopefully He Left You Some Exploits....")
     print("Gr33ts: Chef Gordon, Root, Johnny 5")
