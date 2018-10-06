@@ -27,6 +27,8 @@ ap = apikey
 if ap == '':
     print("Your API Key empty: \n->{}".format(ap))
     sys.exit(1)
+if ap != '':
+    print("Your API Key empty: \n->{}".format(ap))
 
 api = shodan.Shodan(apikey)
 
