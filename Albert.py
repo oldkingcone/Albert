@@ -116,7 +116,7 @@ def nmapScan(tgtHost, tgtPort):  # Nmap function created
 
 def subnet_discover(ip):
     import netaddr
-    question = netaddr.IPAddress(ip).reverse_dns()
+    question = netaddr.IPAddress(ip).cidr()
     print("Reverse DNS {}".format(netaddr.IPAddress(ip).reverse_dns()))
     print("Subnet/CIDR: {}".format(netaddr.IPNetwork(ip).cidr()))
     print("Private? {}".format(netaddr.IPNetwork.is_private(ip)))
