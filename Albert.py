@@ -18,7 +18,6 @@ try:
     import platform
     from time import sleep
     from termcolor import cprint
-    from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
     import dpkt
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
