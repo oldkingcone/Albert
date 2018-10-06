@@ -133,6 +133,7 @@ def scapy_selection(net):
 
 
 if __name__ == '__main__':
+    #@todo, convert to nmap structured XML file from CSV
     #@todo bring in a honeypot detection routine.
     #@todo a way to avoid docker containers like the plague.
     #@todo DNS Dumpster routine
