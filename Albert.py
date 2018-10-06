@@ -134,8 +134,7 @@ def subnet_discover(ip):
     question = netaddr.IPAddress(ip).reverse_dns()
     print("{}".format(question))
     print("{}".format(netaddr.IPNetwork.cidr(ip)))
-    print("Netmask/HostMask:\n{}\n{}\n{}\n{}\n{}\n{}".format(netaddr.IPNetwork.is_multicast(ip),
-                                             netaddr.IPNetwork.is_private(ip)),
+    print("Netmask/HostMask:\n{}\n{}\n{}\n{}\n{}".format(netaddr.IPNetwork.is_private(ip)),
                                              netaddr.IPNetwork(ip).netmask(),
                                              netaddr.IPNetwork(ip).broadcast(),
                                              netaddr.IPNetwork(ip).hostmask(),
