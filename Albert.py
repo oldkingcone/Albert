@@ -13,9 +13,16 @@ try:
     from tqdm import tqdm as tqdm
     import time
     import os
+    import platform
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
-
+test = platform.system()
+if test == 'Windows': clear = 'cls'
+elif test == 'Linux': clear = 'clear'
+elif test == 'Java': clear = 'clear'
+elif test == '':
+    print("[ ! ] Exiting, you have an unknown system! [ ! ] ")
+    sys.exit(1)
 def progress_bar(duration):
     for i in tqdm(range(int(duration))):
         time.sleep(1)
@@ -246,7 +253,6 @@ def list_reject(target = ''):
             print("""
                         Port: {}
                         Banner: {}
-
                 """.format(item['port'], item['data']))
             oops = [str(search['ip_str'], "\n", str(search['data'], "\n"))]
             write_file(''.join(oops))
@@ -254,7 +260,6 @@ def list_reject(target = ''):
     except shodan.APIError as e:
         os.system('clear')
         logo = '''
-
          ________   __        _______   ______   ______   _________   
         /_______/\ /_/\     /_______/\ /_____/\ /_____/\ /________/\  
         \::: _  \ \\:\ \    \::: _  \ \\::::_\/_\:::_ \ \\__.::.__\/  
@@ -262,8 +267,6 @@ def list_reject(target = ''):
           \:: __  \ \\:\ \____\::  _  \ \\::___\/_\: __ `\ \ \::\ \   
            \:.\ \  \ \\:\/___/\\::(_)  \ \\:\____/\\ \ `\ \ \ \::\ \  
             \__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
-
-
         is Restarting'''
         print('[✘] Errpr: %s' % e)
         option = input('[*] Shieeeet you wanna chagne that API Key? <Y/n>: ').lower()
@@ -278,7 +281,7 @@ def list_reject(target = ''):
             return False
 
 def nmapScan(tgtHost, tgtPort):  # Nmap function created
-    nmScan = nmap.PortScanner() 
+    nmScan = nmap.PortScanner()
     nmScan.scan(tgtHost, tgtPort)
     state = nmScan[tgtHost]['tcp'][int(tgtPort)]['state']
     print("[ ! ]  {}\n TCP: {} \n UP/DOWN: {}\n".format(tgtHost, tgtPort, state))
