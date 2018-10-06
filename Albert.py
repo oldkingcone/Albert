@@ -18,6 +18,7 @@ try:
     import platform
     from time import sleep
     from termcolor import cprint
+    from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
     import dpkt
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
@@ -115,7 +116,7 @@ def nmapScan(tgtHost, tgtPort):  # Nmap function created
 
 def subnet_discover(ip):
     import netaddr
-    question = netaddr.IPAddress(ip).cidr()
+    question = netaddr.IPAddress(ip).reverse_dns()
     print("Reverse DNS {}".format(netaddr.IPAddress(ip).reverse_dns()))
     print("Subnet/CIDR: {}".format(netaddr.IPNetwork(ip).cidr()))
     print("Private? {}".format(netaddr.IPNetwork.is_private(ip)))
@@ -161,8 +162,8 @@ if __name__ == '__main__':
             options = str(input("[ + ] Would you like to use:\n"
                        "1.) Shodan\n"
                        "2.) Nmap(Targeted Scanning of host system written out to XML file)\n"
-                       "3.) Inactive(Zombie Host Scapy Scan)"
-                       "4.) NMAP Scan of subnet hosts(ARP or ICMP ACK)"
+                       "3.) Inactive(Zombie Host Scapy Scan)\n"
+                       "4.) NMAP Scan of subnet hosts(ARP or ICMP ACK)\n"
                        "->"))
             if options == '1':
                 os.system(clear)
