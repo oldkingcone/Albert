@@ -24,6 +24,7 @@ except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
 
 api = shodan.Shodan(apikey)
+
 def albert_faces():
     alberts = ''
     albert = random.randint(1, 6)
@@ -54,8 +55,6 @@ elif test == '':
 def progress_bar(duration):
     for i in tqdm(range(int(duration))):
         time.sleep(1)
-
-api = shodan.Shodan(apikey)
 
 
 def write_file(line):
