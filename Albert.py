@@ -158,7 +158,7 @@ if __name__ == '__main__':
             options = str(input("[ + ] Would you like to use:\n"
                        "1.) Shodan\n"
                        "2.) Nmap(Targeted Scanning of host system written out to XML file)\n"
-                       "3.) Inactive(Zombie Host Scapy Scan)"
+                       "3.) Subnet Calculation/Detection"
                        "->"))
             if options == '1':
                 os.system(clear)
