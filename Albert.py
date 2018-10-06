@@ -1,31 +1,21 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 try:
     import sched
     import random
     import urllib
-    from urllib.request import urlopen
-    import http.client
-    from urllib import parse
     import shodan
     import sys
     import nmap
-    import optparse
     from api import apikey
     from tqdm import tqdm as tqdm
     import time
     import os
-    import platform
     from time import sleep
     from termcolor import cprint
     from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
     import dpkt
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
-ap = apikey
-if ap == '':
-    print("Your API Key empty: \n->{}".format(ap))
-    sys.exit(1)
 
 api = shodan.Shodan(apikey)
 def albert_faces():
@@ -46,14 +36,6 @@ def albert_faces():
     cprint("Loading The King Himself Hopefully He Left You Some Exploits....", 'red')
     sleep(0.5)
     cprint("Gr33ts: Chef Gordon, Root, Johnny 5", 'red')
-
-test = platform.system()
-if test == 'Windows': clear = 'cls'
-elif test == 'Linux': clear = 'clear'
-elif test == 'Java': clear = 'clear'
-elif test == '':
-    print("[ ! ] Exiting, you have an unknown system! [ ! ] ")
-    sys.exit(1)
 
 def progress_bar(duration):
     for i in tqdm(range(int(duration))):
@@ -86,7 +68,7 @@ def list_reject(target = ''):
             write_file(''.join(oops))
         return False
     except shodan.APIError as e:
-        os.system(clear)
+        os.system('cls')
         logo = '''
          ________   __        _______   ______   ______   _________   
         /_______/\ /_/\     /_______/\ /_____/\ /_____/\ /________/\  
@@ -118,10 +100,11 @@ def nmapScan(tgtHost, tgtPort):  # Nmap function created
 
 def subnet_discover(ip):
     import netaddr
+    ip = repr(ip)
     question = netaddr.IPAddress(ip).reverse_dns()
     print("Reverse DNS {}".format(netaddr.IPAddress(ip).reverse_dns()))
     print("Subnet/CIDR: {}".format(netaddr.IPNetwork(ip).cidr()))
-    print("Private? {}".format(netaddr.IPNetwork.is_private(ip)))
+    print("Private? {}".format(netaddr.IPNetwork(ip).is_private()))
     print("Net Mask: {}".format(netaddr.IPNetwork(ip).netmask()))
     print("Broad Cast: {}".format(netaddr.IPNetwork(ip).broadcast()))
     print("Host Mask: {}".format(netaddr.IPNetwork(ip).hostmask()))
@@ -160,25 +143,25 @@ if __name__ == '__main__':
     sleep(0.4)
     while run == 't':
         try:
-            os.system(clear)
+            os.system('cls')
             options = str(input("[ + ] Would you like to use:\n"
                        "1.) Shodan\n"
                        "2.) Nmap(Targeted Scanning of host system written out to XML file)\n"
-                       "3.) Inactive(Zombie Host Scapy Scan)\n"
+                       "3.) Subnet Discovery\n"
                        "4.) NMAP Scan of subnet hosts(ARP or ICMP ACK)\n"
                        "->"))
             if options == '1':
-                os.system(clear)
+                os.system('cls')
                 choice = str(input("[ + ] Is this a file list, or a single IP:\n"
                            "1.) File List\n"
                            "2.) Single IP\n"
                            "->"))
                 if choice == '1':
-                    os.system(clear)
+                    os.system('cls')
                     dest = str(input("[ + ] Please input the name of the file list:\n->"))
                     liz = set()
                     if dest == '':
-                        os.system(clear)
+                        os.system('cls')
                         print("[ ! ] Hey! Hey! Hey! Need a file name! [ ! ]")
                         run = 'a'
                     reader = open(dest, "r")
@@ -186,15 +169,19 @@ if __name__ == '__main__':
                         line.strip("\n")
                         list_reject(line)
                 if choice == '2':
-                    os.system(clear)
+                    os.system('cls')
                     choice = str(input("[ + ] Please Input the IP: \n->"))
                     list_reject(choice)
 
             if options == '2':
-                os.system(clear)
+                os.system('cls')
                 host = str(input("[ + ] Please input host IP:\n->"))
                 port = str(input("[ + ] Please input port:\n->"))
-                nmapScan(host, port)
+                try:
+                    nmapScan(host, port)
+                except KeyError as e:
+                    print("[ !! ] IP Must not be a valid IP: \n{}".format(e))
+                    continue
             if options == "3":
                 choice = str(input("[ + ] Please input the subnet to detect [ + ]\n->"))
                 if choice != '':
@@ -210,7 +197,7 @@ if __name__ == '__main__':
                     strike = str(input("[ + ] Please enter the IP, we will need to scan the subnet [ + ]"))
                     scapy_selection(subnet_discover(strike))
             if options == '':
-                os.system(clear)
+                os.system('cls')
                 print("[ ! ] Please enter a value! [ ! ]")
                 print("[ ?? ] Exiting! [ ?? ]")
                 sys.exit(1)
