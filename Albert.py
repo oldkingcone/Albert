@@ -30,7 +30,9 @@ def albert_faces():
     for line in lulz:
         print(line.strip("\n")
         time.sleep(0.5)
+    time.sleep(0.5)
     print("Loading The King Himself Hopefully He Left You Some Exploits....")
+    time.sleep(0.5)
     print("Gr33ts: Chef Gordon, Root, Johnny 5")
 
 test = platform.system()
@@ -103,7 +105,7 @@ def nmapScan(tgtHost, tgtPort):  # Nmap function created
 if __name__ == '__main__':
     run = 't'
     albert_faces()
-    test_system()
+    time.sleep(0.4)
     while run == 't':
         try:
             os.system(clear)
