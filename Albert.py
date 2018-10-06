@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 try:
     import sched
@@ -27,8 +27,8 @@ api = shodan.Shodan(apikey)
 def albert_faces():
     alberts = ''
     albert = random.randint(1, 6)
-    if albert == 1:alberts = "./albert_face.txt"
-    if albert == 2:alberts = "./albert_face_2.txt"
+    if albert == 1: alberts = "./albert_face.txt"
+    if albert == 2: alberts = "./albert_face_2.txt"
     if albert == 3: alberts = "./fat_albert_3"
     if albert == 4: alberts = "./memo_cat"
     if albert == 5: alberts = "./memo_logo"
@@ -203,6 +203,7 @@ if __name__ == '__main__':
                                    "2.) ICMP ACK\n->"))
                 if chance == "2":
                     print("[ !! ] So sorry, not done with that yet... [ !! ]")
+                    continue
                 if chance == "1":
                     strike = str(input("[ + ] Please enter the IP, we will need to scan the subnet [ + ]"))
                     scapy_selection(subnet_discover(strike))
