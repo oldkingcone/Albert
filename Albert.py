@@ -26,6 +26,9 @@ def albert_faces():
     if albert == 1:alberts = "./albert_face.txt"
     if albert == 2:alberts = "./albert_face_2.txt"
     if albert == 3: alberts = "./fat_albert_3"
+    if albert == 4: alberts = "./memo_cat"
+    if albert == 5: alberts = "./memo_logo"
+    if albert == 6: alberts = "./memo_logo_2"
     face = open(alberts, "r")
     lulz = face.readlines()
     for line in lulz:
