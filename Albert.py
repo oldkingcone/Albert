@@ -103,6 +103,11 @@ def nmapScan(tgtHost, tgtPort):  # Nmap function created
     return False
 
 if __name__ == '__main__':
+    #@todo bring in a honeypot detection routine.
+    #@todo a way to avoid docker containers like the plague.
+    #@todo DNS Dumpster routine
+    #@todo, Scapy routine, to create custom icmp messages on the fly.
+    #@todo, add packet sniffing on the fly.
     run = 't'
     albert_faces()
     time.sleep(0.4)
