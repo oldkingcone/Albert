@@ -15,6 +15,7 @@ try:
     import os
     import platform
     import time
+    from termcolor import cprint
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
 
@@ -28,12 +29,12 @@ def albert_faces():
     face = open(alberts, "r")
     lulz = face.readlines()
     for line in lulz:
-        print(line.strip("\n")
+        cprint(line.strip("\n", 'green')
         time.sleep(0.5)
     time.sleep(0.5)
-    print("Loading The King Himself Hopefully He Left You Some Exploits....")
+    cprint("Loading The King Himself Hopefully He Left You Some Exploits....", 'green')
     time.sleep(0.5)
-    print("Gr33ts: Chef Gordon, Root, Johnny 5")
+    cprint("Gr33ts: Chef Gordon, Root, Johnny 5", 'green')
 
 test = platform.system()
 if test == 'Windows': clear = 'cls'
