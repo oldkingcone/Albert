@@ -19,9 +19,6 @@ try:
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
 
-api = shodan.Shodan(apikey)
-
-
 def albert_faces():
     alberts = ''
     albert = random.randint(1, 6)
@@ -55,6 +52,7 @@ def write_file(line):
 
 
 def list_reject(target=''):
+	api = shodan.Shodan(apikey)
     try:
         search = api.host(target)
         # id_seen = set()
