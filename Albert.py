@@ -3,6 +3,7 @@ try:
     from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
     import sched
     import random
+    import urllib
     import shodan
     import sys
     import nmap
@@ -14,8 +15,10 @@ try:
     from time import sleep
     from termcolor import cprint
     from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
+    import dpkt
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
+
 
 def albert_faces():
     alberts = ''
@@ -50,10 +53,9 @@ def write_file(line):
 
 
 def list_reject(target=''):
-	api = shodan.Shodan(apikey)
+    api = shodan.Shodan(apikey)
     try:
         search = api.host(target)
-        # id_seen = set()
         print("""
 				IP: {}
 				Organization: {}
@@ -78,7 +80,7 @@ def list_reject(target=''):
 		 \::(_)  \ \\:\ \    \::(_)  \/_\:\/___/\\:(_) ) )_ \::\ \    
 		  \:: __  \ \\:\ \____\::  _  \ \\::___\/_\: __ `\ \ \::\ \   
 		   \:.\ \  \ \\:\/___/\\::(_)  \ \\:\____/\\ \ `\ \ \ \::\ \  
-		    \__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
+			\__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
 		is Restarting'''
         print('[✘] Errpr: %s' % e)
         option = input('[*] Shieeeet you wanna chagne that API Key? <Y/n>: ').lower()
@@ -136,6 +138,33 @@ def scapy_selection(net):
     except:
         raise
 
+def dns_dumpster(domain):
+    try:
+        res = DNSDumpsterAPI({'verbose': True}).search(domain)
+        print("[ + ] Searching for {} [ + ]".format(domain))
+        print("\n[ + ] DNS Servers [ + ]")
+        for entry in res['dns_records']['dns']:
+            print(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
+        print("\n[ + ] MX Records [ + ]")
+        for entry in res['dns_records']['mx']:
+            print(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
+        print("\n[ + ] Host Records (A) [ + ]")
+        for entry in res['dns_records']['host']:
+            if entry['reverse_dns']:
+                print(("{domain} ({reverse_dns}) ({ip}) {as} {provider} {country}".format(**entry)))
+            else:
+                print(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
+        print("\n[ + ] TXT Records [ + ]")
+        for entry in res['dns_records']['txt']:
+            print("{}".format(entry))
+        image_retrieved = res['image_data'] is not None
+        print("\nRetrieved Network mapping image? {} (accessible in 'image_data')".format(image_retrieved))
+        print(repr(base64.b64decode(res['image_data'])[:20]) + '...')
+        xls_retrieved = res['xls_data'] is not None
+        print("\nRetrieved XLS hosts? {} (accessible in 'xls_data')".format(xls_retrieved))
+        print(repr(base64.b64decode(res['xls_data'])[:20]) + '...')
+    except:
+        raise
 
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
@@ -149,20 +178,20 @@ if __name__ == '__main__':
     while run == 't':
         try:
             os.system('cls')
-            options = str(input("\n\n\n\t[ + ] Would you like to use:\n"\
-                                "\t\t1. ) Shodan\n"\
-                                "\t\t2. ) Nmap(Targeted Scanning of host system written out to XML file)\n"\
-                                "\t\t3. ) Subnet Discovery\n"\
-                                "\t\t4. ) NMAP Scan of subnet hosts(ARP or ICMP ACK)\n"\
-                                "\t\t5. ) DNSDumpster for invalid Domain setups\n"\
-                                "\t\t6. ) Windows API Manipulation\n"\
-                                "\t\t- > Press CTRL + C to return to the menu < -\n\n\n"\
+            options = str(input("\n\n\n\t[ + ] Would you like to use:\n"
+                                "\t\t1. ) Shodan\n"
+                                "\t\t2. ) Nmap(Targeted Scanning of host system written out to XML file)\n"
+                                "\t\t3. ) Subnet Discovery\n"
+                                "\t\t4. ) NMAP Scan of subnet hosts(ARP or ICMP ACK)\n"
+                                "\t\t5. ) DNSDumpster for invalid Domain setups\n"
+                                "\t\t6. ) Windows API Manipulation\n"
+                                "\t\t- > Press CTRL + C to return to the menu < -\n\n\n"
                                 "[ * ] - >"))
             if options == '1':
                 os.system('cls')
-                choice = str(input("[ + ] Is this a file list, or a single IP:\n"\
-                                   "1.) File List\n"\
-                                   "2.) Single IP\n"\
+                choice = str(input("[ + ] Is this a file list, or a single IP:\n"
+                                   "1.) File List\n"
+                                   "2.) Single IP\n"
                                    "->"))
                 if choice == '1':
                     os.system('cls')
@@ -198,7 +227,9 @@ if __name__ == '__main__':
                     subnet_discover(choice)
                     continue
             if options == "4":
-                chance = str(input("[ ** ] Are you choosing\n1.) ARP\n2.) ICMP ACK\n->"))
+                chance = str(input("[ ** ] Are you choosing\n"
+                                   "1. ) ARP\n"
+                                   "2. ) ICMP ACK [ ** ]\n->"))
                 if chance == "2":
                     print("[ !! ] So sorry, not done with that yet... [ !! ]")
                     continue
@@ -207,30 +238,8 @@ if __name__ == '__main__':
                     scapy_selection(subnet_discover(strike))
                     continue
             if options == "5":
-                choice = str(input("[ * ] Please enter a domain name: [ * ]\n->"))
-                res = DNSDumpsterAPI({'verbose': True}).search(choice)
-                print("[ + ] Searching for {} [ + ]".format(choice))
-                print("\n[ + ] DNS Servers [ + ]")
-                for entry in res['dns_records']['dns']:
-                    print(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
-                print("\n[ + ] MX Records [ + ]")
-                for entry in res['dns_records']['mx']:
-                    print(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
-                print("\n[ + ] Host Records (A) [ + ]")
-                for entry in res['dns_records']['host']:
-                    if entry['reverse_dns']:
-                        print(("{domain} ({reverse_dns}) ({ip}) {as} {provider} {country}".format(**entry)))
-                    else:
-                        print(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
-                print("\n[ + ] TXT Records [ + ]")
-                for entry in res['dns_records']['txt']:
-                    print("{}".format(entry))
-                image_retrieved = res['image_data'] is not None
-                print("\nRetrieved Network mapping image? {} (accessible in 'image_data')".format(image_retrieved))
-                print(repr(base64.b64decode(res['image_data'])[:20]) + '...')
-                xls_retrieved = res['xls_data'] is not None
-                print("\nRetrieved XLS hosts? {} (accessible in 'xls_data')".format(xls_retrieved))
-                print(repr(base64.b64decode(res['xls_data'])[:20]) + '...')
+                domain = str(input("[ * ] Please enter a domain name: [ * ]\n->"))
+                dns_dumpster(domain=domain)
                 continue
             if options == "6":
                 print("[ * ] Sorry, that is a coming feature! [ * ]")
