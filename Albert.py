@@ -126,7 +126,7 @@ def scapy_selection(net):
     from scapy.all import srp, ETHER_ANY, ARPHDR_ETHER, conf, IFACES
     try:
 
-        print("{}".format(IFACES.show(resolve_mac=True, print_result=True)))
+        print("{}".format(IFACES.show(resolve_mac=True)))
         interface = str(input("[ + ] Please choose an interface [ + ]\n->"))
         ip = net
         time_start = dt.datetime.now()
