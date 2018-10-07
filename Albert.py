@@ -3,7 +3,6 @@ try:
     from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
     import sched
     import random
-    import urllib
     import shodan
     import sys
     import nmap
@@ -15,7 +14,6 @@ try:
     from time import sleep
     from termcolor import cprint
     from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
-    import dpkt
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
 
