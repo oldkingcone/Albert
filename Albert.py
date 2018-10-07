@@ -106,22 +106,27 @@ def nmapScan(tgtHost, tgtPort):  # Nmap function created
 
 def subnet_discover(ip):
     import netaddr
-    question = netaddr.IPAddress(ip)
-    response = netaddr.IPNetwork(ip).cidr
-    print("Reverse DNS {}".format(question.reverse_dns))
-    print("Subnet/CIDR: {}".format(response.cidr))
-    print("Private? {}".format(question.is_private))
-    print("Net Mask: {}".format(response.netmask))
-    print("Broad Cast: {}".format(response.broadcast))
-    print("Host Mask: {}".format(response.hostmask))
-    print("Multicast: {}".format(question.is_multicast))
-    return response
+    try:
+        question = netaddr.IPAddress(ip)
+        response = netaddr.IPNetwork(ip).cidr
+        print("Reverse DNS {}".format(question.reverse_dns))
+        print("Subnet/CIDR: {}".format(response.cidr))
+        print("Private? {}".format(question.is_private))
+        print("Net Mask: {}".format(response.netmask))
+        print("Broad Cast: {}".format(response.broadcast))
+        print("Host Mask: {}".format(response.hostmask))
+        print("Multicast: {}".format(question.is_multicast))
+        return response
+    except netaddr.core.AddrFormatError as es:
+        print("[ + ] Sorry, that was not an IP [ + ]\n\t\t-> {}".format(es))
 
 
 def scapy_selection(net):
     import datetime as dt
-    from scapy.all import srp, ETHER_ANY, ARPHDR_ETHER, conf
+    from scapy.all import srp, ETHER_ANY, ARPHDR_ETHER, conf, IFACES
     try:
+
+        print("{}".format(IFACES.show(resolve_mac=True, print_result=True)))
         interface = str(input("[ + ] Please choose an interface [ + ]\n->"))
         ip = net
         time_start = dt.datetime.now()
@@ -169,9 +174,8 @@ def dns_dumpster(domain):
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
     # @todo a way to avoid docker containers like the plague.
-    # @todo DNS Dumpster routine
-    # @todo, Scapy routine, to create custom icmp messages on the fly. -> going with ARP instead
-    # @todo, add packet sniffing on the fly.
+    # @todo, Scapy routine, list available interfaces.
+    # @todo, add packet sniffing on the fly. <- debating on using this.
     run = 't'
     albert_faces()
     sleep(0.4)
@@ -193,10 +197,12 @@ if __name__ == '__main__':
                                    "1.) File List\n"
                                    "2.) Single IP\n"
                                    "->"))
+
                 if choice == '1':
                     os.system('cls')
                     dest = str(input("[ + ] Please input the name of the file list:\n->"))
                     liz = set()
+
                     if dest == '':
                         os.system('cls')
                         print("[ ! ] Hey! Hey! Hey! Need a file name! [ ! ]")
@@ -206,6 +212,7 @@ if __name__ == '__main__':
                         line.strip("\n")
                         list_reject(line)
                     continue
+
                 if choice == '2':
                     os.system('cls')
                     choice = str(input("[ + ] Please Input the IP: \n->"))
@@ -221,11 +228,14 @@ if __name__ == '__main__':
                 except KeyError as e:
                     print("[ !! ] IP Must not be a valid IP: \n{}".format(e))
                     continue
+
             if options == "3":
                 choice = str(input("[ + ] Please input the subnet to detect [ + ]\n->"))
+
                 if choice != '':
                     subnet_discover(choice)
                     continue
+
             if options == "4":
                 chance = str(input("[ ** ] Are you choosing\n"
                                    "1. ) ARP\n"
@@ -233,14 +243,17 @@ if __name__ == '__main__':
                 if chance == "2":
                     print("[ !! ] So sorry, not done with that yet... [ !! ]")
                     continue
+
                 if chance == "1":
                     strike = str(input("[ + ] Please enter the IP, we will need to scan the subnet [ + ]"))
                     scapy_selection(subnet_discover(strike))
                     continue
+
             if options == "5":
                 domain = str(input("[ * ] Please enter a domain name: [ * ]\n->"))
                 dns_dumpster(domain=domain)
                 continue
+
             if options == "6":
                 print("[ * ] Sorry, that is a coming feature! [ * ]")
                 continue
@@ -248,8 +261,7 @@ if __name__ == '__main__':
             if options == '':
                 os.system('cls')
                 print("[ ! ] Please enter a value! [ ! ]")
-                print("[ ?? ] Exiting! [ ?? ]")
-                sys.exit(1)
+                continue
         except KeyboardInterrupt:
             choice = str(input("[ + ] Would you like to exit? [ + ]\n->")).lower()
             if choice != "y":
