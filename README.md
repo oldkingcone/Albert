@@ -7,3 +7,4 @@ sudo apt install python3-setuptools python3-minimal python3-pip python-dev pytho
 OR:
 
 sudo pip3 install -r requirements
+pip install -U Vulners
