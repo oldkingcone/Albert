@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 try:
+    from vulnersapi import api
     from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
     import sched
     import random
@@ -16,9 +17,19 @@ try:
     from termcolor import cprint
     from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
     import dpkt
+    import vulners
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
 
+logo = '''
+ ________   __        _______   ______   ______   _________   
+/_______/\ /_/\     /_______/\ /_____/\ /_____/\ /________/\  
+\::: _  \ \\:\ \    \::: _  \ \\::::_\/_\:::_ \ \\__.::.__\/  
+ \::(_)  \ \\:\ \    \::(_)  \/_\:\/___/\\:(_) ) )_ \::\ \    
+  \:: __  \ \\:\ \____\::  _  \ \\::___\/_\: __ `\ \ \::\ \   
+   \:.\ \  \ \\:\/___/\\::(_)  \ \\:\____/\\ \ `\ \ \ \::\ \  
+    \__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
+is Restarting'''
 
 def albert_faces():
     alberts = ''
@@ -73,15 +84,6 @@ def list_reject(target=''):
         return False
     except shodan.APIError as e:
         os.system('cls')
-        logo = '''
-		 ________   __        _______   ______   ______   _________   
-		/_______/\ /_/\     /_______/\ /_____/\ /_____/\ /________/\  
-		\::: _  \ \\:\ \    \::: _  \ \\::::_\/_\:::_ \ \\__.::.__\/  
-		 \::(_)  \ \\:\ \    \::(_)  \/_\:\/___/\\:(_) ) )_ \::\ \    
-		  \:: __  \ \\:\ \____\::  _  \ \\::___\/_\: __ `\ \ \::\ \   
-		   \:.\ \  \ \\:\/___/\\::(_)  \ \\:\____/\\ \ `\ \ \ \::\ \  
-			\__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
-		is Restarting'''
         print('[✘] Errpr: %s' % e)
         option = input('[*] Shieeeet you wanna chagne that API Key? <Y/n>: ').lower()
         if option == ('y'):
@@ -126,7 +128,7 @@ def scapy_selection(net):
     from scapy.all import srp, ETHER_ANY, ARPHDR_ETHER, conf, IFACES
     try:
 
-        print("{}".format(IFACES.show(resolve_mac=True)))
+        print("{}".format(IFACES.show(resolve_mac=True, print_result=True)))
         interface = str(input("[ + ] Please choose an interface [ + ]\n->"))
         ip = net
         time_start = dt.datetime.now()
@@ -171,6 +173,37 @@ def dns_dumpster(domain):
     except:
         raise
 
+def vulners_api(option, term):
+    vulners_search = vulners.Vulners(api_key=api)
+    if api == '':
+        file = open('vulnersapi.py', 'w')
+        VULNERS_API_KEY = input('[*] Hey! Hey! Hey! Enter A Valid VulnersCom API Key: ')
+        oppsie = ["apikey= ", "\"", str(VULNERS_API_KEY), "\""]
+        file.write(''.join(oppsie))
+        print('[~] File Dropped Nigga: ./vulnersapi.py')
+        file.close()
+        print('[~] Take 5 To Larp Around\n {}'.format(logo))
+    if option == "1":
+        vulners_search.search(term, limit=20)
+    if option == "2":
+        vulners_search.documentList(term)
+    if option == "3":
+        vulners_search.searchExploit(term)
+    if option == "4":
+        version = str(input("Please enter a version number\n->"))
+        stuff = vulners_search.softwareVulnerabilities(term, version)
+        results = stuff.get('exploit')
+        vulnrabilities_list = [results.get(key) for key in results if key not in ['info', 'blog', 'bugbounty']]
+        return vulnrabilities_list
+    # if option == "5":
+    # all_cve = vulners_search.archive("cve")
+    # text_ai_score = vulners_search.aiScore(" Flamming Botnet")
+    # print('[~] Hey! Hey! Hey! Time To Put Your BigBoy Pants On, Self Audit!')
+    # OS_vulnerabilities = vulners_search.audit(os=' ', os_version=' ', package=[' '])
+    # vulnerable_packages = OS_vulnerabilities.get('pacakge')
+    # missed_patches_ids = OS_vulnerabilities.get('vulnerabilitites')
+    # cve_list = OS_vulnerabilities.get('cvelist')
+
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
     # @todo a way to avoid docker containers like the plague.
@@ -182,21 +215,22 @@ if __name__ == '__main__':
     while run == 't':
         try:
             os.system('cls')
-            options = str(input("\n\n\n\t[ + ] Would you like to use:\n"
-                                "\t\t1. ) Shodan\n"
-                                "\t\t2. ) Nmap(Targeted Scanning of host system written out to XML file)\n"
-                                "\t\t3. ) Subnet Discovery\n"
-                                "\t\t4. ) NMAP Scan of subnet hosts(ARP or ICMP ACK)\n"
-                                "\t\t5. ) DNSDumpster for invalid Domain setups\n"
-                                "\t\t6. ) Windows API Manipulation\n"
-                                "\t\t- > Press CTRL + C to return to the menu < -\n\n\n"
+            options = str(input("\n\n\n\t[ + ] Would you like to use:\n"\
+                                "\t\t1. ) Shodan\n"\
+                                "\t\t2. ) Nmap(Targeted Scanning of host system written out to XML file)\n"\
+                                "\t\t3. ) Subnet Discovery\n"\
+                                "\t\t4. ) NMAP Scan of subnet hosts(ARP or ICMP ACK)\n"\
+                                "\t\t5. ) DNSDumpster for invalid Domain setups\n"\
+                                "\t\t6. ) Windows API Manipulation\n"\
+                                "\t\t7. ) Vulners DB Search API\n"\
+                                "\t\t- > Press CTRL + C to return to the menu < -\n\n\n"\
                                 "[ * ] - >"))
             if options == '1':
                 os.system('cls')
-                choice = str(input("[ + ] Is this a file list, or a single IP:\n"
-                                   "1.) File List\n"
-                                   "2.) Single IP\n"
-                                   "->"))
+                choice = str(input("[ + ] Is this a file list, or a single IP:\n"\
+                                   "\t1 . ) File List\n"\
+                                   "\t2 . ) Single IP\n"\
+                                   "[ + ] ->"))
 
                 if choice == '1':
                     os.system('cls')
@@ -237,9 +271,9 @@ if __name__ == '__main__':
                     continue
 
             if options == "4":
-                chance = str(input("[ ** ] Are you choosing\n"
-                                   "1. ) ARP\n"
-                                   "2. ) ICMP ACK [ ** ]\n->"))
+                chance = str(input("[ ** ] Are you choosing\n"\
+                                   "\t1. ) ARP\n"\
+                                   "\t2. ) ICMP ACK [ ** ]\n[ + ] ->"))
                 if chance == "2":
                     print("[ !! ] So sorry, not done with that yet... [ !! ]")
                     continue
@@ -258,10 +292,35 @@ if __name__ == '__main__':
                 print("[ * ] Sorry, that is a coming feature! [ * ]")
                 continue
 
+            if options == "7":
+                choice = str(input("[ + ] VulnersDB search API:\n"\
+                                   "\t1 . ) Search by term\n"\
+                                   "\t2 . ) Search by CVE code\n"\
+                                   "\t3 . ) Search for specific exploits\n"\
+                                   "\t4 . ) Search by term and Version Number [ + ]\n"\
+                                   "[ + ] - >"))
+                if choice == "1":
+                    term = str(input("[ + } Please input a string to search for [ + ]\n->"))
+                    vulners_api(option="1", term=term)
+                    continue
+                if choice == "2":
+                    term = str(input("[ + } Please input a Doc to search for [ + ]\n->"))
+                    vulners_api(option="2", term=term)
+                    continue
+                if choice == "3":
+                    term = str(input("[ + } Please input a CVE number to search for \n"\
+                                     "example: CVE-2017-14174 [ + ]\n->"))
+                    vulners_api(option="3", term=term)
+                    continue
+                if choice == "4":
+                    term = str(input("[ + } Which software are we to search for [ + ]\n->"))
+                    vulners_api(option="4", term=term)
+                    continue
             if options == '':
                 os.system('cls')
                 print("[ ! ] Please enter a value! [ ! ]")
                 continue
+
         except KeyboardInterrupt:
             choice = str(input("[ + ] Would you like to exit? [ + ]\n->")).lower()
             if choice != "y":
