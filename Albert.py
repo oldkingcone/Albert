@@ -217,6 +217,17 @@ def vulners_api(option, term):
     # vulnerable_packages = OS_vulnerabilities.get('pacakge')
     # missed_patches_ids = OS_vulnerabilities.get('vulnerabilitites')
     # cve_list = OS_vulnerabilities.get('cvelist')
+def exploit_db(file):
+    from subprocess import PIPE, Popen
+    if file == '':
+        command = 'searchsploit -x --nmap ./XML_Output/scan.xml'
+        db_search = Popen([command], stdout=PIPE)
+        print(db_search.communicate())
+    if file != '':
+        fil = file
+        command = 'searchsploit -x --nmap '+ fil
+        db_search = Popen([command], stdout=PIPE)
+        print(db_search.communicate())
 
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
@@ -268,13 +279,16 @@ if __name__ == '__main__':
                     continue
 
             if options == '2':
+                def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC -S www.microsoft.com --data-length 180 -oX" \
+                           "./XML_Outpot/scan.xml -vvv --reason"
+                print("Default Args: \n{}".format(def_args))
                 question = str(input("[ + ] Would you like to use custom args with the nmap scan? [ + ] \n->")).lower()
                 if question == 'n':
                     os.system('cls')
                     host = str(input("[ + ] Please input host IP:\n->"))
                     port = str(input("[ + ] Please input port:\n->"))
                     try:
-                        nmapScan(host, port, args='')
+                        nmapScan(host, port, args=def_args)
                     except KeyError as e:
                         print("[ !! ] IP Must not be a valid IP: \n{}".format(e))
                         continue
