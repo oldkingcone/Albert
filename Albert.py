@@ -27,7 +27,7 @@ logo = '''
 /_______/\ /_/\     /_______/\ /_____/\ /_____/\ /________/\  
 \::: _  \ \\:\ \    \::: _  \ \\::::_\/_\:::_ \ \\__.::.__\/  
  \::(_)  \ \\:\ \    \::(_)  \/_\:\/___/\\:(_) ) )_ \::\ \    
-  \:: __  \ \\:\ \____\::  _  \ \\::___\/_\: __ `\ \ \::\ \   
+  \:: __  \ \\:\ \____\::  _  \ \\::___\/_\: __ `\ \ \::\5 \   
    \:.\ \  \ \\:\/___/\\::(_)  \ \\:\____/\\ \ `\ \ \ \::\ \  
     \__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
 is Restarting'''
@@ -242,17 +242,18 @@ if __name__ == '__main__':
         try:
             os.system('cls')
             options = str(input("\n\n\n\t[ + ] Would you like to use:\n"\
-                                "\t\t1. ) Shodan\n"\
-                                "\t\t2. ) Nmap(Targeted Scanning of host system written out to XML file)\n"\
-                                "\t\t3. ) Subnet Discovery\n"\
-                                "\t\t4. ) NMAP Scan of subnet hosts(ARP or ICMP ACK)\n"\
-                                "\t\t5. ) DNSDumpster for invalid Domain setups\n"\
-                                "\t\t6. ) Windows API Manipulation\n"\
-                                "\t\t7. ) Vulners DB Search API\n"\
+                                "\t\t1. ] Shodan\n"\
+                                "\t\t2. ] Nmap(Targeted Scanning of host system written out to XML file)\n"\
+                                "\t\t3. ] Subnet Discovery\n"\
+                                "\t\t4. ] NMAP Scan of subnet hosts(ARP or ICMP ACK)\n"\
+                                "\t\t5. ] DNSDumpster for invalid Domain setups\n"\
+                                "\t\t6. ] Windows API Manipulation\n"\
+                                "\t\t7. ] Vulners DB Search API\n"\
                                 "\t\t- > Press CTRL + C to return to the menu < -\n"\
-                                "\t\t --------------------------------------------------\n"
-                                "\t\t Please ensure that all recon is done at least with nmap before using this\n"\
-                                "\t\t 8. ) Exploit DB\n"\
+                                "\t --------------------------------------------------\n"
+                                "\t Please ensure that all recon is done at least with nmap before using this\n"\
+                                "\t Section of this tool."\
+                                "\t 8. ] Exploit DB\n"\
                                 "[ * ] - >"))
             if options == '1':
                 os.system('cls')
