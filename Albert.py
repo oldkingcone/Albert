@@ -132,6 +132,7 @@ def subnet_discover(ip):
 
 
 def scapy_selection(net):
+	#the interface list works wonders on windows, but not on linux.
     import datetime as dt
     from scapy.all import srp, ETHER_ANY, ARPHDR_ETHER, conf, IFACES
     try:
@@ -233,7 +234,6 @@ def exploit_db(file):
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
     # @todo a way to avoid docker containers like the plague.
-    # @todo, Scapy routine, list available interfaces.
     # @todo, add packet sniffing on the fly. <- debating on using this.
     run = 't'
     albert_faces()
