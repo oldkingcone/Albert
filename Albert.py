@@ -248,7 +248,10 @@ if __name__ == '__main__':
                                 "\t\t5. ) DNSDumpster for invalid Domain setups\n"\
                                 "\t\t6. ) Windows API Manipulation\n"\
                                 "\t\t7. ) Vulners DB Search API\n"\
-                                "\t\t- > Press CTRL + C to return to the menu < -\n\n\n"\
+                                "\t\t- > Press CTRL + C to return to the menu < -\n"\
+                                "\t\t --------------------------------------------------\n"
+                                "\t\t Please ensure that all recon is done at least with nmap before using this\n"\
+                                "\t\t 8. ) Exploit DB\n"\
                                 "[ * ] - >"))
             if options == '1':
                 os.system('cls')
@@ -304,8 +307,10 @@ if __name__ == '__main__':
                     print("Default Args: \n{}".format(def_args))
                     if args == '':
                         nmapScan(host, port, args=def_args)
+                        continue
                     if args != '':
                         nmapScan(host, port, args=args)
+                        continue
 
             if options == "3":
                 choice = str(input("[ + ] Please input the subnet to detect [ + ]\n->"))
@@ -360,6 +365,22 @@ if __name__ == '__main__':
                     term = str(input("[ + } Which software are we to search for [ + ]\n->"))
                     vulners_api(option="4", term=term)
                     continue
+            if options == '8':
+                question = str(input("[ + ] Is the file outside of the default XML_Output directory? y/N\n->")).lower()
+                if question == 'n':
+                    default_path = './XML_Output/scan.xml'
+                    exploit_db(default_path)
+                    continue
+                if question == "y":
+                    path = str(input("[ + ] Please put the full path to the file:\n->"))
+                    if path != '':
+                        from pathlib import Path
+                        lib = Path(path)
+                        exploit_db(lib)
+                        continue
+                    if path == '':
+                        print("[ !! ] Please input a path!! [ !! ]")
+                        continue
             if options == '':
                 os.system('cls')
                 print("[ ! ] Please enter a value! [ ! ]")
