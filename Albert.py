@@ -20,6 +20,7 @@ try:
     import vulners
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
+    sys.exit(1)
 
 logo = '''
  ________   __        _______   ______   ______   _________   
@@ -368,9 +369,12 @@ if __name__ == '__main__':
             if options == '8':
                 question = str(input("[ + ] Is the file outside of the default XML_Output directory? y/N\n->")).lower()
                 if question == 'n':
-                    default_path = './XML_Output/scan.xml'
-                    exploit_db(default_path)
-                    continue
+                    try:
+                        default_path = './XML_Output/scan.xml'
+                        exploit_db(default_path)
+                        continue
+                    except FileNotFoundError as e:
+                        print("Hey! Hey! Hey! No one likes a liar... \n{}".format(e))
                 if question == "y":
                     path = str(input("[ + ] Please put the full path to the file:\n->"))
                     if path != '':
