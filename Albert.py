@@ -97,13 +97,20 @@ def list_reject(target=''):
             return False
 
 
-def nmapScan(tgtHost, tgtPort):  # Nmap function created
-    nmScan = nmap.PortScanner()
-    nmScan.scan(tgtHost, tgtPort)
-    state = nmScan[tgtHost]['tcp'][int(tgtPort)]['state']
-    nmScan.csv()
-    print("[ ! ]  {}\n TCP: {} \n UP/DOWN: {}\n".format(tgtHost, tgtPort, state))
-    return False
+def nmapScan(tgtHost, tgtPort, args):  # Nmap function created
+    from subprocess import Popen, PIPE
+    if args != '':
+        print("[ + ] Using: {} [ + ]".format(args))
+        command = 'nmap ' + tgtHost + ' ' + args
+        nmScanner = Popen([command], stdout=PIPE)
+        print(nmScanner.communicate())
+    if args == '':
+        nmScan = nmap.PortScanner()
+        nmScan.scan(tgtHost, tgtPort)
+        state = nmScan[tgtHost]['tcp'][int(tgtPort)]['state']
+        nmScan.csv()
+        print("[ ! ]  {}\n TCP: {} \n UP/DOWN: {}\n".format(tgtHost, tgtPort, state))
+        return False
 
 
 def subnet_discover(ip):
@@ -184,11 +191,20 @@ def vulners_api(option, term):
         file.close()
         print('[~] Take 5 To Larp Around\n {}'.format(logo))
     if option == "1":
-        vulners_search.search(term, limit=20)
+        exploit = vulners_search.search(term, limit=10, fields=['bulletinFamily', 'exploit', 'description',
+                                                               'modified', 'published', 'id', 'href', 'title', 'vector',
+                                                               'type', 'vhref', 'title', 'type'])
+        for item in exploit:
+            print("Exploits found for {}:\n{}".format(term, item))
+
     if option == "2":
-        vulners_search.documentList(term)
+        clue = vulners_search.documentList(term)
+        for item in clue:
+            print("{}".format(item))
     if option == "3":
-        vulners_search.searchExploit(term)
+        sploit = vulners_search.searchExploit(term)
+        for loit in sploit:
+            print("{}".format(loit))
     if option == "4":
         version = str(input("Please enter a version number\n->"))
         stuff = vulners_search.softwareVulnerabilities(term, version)
@@ -254,14 +270,21 @@ if __name__ == '__main__':
                     continue
 
             if options == '2':
-                os.system('cls')
-                host = str(input("[ + ] Please input host IP:\n->"))
-                port = str(input("[ + ] Please input port:\n->"))
-                try:
-                    nmapScan(host, port)
-                except KeyError as e:
-                    print("[ !! ] IP Must not be a valid IP: \n{}".format(e))
+                question = str(input("[ + ] Would you like to use custom args with the nmap scan? [ + ] \n->")).lower()
+                if question == 'n':
+                    os.system('cls')
+                    host = str(input("[ + ] Please input host IP:\n->"))
+                    port = str(input("[ + ] Please input port:\n->"))
+                    try:
+                        nmapScan(host, port, args='')
+                    except KeyError as e:
+                        print("[ !! ] IP Must not be a valid IP: \n{}".format(e))
+                        continue
                     continue
+                if question == 'y':
+                    os.system('cls')
+                    args = str(input("[ + ] Please enter the full commands:\n Eample: -f -t 0 -n -Pn –data-length 200 -D"\
+                                     "\n->"))
 
             if options == "3":
                 choice = str(input("[ + ] Please input the subnet to detect [ + ]\n->"))
