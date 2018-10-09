@@ -134,7 +134,6 @@ def scapy_selection(net):
     import datetime as dt
     from scapy.all import srp, ETHER_ANY, ARPHDR_ETHER, conf, IFACES
     try:
-
         print("{}".format(IFACES.show(resolve_mac=True, print_result=True)))
         interface = str(input("[ + ] Please choose an interface [ + ]\n->"))
         ip = net
@@ -148,7 +147,6 @@ def scapy_selection(net):
             total_time = time_start - stop_time
             print("[ ** ] Complete! [ ** ]")
             print("[ ** ] Finished in: {} [ ** ]".format(total_time))
-
     except:
         raise
 
@@ -283,8 +281,17 @@ if __name__ == '__main__':
                     continue
                 if question == 'y':
                     os.system('cls')
+                    def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC -S www.microsoft.com --data-length 180 -oX" \
+                               "./XML_Outpot/scan.xml -vvv --reason"
+                    host = str(input("[ + ] Please input host IP:\n->"))
+                    port = str(input("[ + ] Please input port:\n->"))
                     args = str(input("[ + ] Please enter the full commands:\n Eample: -f -t 0 -n -Pn –data-length 200 -D"\
                                      "\n->"))
+                    print("Default Args: \n{}".format(def_args))
+                    if args == '':
+                        nmapScan(host, port, args=def_args)
+                    if args != '':
+                        nmapScan(host, port, args=args)
 
             if options == "3":
                 choice = str(input("[ + ] Please input the subnet to detect [ + ]\n->"))
