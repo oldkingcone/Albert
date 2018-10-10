@@ -132,7 +132,6 @@ def subnet_discover(ip):
 
 
 def scapy_selection(net):
-	#the interface list works wonders on windows, but not on linux.
     import datetime as dt
     from scapy.all import srp, ETHER_ANY, ARPHDR_ETHER, conf, IFACES
     try:
@@ -234,6 +233,7 @@ def exploit_db(file):
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
     # @todo a way to avoid docker containers like the plague.
+    # @todo, Scapy routine, list available interfaces.
     # @todo, add packet sniffing on the fly. <- debating on using this.
     run = 't'
     albert_faces()
@@ -249,11 +249,12 @@ if __name__ == '__main__':
                                 "\t\t5. ] DNSDumpster for invalid Domain setups\n"\
                                 "\t\t6. ] Windows API Manipulation\n"\
                                 "\t\t7. ] Vulners DB Search API\n"\
+                                "\t\t8. ] Admin Finder\n"\
                                 "\t\t- > Press CTRL + C to return to the menu < -\n"\
-                                "\t --------------------------------------------------\n"
+                                "\t --------------------------------------------------\n"\
                                 "\t Please ensure that all recon is done at least with nmap before using this\n"\
-                                "\t Section of this tool."\
-                                "\t 8. ] Exploit DB\n"\
+                                "\t Section of this tool.\n"\
+                                "\t 9. ] Exploit DB\n"\
                                 "[ * ] - >"))
             if options == '1':
                 os.system('cls')
@@ -304,9 +305,10 @@ if __name__ == '__main__':
                                "./XML_Outpot/scan.xml -vvv --reason"
                     host = str(input("[ + ] Please input host IP:\n->"))
                     port = str(input("[ + ] Please input port:\n->"))
-                    args = str(input("[ + ] Please enter the full commands:\n Eample: -f -t 0 -n -Pn –data-length 200 -D"\
+                    args = str(input("[ + ] Please enter the full commands:\n Example: -f -t 0 -n -Pn –data-length 200 -D"\
                                      "\n->"))
-                    print("Default Args: \n{}".format(def_args))
+                    print("If you choose to not enter any different args, these will be used\n"\
+                          "Default Args: \n{}".format(def_args))
                     if args == '':
                         nmapScan(host, port, args=def_args)
                         continue
@@ -367,7 +369,7 @@ if __name__ == '__main__':
                     term = str(input("[ + } Which software are we to search for [ + ]\n->"))
                     vulners_api(option="4", term=term)
                     continue
-            if options == '8':
+            if options == '9':
                 question = str(input("[ + ] Is the file outside of the default XML_Output directory? y/N\n->")).lower()
                 if question == 'n':
                     try:
