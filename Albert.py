@@ -75,7 +75,7 @@ def atk_log(atk):
             lines = set()
             lines.add(atk)
             for item in lines:
-                if item.startswith('DNS Dumpster')
+                if item.startswith('DNS Dumpster'):
                     f.writelines(''.join(item.replace(":", "\n")))
                 else:
                     f.writelines(item)
