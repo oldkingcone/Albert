@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# add SQL, so scans can be quickly queired and stored.
 try:
     import urllib
     import pathlib
