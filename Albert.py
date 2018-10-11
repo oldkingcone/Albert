@@ -487,9 +487,8 @@ if __name__ == '__main__':
                 atk_log(smtp_enum(server=server, user=user, passwd=password))
                 continue
             if options == '10':
-                import ipaddress
                 ip = str(input("[ + ] Please input an IP to locate [ + ]\n->"))
-                if ip != '': ip = ipaddress.ip_address(ip)
+                if ip != '': ip = ip
                 atk_log(iplocator(ip))
                 continue
             if options == '11':
