@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 try:
+    import urllib
+    import pathlib
     import time
     from vulnersapi import api
     from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
@@ -22,8 +24,8 @@ try:
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
     sys.exit(1)
-PATH = './atk_output/'+str(time.time())
-Logo = '''
+PATH = './atk_output/' + str(time.time())
+logo = '''
  ________   __        _______   ______   ______   _________   
 /_______/\ /_/\     /_______/\ /_____/\ /_____/\ /________/\  
 \::: _  \ \\:\ \    \::: _  \ \\::::_\/_\:::_ \ \\__.::.__\/  
@@ -32,6 +34,7 @@ Logo = '''
    \:.\ \  \ \\:\/___/\\::(_)  \ \\:\____/\\ \ `\ \ \ \::\ \  
     \__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
 is Restarting'''
+
 
 def albert_faces():
     alberts = ''
@@ -65,6 +68,7 @@ def write_file(line):
     f.close()
     return False
 
+
 def atk_log(atk):
     try:
         with open(PATH, 'at') as f:
@@ -72,12 +76,13 @@ def atk_log(atk):
             lines.add(atk)
             for item in lines:
                 f.writelines(''.join(item.replace(":", "\n")))
-                f.write('\n-------------------------------------------------------------------------------------------\n')
+            f.write('\n-------------------------------------------------------------------------------------------\n')
         f.close()
         return False
     except TypeError as e:
         print("{}".format(e))
         return e
+
 
 def list_reject(target=''):
     api = shodan.Shodan(apikey)
@@ -168,10 +173,11 @@ def scapy_selection(net):
             total_time = time_start - stop_time
             print("[ ** ] Complete! [ ** ]")
             print("[ ** ] Finished in: {} [ ** ]".format(total_time))
-        return "ARP Scan of: ",ip
+        return "ARP Scan of: ", ip
     except Exception as e:
         print("{}".format(e))
         return e
+
 
 def dns_dumpster(domain):
     try:
@@ -205,6 +211,69 @@ def dns_dumpster(domain):
         print("{}".format(e))
         return e
 
+
+def smtp_enum(server, user, passwd):
+    import smtplib
+    try:
+        userOpen = open(user, "r")
+        userWord = userOpen.readlines()
+        userOpen.close()
+    except IOError:
+        print("[-]No User file found: " + user)
+        pass
+    try:
+        passOpen = open(passwd, "r")
+        passWord = passOpen.readlines()
+        passOpen.close()
+    except IOError:
+        print("[-]No Password File Found")
+        pass
+    try:
+        smtpServer = smtplib.SMTP(server, port)
+        smtpServer.ehlo()
+        smtpServer.starttls()
+    except:
+        print(" No server found")
+        sys.exit(1)
+    for username, passe in userWord, passWord:
+        con = smtplib.SMTP()
+        try:
+            con.login(username, passe)
+            print("server: ")
+            print("port: ")
+            print("username: ")
+            print("password: ")
+        except Exception as e:
+            print("{}".format(e))
+            return e
+
+def panel_find(server, adminList):
+    import urllib3
+    if adminList == '':adminList = open("./data/adm_list", "r")
+    for admin in adminList.readlines():
+        ax = set()
+        ax.add(admin)
+        x = urllib3.PoolManager()
+        for item in ax:
+            lx = server + item
+            x.request('GET', lx)
+            if x.status == '200':
+                print("[-] Found Da Panel -> {}".format(lx))
+
+def iplocator(ip):
+    import urllib3
+    url = "http://ip-api.com/json/"+ip
+    try:
+        u = urllib3.PoolManager()
+        x = u.request('GET', url)
+        if x.status != '200':
+            print("[ + ] Failed at request! [ + ]")
+            pass
+        else:
+            print(x.data)
+    except Exception as e:
+        print("[-} Did Not Work:\n{} [~]".format(e))
+
 def vulners_api(option, term):
     vulners_search = vulners.Vulners(api_key=api)
     if api == '':
@@ -217,8 +286,9 @@ def vulners_api(option, term):
         print('[~] Take 5 To Larp Around\n {}'.format(logo))
     if option == "1":
         exploit = vulners_search.search(term, limit=10, fields=['bulletinFamily', 'exploit', 'description',
-                                                               'modified', 'published', 'id', 'href', 'title', 'vector',
-                                                               'type', 'vhref', 'title', 'type'])
+                                                                'modified', 'published', 'id', 'href', 'title',
+                                                                'vector',
+                                                                'type', 'vhref', 'title', 'type'])
         for item in exploit:
             print("Exploits found for {}:\n{}".format(term, item))
 
@@ -244,6 +314,8 @@ def vulners_api(option, term):
     # vulnerable_packages = OS_vulnerabilities.get('pacakge')
     # missed_patches_ids = OS_vulnerabilities.get('vulnerabilitites')
     # cve_list = OS_vulnerabilities.get('cvelist')
+
+
 def exploit_db(file):
     from subprocess import PIPE, Popen
     try:
@@ -253,12 +325,13 @@ def exploit_db(file):
             atk_log(print(db_search.communicate()))
         if file != '':
             fil = file
-            command = 'searchsploit -x --nmap '+ fil
+            command = 'searchsploit -x --nmap ' + fil
             db_search = Popen([command], stdout=PIPE, stderr=PIPE)
             atk_log(print(db_search.communicate()))
     except Exception as e:
         print("{}".format(e))
         return e
+
 
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
@@ -270,26 +343,28 @@ if __name__ == '__main__':
     while run == 't':
         try:
             os.system('cls')
-            options = str(input("\n\n\n\t[ + ] Would you like to use:\n"\
-                                "\t\t1. ] Shodan\n"\
-                                "\t\t2. ] Nmap(Targeted Scanning of host system written out to XML file)\n"\
-                                "\t\t3. ] Subnet Discovery\n"\
-                                "\t\t4. ] NMAP Scan of subnet hosts(ARP or ICMP ACK)\n"\
-                                "\t\t5. ] DNSDumpster for invalid Domain setups\n"\
-                                "\t\t6. ] Windows API Manipulation\n"\
-                                "\t\t7. ] Vulners DB Search API\n"\
-                                "\t\t8. ] Admin Finder\n"\
-                                "\t\t- > Press CTRL + C to return to the menu < -\n"\
-                                "\t --------------------------------------------------\n"\
-                                "\t Please ensure that all recon is done at least with nmap before using this\n"\
-                                "\t Section of this tool.\n"\
-                                "\t 9. ] Exploit DB\n"\
+            options = str(input("\n\n\n\t[ + ] Would you like to use:\n" \
+                                "\t\t1. ] Shodan\n" \
+                                "\t\t2. ] Nmap(Targeted Scanning of host system written out to XML file)\n" \
+                                "\t\t3. ] Subnet Discovery\n" \
+                                "\t\t4. ] NMAP Scan of subnet hosts(ARP or ICMP ACK)\n" \
+                                "\t\t5. ] DNSDumpster for invalid Domain setups\n" \
+                                "\t\t6. ] Windows API Manipulation\n" \
+                                "\t\t7. ] Vulners DB Search API\n" \
+                                "\t\t8. ] Admin Finder\n" \
+                                "\t\t9. ] SMTP User Enum/Brute Force\n"\
+                                "\t\t10. ] IP Locator\n"\
+                                "\t\t- > Press CTRL + C to return to the menu < -\n" \
+                                "\t --------------------------------------------------\n" \
+                                "\t Please ensure that all recon is done at least with nmap before using this\n" \
+                                "\t Section of this tool.\n" \
+                                "\t 11. ] Exploit DB\n" \
                                 "[ * ] - >"))
             if options == '1':
                 os.system('cls')
-                choice = str(input("[ + ] Is this a file list, or a single IP:\n"\
-                                   "\t1 . ) File List\n"\
-                                   "\t2 . ) Single IP\n"\
+                choice = str(input("[ + ] Is this a file list, or a single IP:\n" \
+                                   "\t1 . ) File List\n" \
+                                   "\t2 . ) Single IP\n" \
                                    "[ + ] ->"))
 
                 if choice == '1':
@@ -334,9 +409,10 @@ if __name__ == '__main__':
                                "./XML_Outpot/scan.xml -vvv --reason"
                     host = str(input("[ + ] Please input host IP:\n->"))
                     port = str(input("[ + ] Please input port:\n->"))
-                    args = str(input("[ + ] Please enter the full commands:\n Example: -f -t 0 -n -Pn –data-length 200 -D"\
-                                     "\n->"))
-                    print("If you choose to not enter any different args, these will be used\n"\
+                    args = str(
+                        input("[ + ] Please enter the full commands:\n Example: -f -t 0 -n -Pn –data-length 200 -D" \
+                              "\n->"))
+                    print("If you choose to not enter any different args, these will be used\n" \
                           "Default Args: \n{}".format(def_args))
                     if args == '':
                         atk_log(nmapScan(host, port, args=def_args))
@@ -353,8 +429,8 @@ if __name__ == '__main__':
                     continue
 
             if options == "4":
-                chance = str(input("[ ** ] Are you choosing\n"\
-                                   "\t1. ) ARP\n"\
+                chance = str(input("[ ** ] Are you choosing\n" \
+                                   "\t1. ) ARP\n" \
                                    "\t2. ) ICMP ACK [ ** ]\n[ + ] ->"))
                 if chance == "2":
                     print("[ !! ] So sorry, not done with that yet... [ !! ]")
@@ -375,11 +451,11 @@ if __name__ == '__main__':
                 continue
 
             if options == "7":
-                choice = str(input("[ + ] VulnersDB search API:\n"\
-                                   "\t1 . ) Search by term\n"\
-                                   "\t2 . ) Search by CVE code\n"\
-                                   "\t3 . ) Search for specific exploits\n"\
-                                   "\t4 . ) Search by term and Version Number [ + ]\n"\
+                choice = str(input("[ + ] VulnersDB search API:\n" \
+                                   "\t1 . ) Search by term\n" \
+                                   "\t2 . ) Search by CVE code\n" \
+                                   "\t3 . ) Search for specific exploits\n" \
+                                   "\t4 . ) Search by term and Version Number [ + ]\n" \
                                    "[ + ] - >"))
                 if choice == "1":
                     term = str(input("[ + } Please input a string to search for [ + ]\n->"))
@@ -390,7 +466,7 @@ if __name__ == '__main__':
                     atk_log(vulners_api(option="2", term=term))
                     continue
                 if choice == "3":
-                    term = str(input("[ + } Please input a CVE number to search for \n"\
+                    term = str(input("[ + } Please input a CVE number to search for \n" \
                                      "example: CVE-2017-14174 [ + ]\n->"))
                     atk_log(vulners_api(option="3", term=term))
                     continue
@@ -398,7 +474,28 @@ if __name__ == '__main__':
                     term = str(input("[ + } Which software are we to search for [ + ]\n->"))
                     atk_log(vulners_api(option="4", term=term))
                     continue
+            if options == '8':
+                from pathlib import Path
+                server = str(input("[ + ] Please input the server address [ + ]\n->"))
+                admlist = str(input("[ + ] Please tell me where the admin list is, or leave blank for default [ + ]\n->"))
+                if server != '' and admlist != '':
+                    atk_log(panel_find(server, adminList=Path(admlist)))
+                    continue
             if options == '9':
+                server = str(input("[ + ] Please input a server address/IP [ + ]\n->"))
+                user = str(input("[ + ] Please enter a path for username list, or leave blank for default [ + ]\n->"))
+                password = str(input("[ + ] Please enter path for password list, or leave blank for default [ + ]\n->"))
+                if user != '': Path(user)
+                if password != '': Path(password)
+                atk_log(smtp_enum(server=server, user=user, passwd=password))
+                continue
+            if options == '10':
+                import ipaddress
+                ip = str(input("[ + ] Please input an IP to locate [ + ]\n->"))
+                if ip != '': ip = ipaddress.ip_address(ip)
+                atk_log(iplocator(ip))
+                continue
+            if options == '11':
                 question = str(input("[ + ] Is the file outside of the default XML_Output directory? y/N\n->")).lower()
                 if question == 'n':
                     try:
@@ -429,5 +526,3 @@ if __name__ == '__main__':
             if choice == 'y':
                 print("[ !! ] Good-Bye! [ !! ]")
                 sys.exit(1)
-
-
