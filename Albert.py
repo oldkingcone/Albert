@@ -12,6 +12,7 @@ try:
     import sys
     import nmap
     from api import apikey
+    from tqdm import tqdm as tqdm
     import time
     import base64
     import os
@@ -54,6 +55,11 @@ def albert_faces():
     sleep(0.5)
     cprint("Gr33ts: Chef Gordon, Root, Johnny 5", 'red')
     return "t"
+
+
+def progress_bar(duration):
+    for i in tqdm(range(int(duration))):
+        time.sleep(1)
 
 
 def write_file(line):
@@ -254,7 +260,7 @@ def panel_find(server, adminList):
         for item in ax:
             lx = server + item
             x.request('GET', lx)
-            if x.status == '200':
+            if x.status == '200' or x.status != 200:
                 print("[-] Found Da Panel -> {}".format(lx))
 
 def iplocator(ip):
@@ -263,7 +269,7 @@ def iplocator(ip):
     try:
         u = urllib3.PoolManager()
         x = u.request('GET', url)
-        if x.status != '200':
+        if x.status != '200' or x.status != 200:
             print("[ + ] Failed at request! [ + ]")
             pass
         else:
