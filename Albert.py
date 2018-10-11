@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 try:
+    import time
     from vulnersapi import api
     from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
     import sched
@@ -21,8 +22,8 @@ try:
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
     sys.exit(1)
-
-logo = '''
+PATH = './atk_output/'+str(time.time())
+Logo = '''
  ________   __        _______   ______   ______   _________   
 /_______/\ /_/\     /_______/\ /_____/\ /_____/\ /________/\  
 \::: _  \ \\:\ \    \::: _  \ \\::::_\/_\:::_ \ \\__.::.__\/  
@@ -50,6 +51,7 @@ def albert_faces():
     cprint("Loading The King Himself Hopefully He Left You Some Exploits....", 'red')
     sleep(0.5)
     cprint("Gr33ts: Chef Gordon, Root, Johnny 5", 'red')
+    return "t"
 
 
 def progress_bar(duration):
@@ -63,6 +65,19 @@ def write_file(line):
     f.close()
     return False
 
+def atk_log(atk):
+    try:
+        with open(PATH, 'at') as f:
+            lines = set()
+            lines.add(atk)
+            for item in lines:
+                f.writelines(''.join(item.replace(":", "\n")))
+                f.write('\n-------------------------------------------------------------------------------------------\n')
+        f.close()
+        return False
+    except TypeError as e:
+        print("{}".format(e))
+        return e
 
 def list_reject(target=''):
     api = shodan.Shodan(apikey)
@@ -100,18 +115,22 @@ def list_reject(target=''):
 
 def nmapScan(tgtHost, tgtPort, args):  # Nmap function created
     from subprocess import Popen, PIPE
-    if args != '':
-        print("[ + ] Using: {} [ + ]".format(args))
-        command = 'nmap ' + tgtHost + ' ' + args
-        nmScanner = Popen([command], stdout=PIPE)
-        print(nmScanner.communicate())
-    if args == '':
-        nmScan = nmap.PortScanner()
-        nmScan.scan(tgtHost, tgtPort)
-        state = nmScan[tgtHost]['tcp'][int(tgtPort)]['state']
-        nmScan.csv()
-        print("[ ! ]  {}\n TCP: {} \n UP/DOWN: {}\n".format(tgtHost, tgtPort, state))
-        return False
+    try:
+        if args != '':
+            print("[ + ] Using: {} [ + ]".format(args))
+            command = 'nmap ' + tgtHost + ' ' + args
+            nmScanner = Popen([command], stdout=PIPE)
+            print(nmScanner.communicate())
+        if args == '':
+            nmScan = nmap.PortScanner()
+            nmScan.scan(tgtHost, tgtPort)
+            state = nmScan[tgtHost]['tcp'][int(tgtPort)]['state']
+            nmScan.csv()
+            print("[ ! ]  {}\n TCP: {} \n UP/DOWN: {}\n".format(tgtHost, tgtPort, state))
+            return tgtHost, tgtPort, args
+    except FileNotFoundError:
+        print("Please install Nmap on your system, and try this again.")
+        return tgtHost, tgtPort
 
 
 def subnet_discover(ip):
@@ -129,6 +148,7 @@ def subnet_discover(ip):
         return response
     except netaddr.core.AddrFormatError as es:
         print("[ + ] Sorry, that was not an IP [ + ]\n\t\t-> {}".format(es))
+        return es
 
 
 def scapy_selection(net):
@@ -148,12 +168,16 @@ def scapy_selection(net):
             total_time = time_start - stop_time
             print("[ ** ] Complete! [ ** ]")
             print("[ ** ] Finished in: {} [ ** ]".format(total_time))
-    except:
-        raise
+        return "ARP Scan of: ",ip
+    except Exception as e:
+        print("{}".format(e))
+        return e
 
 def dns_dumpster(domain):
     try:
         res = DNSDumpsterAPI({'verbose': True}).search(domain)
+        aks = ['DNS Dumpster results:', '\n', str(res), '\n']
+        atk_log(''.join(aks))
         print("[ + ] Searching for {} [ + ]".format(domain))
         print("\n[ + ] DNS Servers [ + ]")
         for entry in res['dns_records']['dns']:
@@ -176,8 +200,10 @@ def dns_dumpster(domain):
         xls_retrieved = res['xls_data'] is not None
         print("\nRetrieved XLS hosts? {} (accessible in 'xls_data')".format(xls_retrieved))
         print(repr(base64.b64decode(res['xls_data'])[:20]) + '...')
-    except:
-        raise
+        return domain
+    except Exception as e:
+        print("{}".format(e))
+        return e
 
 def vulners_api(option, term):
     vulners_search = vulners.Vulners(api_key=api)
@@ -220,23 +246,26 @@ def vulners_api(option, term):
     # cve_list = OS_vulnerabilities.get('cvelist')
 def exploit_db(file):
     from subprocess import PIPE, Popen
-    if file == '':
-        command = 'searchsploit -x --nmap ./XML_Output/scan.xml'
-        db_search = Popen([command], stdout=PIPE)
-        print(db_search.communicate())
-    if file != '':
-        fil = file
-        command = 'searchsploit -x --nmap '+ fil
-        db_search = Popen([command], stdout=PIPE)
-        print(db_search.communicate())
+    try:
+        if file == '':
+            command = 'searchsploit -x --nmap ./XML_Output/scan.xml'
+            db_search = Popen([command], stdout=PIPE, stderr=PIPE)
+            atk_log(print(db_search.communicate()))
+        if file != '':
+            fil = file
+            command = 'searchsploit -x --nmap '+ fil
+            db_search = Popen([command], stdout=PIPE, stderr=PIPE)
+            atk_log(print(db_search.communicate()))
+    except Exception as e:
+        print("{}".format(e))
+        return e
 
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
     # @todo a way to avoid docker containers like the plague.
     # @todo, Scapy routine, list available interfaces.
     # @todo, add packet sniffing on the fly. <- debating on using this.
-    run = 't'
-    albert_faces()
+    run = albert_faces()
     sleep(0.4)
     while run == 't':
         try:
@@ -275,17 +304,17 @@ if __name__ == '__main__':
                     reader = open(dest, "r")
                     for line in reader.readlines():
                         line.strip("\n")
-                        list_reject(line)
+                        atk_log(list_reject(line))
                     continue
 
                 if choice == '2':
                     os.system('cls')
                     choice = str(input("[ + ] Please Input the IP: \n->"))
-                    list_reject(choice)
+                    atk_log(list_reject(choice))
                     continue
 
             if options == '2':
-                def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC -S www.microsoft.com --data-length 180 -oX" \
+                def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC -S www.microsoft.com --data-length 180 -oX " \
                            "./XML_Outpot/scan.xml -vvv --reason"
                 print("Default Args: \n{}".format(def_args))
                 question = str(input("[ + ] Would you like to use custom args with the nmap scan? [ + ] \n->")).lower()
@@ -294,14 +323,14 @@ if __name__ == '__main__':
                     host = str(input("[ + ] Please input host IP:\n->"))
                     port = str(input("[ + ] Please input port:\n->"))
                     try:
-                        nmapScan(host, port, args=def_args)
+                        atk_log(nmapScan(host, port, args=def_args))
                     except KeyError as e:
                         print("[ !! ] IP Must not be a valid IP: \n{}".format(e))
                         continue
                     continue
                 if question == 'y':
                     os.system('cls')
-                    def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC -S www.microsoft.com --data-length 180 -oX" \
+                    def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC -S www.microsoft.com --data-length 180 -oX " \
                                "./XML_Outpot/scan.xml -vvv --reason"
                     host = str(input("[ + ] Please input host IP:\n->"))
                     port = str(input("[ + ] Please input port:\n->"))
@@ -310,17 +339,17 @@ if __name__ == '__main__':
                     print("If you choose to not enter any different args, these will be used\n"\
                           "Default Args: \n{}".format(def_args))
                     if args == '':
-                        nmapScan(host, port, args=def_args)
+                        atk_log(nmapScan(host, port, args=def_args))
                         continue
                     if args != '':
-                        nmapScan(host, port, args=args)
+                        atk_log(nmapScan(host, port, args=args))
                         continue
 
             if options == "3":
                 choice = str(input("[ + ] Please input the subnet to detect [ + ]\n->"))
 
                 if choice != '':
-                    subnet_discover(choice)
+                    atk_log(subnet_discover(choice))
                     continue
 
             if options == "4":
@@ -333,12 +362,12 @@ if __name__ == '__main__':
 
                 if chance == "1":
                     strike = str(input("[ + ] Please enter the IP, we will need to scan the subnet [ + ]"))
-                    scapy_selection(subnet_discover(strike))
+                    atk_log(scapy_selection(subnet_discover(strike)))
                     continue
 
             if options == "5":
                 domain = str(input("[ * ] Please enter a domain name: [ * ]\n->"))
-                dns_dumpster(domain=domain)
+                atk_log(dns_dumpster(domain=domain))
                 continue
 
             if options == "6":
@@ -354,27 +383,27 @@ if __name__ == '__main__':
                                    "[ + ] - >"))
                 if choice == "1":
                     term = str(input("[ + } Please input a string to search for [ + ]\n->"))
-                    vulners_api(option="1", term=term)
+                    atk_log(vulners_api(option="1", term=term))
                     continue
                 if choice == "2":
                     term = str(input("[ + } Please input a Doc to search for [ + ]\n->"))
-                    vulners_api(option="2", term=term)
+                    atk_log(vulners_api(option="2", term=term))
                     continue
                 if choice == "3":
                     term = str(input("[ + } Please input a CVE number to search for \n"\
                                      "example: CVE-2017-14174 [ + ]\n->"))
-                    vulners_api(option="3", term=term)
+                    atk_log(vulners_api(option="3", term=term))
                     continue
                 if choice == "4":
                     term = str(input("[ + } Which software are we to search for [ + ]\n->"))
-                    vulners_api(option="4", term=term)
+                    atk_log(vulners_api(option="4", term=term))
                     continue
             if options == '9':
                 question = str(input("[ + ] Is the file outside of the default XML_Output directory? y/N\n->")).lower()
                 if question == 'n':
                     try:
                         default_path = './XML_Output/scan.xml'
-                        exploit_db(default_path)
+                        atk_log(exploit_db(default_path))
                         continue
                     except FileNotFoundError as e:
                         print("Hey! Hey! Hey! No one likes a liar... \n{}".format(e))
@@ -383,7 +412,7 @@ if __name__ == '__main__':
                     if path != '':
                         from pathlib import Path
                         lib = Path(path)
-                        exploit_db(lib)
+                        atk_log(exploit_db(lib))
                         continue
                     if path == '':
                         print("[ !! ] Please input a path!! [ !! ]")
