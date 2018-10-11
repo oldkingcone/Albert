@@ -1,5 +1,4 @@
 python-nmap
-tqdm
 scapy
 shodan
 termcolor
