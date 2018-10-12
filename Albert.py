@@ -370,22 +370,21 @@ if __name__ == '__main__':
     while run == 't':
         try:
             os.system('cls')
-            options = str(input("\n\n\n\t[ + ] Would you like to use:\n" \
-                                "\t\t1. ] Shodan\n" \
-                                "\t\t2. ] Nmap(Targeted Scanning of host system written out to XML file)\n" \
-                                "\t\t3. ] Subnet Discovery\n" \
-                                "\t\t4. ] NMAP Scan of subnet hosts(ARP or ICMP ACK)\n" \
-                                "\t\t5. ] DNSDumpster for invalid Domain setups\n" \
-                                "\t\t6. ] Windows API Manipulation\n" \
-                                "\t\t7. ] Vulners DB Search API\n" \
-                                "\t\t8. ] Admin Finder\n" \
-                                "\t\t9. ] SMTP User Enum/Brute Force\n"\
-                                "\t\t10. ] IP Locator\n"\
-                                "\t\t- > Press CTRL + C to return to the menu < -\n" \
-                                "\t --------------------------------------------------\n" \
-                                "\t Please ensure that all recon is done at least with nmap before using this\n" \
-                                "\t Section of this tool.\n" \
-                                "\t 11. ] Exploit DB\n" \
+            options = str(input("\n\n\n\t[ + ] Recon Phase:\n\n" \
+                                "\t\t[ 1. ] Shodan\n" \
+                                "\t\t[ 2. ] Nmap(Targeted Scanning of host system written out to XML file)\n" \
+                                "\t\t[ 3. ] Subnet Discovery\n" \
+                                "\t\t[ 4. ] NMAP Scan of subnet hosts(ARP or ICMP ACK)\n" \
+                                "\t\t[ 5. ] DNSDumpster for invalid Domain setups\n" \
+                                "\t\t[ 6. ] Windows API Manipulation\n" \
+                                "\t\t[ 7. ] Vulners DB Search API\n" \
+                                "\t\t[ 8. ] Admin Finder\n" \
+                                "\t\t[ 9. ] SMTP User Enum/Brute Force\n"\
+                                "\t\t[ 10. ] IP Locator\n"\
+                                "\t\t- > Press CTRL + C to return to the menu < -\n\n" \
+                                "\t --------------------------------------------------\n\n" \
+                                "\t Exploitation phase:\n"\
+                                "\t [ E ] Exploit DB\n" \
                                 "[ * ] - >"))
             if options == '1':
                 os.system('cls')
