@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-# add SQL, so scans can be quickly queired and stored.
 try:
     import urllib
     import pathlib
     import time
-    from vulnersapi import api_key
+    from vulnersapi import api
     from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
     import sched
     import random
@@ -143,7 +142,7 @@ def list_reject(target=''):
             return False
 
 
-def nmapScan(tgtHost, tgtPort, args):  # Nmap function created
+def nmapScan(tgtHost, tgtPort, args, file):  # Nmap function created
     from subprocess import Popen, PIPE
     try:
         if args != '':
@@ -157,7 +156,7 @@ def nmapScan(tgtHost, tgtPort, args):  # Nmap function created
             state = nmScan[tgtHost]['tcp'][int(tgtPort)]['state']
             nmScan.csv()
             print("[ ! ]  {}\n TCP: {} \n UP/DOWN: {}\n".format(tgtHost, tgtPort, state))
-            return tgtHost, tgtPort, args
+            return file
     except FileNotFoundError:
         print("Please install Nmap on your system, and try this again.")
         return tgtHost, tgtPort
@@ -238,9 +237,9 @@ def dns_dumpster(domain):
 
 
 def smtp_enum(server, user, passwd):
+    import smtplib
     if passwd == '': passwd = pw_lists()
     if user == '': user = usernames()
-    import smtplib
     try:
         userOpen = open(user, "r")
         userWord = userOpen.readlines()
@@ -345,14 +344,15 @@ def vulners_api(option, term):
 
 def exploit_db(file):
     from subprocess import PIPE, Popen
+    default = './XML_Output/scan.xml'
     try:
         if file == '':
-            command = 'searchsploit -x --nmap ./XML_Output/scan.xml'
+            command = 'searchsploit -x --nmap {}'.format(default)
             db_search = Popen([command], stdout=PIPE, stderr=PIPE)
             atk_log(print(db_search.communicate()))
         if file != '':
             fil = file
-            command = 'searchsploit -x --nmap ' + fil
+            command = 'searchsploit -x --nmap {}' .format(fil)
             db_search = Popen([command], stdout=PIPE, stderr=PIPE)
             atk_log(print(db_search.communicate()))
     except Exception as e:
@@ -383,7 +383,7 @@ if __name__ == '__main__':
                                 "\t\t[ 10. ] IP Locator\n"\
                                 "\t\t- > Press CTRL + C to return to the menu < -\n\n" \
                                 "\t --------------------------------------------------\n\n" \
-                                "\t Exploitation phase:\n"\
+                                "\t Exploitation phase:\n"
                                 "\t [ E ] Exploit DB\n" \
                                 "[ * ] - >"))
             if options == '1':
@@ -431,20 +431,21 @@ if __name__ == '__main__':
                     continue
                 if question == 'y':
                     os.system('cls')
-                    def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC -S www.microsoft.com --data-length 180 -oX " \
-                               "./XML_Outpot/scan.xml -vvv --reason"
                     host = str(input("[ + ] Please input host IP:\n->"))
                     port = str(input("[ + ] Please input port:\n->"))
+                    file = './XML_Output/{}.xml'.format(host)
+                    def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC -S www.microsoft.com --data-length 180 -oX " \
+                               "./XML_Outpot/{}.xml -vvv --reason".format(host)
                     args = str(
                         input("[ + ] Please enter the full commands:\n Example: -f -t 0 -n -Pn –data-length 200 -D" \
                               "\n->"))
                     print("If you choose to not enter any different args, these will be used\n" \
                           "Default Args: \n{}".format(def_args))
                     if args == '':
-                        atk_log(nmapScan(host, port, args=def_args))
+                        atk_log(nmapScan(host, port, args=def_args, file=file))
                         continue
                     if args != '':
-                        atk_log(nmapScan(host, port, args=args))
+                        atk_log(nmapScan(host, port, args=args, file=file))
                         continue
 
             if options == "3":
@@ -516,8 +517,9 @@ if __name__ == '__main__':
                 atk_log(smtp_enum(server=server, user=user, passwd=password))
                 continue
             if options == '10':
+                import ipaddress
                 ip = str(input("[ + ] Please input an IP to locate [ + ]\n->"))
-                if ip != '': ip = ip
+                if ip != '': ip = ipaddress.ip_address(ip)
                 atk_log(iplocator(ip))
                 continue
             if options == '11':
