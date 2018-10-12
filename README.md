@@ -1,5 +1,5 @@
 # F.A.T Albert
----
+
 ### The Albert
 ---
 #### Synopsis:
