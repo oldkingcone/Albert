@@ -20,6 +20,8 @@ __OR:__
 
 > sudo pip3 install -r requirements
 
+Upon successful installation of the required packages, you will __NEED__ to acquire an API key to use VulnersDB from:
+[https://www.vulners.com](https://www.vulners.com)
 
 ---
 
