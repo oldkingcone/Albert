@@ -35,6 +35,45 @@ logo = '''
     \__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
 is Restarting'''
 
+def pw_lists():
+    from pathlib import Path
+    print("Starting to import password lists, please be patient.\n")
+    PATH_DIR = './data/'
+    usersnames = set()
+    for item in os.scandir(PATH_DIR):
+        lists = set()
+        lists.add(item)
+        for entry in lists:
+            with open(entry) as ax:
+                try:
+                    if entry.startswith('adm'):
+                        pass
+                    elif entry.startswith('password') or entry.startswith("wp") or entry.startswith("mil"):
+                        sykes = ax.readlines()
+                        usersnames.add(sykes)
+                    ax.close()
+                    return usersnames
+                except (IOError, FileNotFoundError) as e:
+                    print("{}".format(e))
+                    return e
+def usernames():
+    PATH_DIR = './data/'
+    passes = set()
+    for item in os.scandir(PATH_DIR):
+        lists = set()
+        lists.add(item)
+        for entry in lists:
+            with open(entry) as ax:
+                try:
+                    if entry.startswith('adm'):
+                        pass
+                    elif entry.startswith('names') or entry.startswith('multi'):
+                        style = ax.readlines(entry)
+                        passes.add(style)
+                    return passes
+                except (IOError, FileNotFoundError) as e:
+                    print("{}".format(e))
+                    return e
 
 def albert_faces():
     alberts = ''
@@ -210,6 +249,8 @@ def dns_dumpster(domain):
 
 
 def smtp_enum(server, user, passwd):
+    if passwd == '': passwd = pw_lists()
+    if user == '': user = usernames()
     import smtplib
     try:
         userOpen = open(user, "r")
