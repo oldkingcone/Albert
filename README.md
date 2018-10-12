@@ -31,7 +31,15 @@ Upon successful installation of the required packages, you will __NEED__ to acqu
 
 #### Usage:
 
-  The useage of this tool is very easy, there is a guided menu. The options are seperated by type, future editions of this tool will incoporate exploitation and post-exploitation phases to further simplify the whole process. Along with the additions of those 2 phases, it will also have the ability to automate the whole process, and not just shotgun blast exploits at a clients machine in the hope that one will work. 
+  The useage of this tool is very easy, there is a guided menu. The options are seperated by type, future editions of this tool will incoporate exploitation and post-exploitation phases to further simplify the whole process. Along with the additions of those 2 phases, it will also have the ability to automate the whole process, and not just shotgun blast exploits at a clients machine in the hope that one will work.
+  
+  Because of the lower level packages within this project, you will need to run this program as `sudo`:
+  
+  Clone the repo by using the standard `git clone` method:
+  >git clone https://github.com/oldkingcone/Albert.git ; cd Albert-master
+  
+  To run the program, simply use:
+  >sudo python3 ./Albert.py
 
 
 ---
