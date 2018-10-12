@@ -3,7 +3,11 @@
 ### The Albert
 ---
 #### Synopsis:
-  The smart penetration testing tool. This tool is meant as an all in one for penetration testing, **mixing some __tried and tested methods__** for gathering recon on a __single machine__ or an entire __subnet__. With output being printed into Nmap XML document for easy use with ExploitDB. The scans used within this tool will be incredibly verbose and make its best attempt at service identification, although it uses __subprocess__ to leverage the strength and power of Nmap, it still combines the extra steps into a single tool. This fixes 2 issues, the first being having to manually run all XML output through ExploitDB to find the most likely exploits to use against your clients machine, **AND** simplifies the recon process. The **best** part of this tool, is it uses both active scanning or passive scanning, the choice is at your fingertips, it leverages the power of Shodan with all results written to a single file(overwritten each run) for later review, the full logging of the shodan results can be found inside the `atk_output` folder, matter of a fact, __ALL__ output from each scan can be found inside the `atk_output` folder [Example](https://github.com/oldkingcone/Albert/tree/master/atk_output). This tool will also make an attempt to retrieve the Geo Location data for a specified IP address. And to top it all off, this program will attempt to enumerate SMTP username's and password's, leveraging the power of SecLists.
+  The smart penetration testing tool. This tool is meant as an all in one for penetration testing, **mixing some __tried and tested methods__** for gathering recon on a __single machine__ or an entire __subnet__. 
+  
+  With output being printed into Nmap XML document for easy use with ExploitDB. The scans used within this tool will be incredibly verbose and make its best attempt at service identification, although it uses __subprocess__ to leverage the strength and power of Nmap, it still combines the extra steps into a single tool. This fixes 2 issues, the first being having to manually run all XML output through ExploitDB to find the most likely exploits to use against your clients machine, **AND** simplifies the recon process. The **best** part of this tool, is it uses both active scanning or passive scanning, the choice is at your fingertips, it leverages the power of Shodan with all results written to a single file(overwritten each run) for later review, the full logging of the shodan results can be found inside the `atk_output` folder, matter of a fact, __ALL__ output from each scan can be found inside the `atk_output` folder [Example](https://github.com/oldkingcone/Albert/tree/master/atk_output). 
+  
+  This tool will also make an attempt to retrieve the Geo Location data for a specified IP address. And to top it all off, this program will attempt to enumerate SMTP username's and password's, leveraging the power of SecLists.
 
 -----
 
@@ -46,6 +50,9 @@ Upon successful installation of the required packages, you will __NEED__ to acqu
     1. Use Stem package for this.
 6. Network Pivoting
     1. Add a way to pivot yourself through the network exploring all available options.
+7. Bring in AI( oh yea ):
+    1. Teach the AI to recognize honeypots and docker containers, and to avoid them at all costs.
+    2. Also teach the AI to help with fuzzing to bypass WAF/IDS.
 
 ---
 
