@@ -34,18 +34,18 @@ Upon successful installation of the required packages, you will __NEED__ to acqu
 ### Future Features:
 
 1. Automation of Recon Phase
-  1. Add Option to choose automated recon phase with little printed out to the screen, other than the reccommended exploits, suggested by ExploitDB.
-  2. Make this into an API so it can be imported into other projects.
+   1. Add Option to choose automated recon phase with little printed out to the screen, other than the reccommended exploits, suggested by ExploitDB.
+   2. Make this into an API so it can be imported into other projects.
 2. A routine that, based off of information collected from the targeted system, populates the correct information within exploit
-  1. Correct hostname paramaters, named pipes, or other collected information.
-  2. Routine to handle Exploitation process either manual or guided.
+   1. Correct hostname paramaters, named pipes, or other collected information.
+   2. Routine to handle Exploitation process either manual or guided.
 3. SQL Injection testing.
    1. By either adding SQLMap directly to the project, or other means.
   4. SQL Database logging of discovered weaknesses/information.
 5. Automatic cloaking(through TOR)
     1. Use Stem package for this.
 6. Network Pivoting
-     1. Add a way to pivot yourself through the network exploring all available options.
+    1. Add a way to pivot yourself through the network exploring all available options.
 
 ---
 
