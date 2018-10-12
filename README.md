@@ -10,8 +10,7 @@
 
 #### Install:
 ---
->sudo apt install python3-setuptools python3-minimal python3-pip python-dev python3-dev python3-scapy python3-tqdm \
->python3-termcolor python3-shodan nmap exploitdb
+>sudo apt install python3-setuptools python3-minimal python3-pip python-dev python3-dev python3-scapy python3-tqdm python3-termcolor python3-shodan nmap exploitdb
 
 __OR:__
 
