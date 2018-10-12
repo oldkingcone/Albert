@@ -156,7 +156,7 @@ def nmapScan(tgtHost, tgtPort, args, file):  # Nmap function created
             state = nmScan[tgtHost]['tcp'][int(tgtPort)]['state']
             nmScan.csv()
             print("[ ! ]  {}\n TCP: {} \n UP/DOWN: {}\n".format(tgtHost, tgtPort, state))
-            return file
+            return "Scan file is located at: ", file
     except FileNotFoundError:
         print("Please install Nmap on your system, and try this again.")
         return tgtHost, tgtPort
@@ -385,7 +385,7 @@ if __name__ == '__main__':
                                 "\t --------------------------------------------------\n\n" \
                                 "\t Exploitation phase:\n"
                                 "\t [ E ] Exploit DB\n" \
-                                "[ * ] - >"))
+                                "\n\n[ * ]Choice goes here: - >"))
             if options == '1':
                 os.system('cls')
                 choice = str(input("[ + ] Is this a file list, or a single IP:\n" \
@@ -435,7 +435,7 @@ if __name__ == '__main__':
                     port = str(input("[ + ] Please input port:\n->"))
                     file = './XML_Output/{}.xml'.format(host)
                     def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC -S www.microsoft.com --data-length 180 -oX " \
-                               "./XML_Outpot/{}.xml -vvv --reason".format(host)
+                               "./XML_Outpot/scan.xml -vvv --reason"
                     args = str(
                         input("[ + ] Please enter the full commands:\n Example: -f -t 0 -n -Pn –data-length 200 -D" \
                               "\n->"))
