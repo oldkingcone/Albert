@@ -9,7 +9,7 @@
   
   This tool will also make an attempt to retrieve the Geo Location data for a specified IP address. And to top it all off, this program will attempt to enumerate SMTP username's and password's, leveraging the power of SecLists.
   
-  On top of all those cool features, this project will enumerate a subnet for hosts connected to the subnet, by 1 of 2 ways. An ARP scan of the entire subnet, __You will need to choose an interface for this__, or `ICMP ACK` scans, if the target allows such scans from outside the network to occur.
+  On top of all those cool features, this project will enumerate a subnet for hosts connected to the subnet, by 1 of 2 ways. An ARP scan of the entire subnet, __You will need to choose an interface for this__, or `ICMP ACK` scans, if the target allows such scans from outside the network to occur. Found hosts can be used for a zombie scan, or for later implimentations push directly into network pivoting, the choice is yours.
 
 -----
 
