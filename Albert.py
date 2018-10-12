@@ -36,44 +36,33 @@ logo = '''
 is Restarting'''
 
 def pw_lists():
-    from pathlib import Path
     print("Starting to import password lists, please be patient.\n")
-    PATH_DIR = './data/'
+    PATH_DIR = './data/main_pass.txt'
     usersnames = set()
-    for item in os.scandir(PATH_DIR):
-        lists = set()
-        lists.add(item)
-        for entry in lists:
-            with open(entry) as ax:
-                try:
-                    if entry.startswith('adm'):
-                        pass
-                    elif entry.startswith('password') or entry.startswith("wp") or entry.startswith("mil"):
-                        sykes = ax.readlines()
-                        usersnames.add(sykes)
-                    ax.close()
-                    return usersnames
-                except (IOError, FileNotFoundError) as e:
-                    print("{}".format(e))
-                    return e
+    try:
+        with open(PATH_DIR, 'r') as ax:
+                sykes = ax.readlines()
+                for line in sykes:
+                    print(line.strip('\n'))
+                    usersnames.add(line.strip('\n'))
+                return usersnames
+    except (IOError, FileNotFoundError) as e:
+        print("{}".format(e))
+        return e
+
 def usernames():
-    PATH_DIR = './data/'
+    PATH_DIR = './data/main_names.txt'
     passes = set()
-    for item in os.scandir(PATH_DIR):
-        lists = set()
-        lists.add(item)
-        for entry in lists:
-            with open(entry) as ax:
-                try:
-                    if entry.startswith('adm'):
-                        pass
-                    elif entry.startswith('names') or entry.startswith('multi'):
-                        style = ax.readlines(entry)
-                        passes.add(style)
-                    return passes
-                except (IOError, FileNotFoundError) as e:
-                    print("{}".format(e))
-                    return e
+    with open(PATH_DIR, 'r') as a:
+        try:
+            style = a.readlines()
+            for line in style:
+                print(line.strip('\n'))
+                passes.add(line.strip('\n'))
+            return passes
+        except (IOError, FileNotFoundError) as e:
+            print("{}".format(e))
+            return e
 
 def albert_faces():
     alberts = ''
