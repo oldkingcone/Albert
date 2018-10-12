@@ -8,6 +8,8 @@
   With output being printed into Nmap XML document for easy use with ExploitDB. The scans used within this tool will be incredibly verbose and make its best attempt at service identification, although it uses __subprocess__ to leverage the strength and power of Nmap, it still combines the extra steps into a single tool. This fixes 2 issues, the first being having to manually run all XML output through ExploitDB to find the most likely exploits to use against your clients machine, **AND** simplifies the recon process. The **best** part of this tool, is it uses both active scanning or passive scanning, the choice is at your fingertips, it leverages the power of Shodan with all results written to a single file(overwritten each run) for later review, the full logging of the shodan results can be found inside the `atk_output` folder, matter of a fact, __ALL__ output from each scan can be found inside the `atk_output` folder [Example](https://github.com/oldkingcone/Albert/tree/master/atk_output). 
   
   This tool will also make an attempt to retrieve the Geo Location data for a specified IP address. And to top it all off, this program will attempt to enumerate SMTP username's and password's, leveraging the power of SecLists.
+  
+  On top of all those cool features, this project will enumerate a subnet for hosts connected to the subnet, by 1 of 2 ways. An ARP scan of the entire subnet, __You will need to choose an interface for this__, or `ICMP ACK` scans, if the target allows such scans from outside the network to occur.
 
 -----
 
