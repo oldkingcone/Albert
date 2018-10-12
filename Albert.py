@@ -156,7 +156,7 @@ def nmapScan(tgtHost, tgtPort, args, file):  # Nmap function created
             state = nmScan[tgtHost]['tcp'][int(tgtPort)]['state']
             nmScan.csv()
             print("[ ! ]  {}\n TCP: {} \n UP/DOWN: {}\n".format(tgtHost, tgtPort, state))
-            return "Scan file is located at: ", file
+            return "Scan file is located at: ", file, "\nPlease copy this down."
     except FileNotFoundError:
         print("Please install Nmap on your system, and try this again.")
         return tgtHost, tgtPort
