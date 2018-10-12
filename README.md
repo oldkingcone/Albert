@@ -36,7 +36,7 @@ Upon successful installation of the required packages, you will __NEED__ to acqu
   Because of the lower level packages within this project, you will need to run this program as `sudo`:
   
   Clone the repo by using the standard `git clone` method:
-  >git clone https://github.com/oldkingcone/Albert.git ; cd Albert-master
+  >git clone `https://github.com/oldkingcone/Albert.git` ; cd Albert-master
   
   To run the program, simply use:
   >sudo python3 ./Albert.py
