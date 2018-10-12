@@ -18,8 +18,4 @@ __OR:__
 
 > sudo apt install nmap exploitdb python3-setuptools python3-minimal python3-pip python-dev python3-dev
 
-
-__ Then run:__
-
-
 > sudo pip3 install -r requirements
