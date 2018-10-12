@@ -48,3 +48,10 @@ Upon successful installation of the required packages, you will __NEED__ to acqu
      1. Add a way to pivot yourself through the network exploring all available options.
 
 ---
+
+
+### Thanks:
+
+If you enjoy this tool, say thank you to the crew of Freedom45, or, Chef, Root, and Johnny5.
+
+---
