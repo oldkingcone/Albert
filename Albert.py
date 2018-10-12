@@ -3,7 +3,7 @@ try:
     import urllib
     import pathlib
     import time
-    from vulnersapi import api
+    from vulnersapi import api_key
     from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
     import sched
     import random
