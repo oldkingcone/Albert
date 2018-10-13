@@ -68,7 +68,7 @@ Upon successful installation of the required packages, you will __NEED__ to acqu
 7. Bring in AI( oh yea ):
     1. Teach the AI to recognize honeypots and docker containers, and to avoid them at all costs.
     2. Also teach the AI to help with fuzzing to bypass WAF/IDS.
-
+8. DPKT for network level attacks such as, DNS Poisoning, ARP Poisoning, etc.
 ---
 
 
