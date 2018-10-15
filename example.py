@@ -1,4 +1,4 @@
-def netsh_pivot(option, iface, listenport, connectport, host):
+def netsh_pivot(option='', iface='', listenport='', connectport='', host=''):
     from subprocess import Popen, PIPE
     if option == '2':
         # put the popen connamds in here
