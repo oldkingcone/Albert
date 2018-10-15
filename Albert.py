@@ -359,6 +359,7 @@ def exploit_db(file):
         print("{}".format(e))
         return e
 
+# insert that fucntion here.
 
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
@@ -541,6 +542,7 @@ if __name__ == '__main__':
                     if path == '':
                         print("[ !! ] Please input a path!! [ !! ]")
                         continue
+	# insert the option here, and all collected info from the user, passing it to netsh_pivot(option= ,iface= ,listenport= ,connectport= ,host= )
             if options == '':
                 os.system('cls')
                 print("[ ! ] Please enter a value! [ ! ]")
