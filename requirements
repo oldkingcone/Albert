@@ -6,3 +6,4 @@ netaddr
 vulners
 dpkt
 pypiwin32
+stem
