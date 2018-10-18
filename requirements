@@ -5,3 +5,4 @@ termcolor
 netaddr
 vulners
 dpkt
+pypiwin32
