@@ -393,7 +393,7 @@ if __name__ == '__main__':
     while run == 't':
         try:
             os.system('cls')
-	    options = str(input("\n\n\n\t[ + ]\n\t [ ?? ] Recon Phase:\n\n" \
+            options = str(input("\n\n\n\t[ + ]\n\t [ ?? ] Recon Phase:\n\n" \
                                 "\t\t > 1. Shodan\n" \
                                 "\t\t > 2. Nmap(Targeted Scanning of host system written out to XML file)\n" \
                                 "\t\t > 3. Subnet Discovery\n" \
