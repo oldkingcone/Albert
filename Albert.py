@@ -393,24 +393,24 @@ if __name__ == '__main__':
     while run == 't':
         try:
             os.system('cls')
-            options = str(input("\n\n\n\t[ + ] Recon Phase:\n\n" \
+            options = str(input("\n\n\n\t[ + ]\n---> Recon Phase:\n\n" \
                                 "\t\t[ 1. ] Shodan\n" \
                                 "\t\t[ 2. ] Nmap(Targeted Scanning of host system written out to XML file)\n" \
                                 "\t\t[ 3. ] Subnet Discovery\n" \
                                 "\t\t[ 4. ] NMAP Scan of subnet hosts(ARP or ICMP ACK)\n" \
                                 "\t\t[ 5. ] DNSDumpster for invalid Domain setups\n" \
-                                "\t\t[ 6. ] Windows API Manipulation\n" \
-                                "\t\t[ 7. ] Vulners DB Search API\n" \
-                                "\t\t[ 8. ] Admin Finder\n" \
-                                "\t\t[ 9. ] SMTP User Enum/Brute Force\n"\
-                                "\t\t[ 10. ] IP Locator\n"\
+                                "\t\t[ 6. ] Vulners DB Search API\n" \
+                                "\t\t[ 7. ] Admin Finder\n" \
+                                "\t\t[ 8. ] SMTP User Enum/Brute Force\n"\
+                                "\t\t[ 9. ] IP Locator\n"\
                                 "\t\t- > Press CTRL + C to return to the menu < -\n\n" \
                                 "\t --------------------------------------------------\n\n" \
-                                "\t Exploitation phase:\n"
-                                "\t [ E1 ] Exploit DB\n"\
+                                "\t---> Exploitation phase:\n"
+                                "\t\t [ E1 ] Exploit DB\n\n"\
                                 "\t --------------------------------------------------\n\n"\
-                                "\t Post-Exploitation Phase:\n"\
-                                "\t\t[ P1 ] Network Pivot with NetSH\n"
+                                "\t ---> Post-Exploitation Phase:\n"\
+                                "\t\t[ P1 ] Windows API Manipulation\n" \
+                                "\t\t[ P2 ] Network Pivot with NetSH\n"\
                                 "\n\n[ * ]Choice goes here: - >")).lower()
             if options == '1':
                 os.system('cls')
@@ -500,10 +500,6 @@ if __name__ == '__main__':
                 continue
 
             if options == "6":
-                print("[ * ] Sorry, that is a coming feature! [ * ]")
-                continue
-
-            if options == "7":
                 choice = str(input("[ + ] VulnersDB search API:\n" \
                                    "\t1 . ) Search by term\n" \
                                    "\t2 . ) Search by CVE code\n" \
@@ -527,14 +523,14 @@ if __name__ == '__main__':
                     term = str(input("[ + } Which software are we to search for [ + ]\n->"))
                     atk_log(vulners_api(option="4", term=term))
                     continue
-            if options == '8':
+            if options == '7':
                 from pathlib import Path
                 server = str(input("[ + ] Please input the server address [ + ]\n->"))
                 admlist = str(input("[ + ] Please tell me where the admin list is, or leave blank for default [ + ]\n->"))
                 if server != '' and admlist != '':
                     atk_log(panel_find(server, adminList=Path(admlist)))
                     continue
-            if options == '9':
+            if options == '8':
                 server = str(input("[ + ] Please input a server address/IP [ + ]\n->"))
                 user = str(input("[ + ] Please enter a path for username list, or leave blank for default [ + ]\n->"))
                 password = str(input("[ + ] Please enter path for password list, or leave blank for default [ + ]\n->"))
@@ -542,7 +538,7 @@ if __name__ == '__main__':
                 if password != '': Path(password)
                 atk_log(smtp_enum(server=server, user=user, passwd=password))
                 continue
-            if options == '10':
+            if options == '9':
                 import ipaddress
                 ip = str(input("[ + ] Please input an IP to locate [ + ]\n->"))
                 atk_log(iplocator(ip))
@@ -566,7 +562,10 @@ if __name__ == '__main__':
                     if path == '':
                         print("[ !! ] Please input a path!! [ !! ]")
                         continue
-            if options == 'p1':
+            if options == "p1":
+                print("[ * ] Sorry, that is a coming feature! [ * ]")
+                continue
+            if options == 'p2':
                 print("[ + ] Still working on this and perfecting it! check back later! [ + ]")
                 continue
             if options == '':
