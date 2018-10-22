@@ -96,10 +96,7 @@ def atk_log(atk):
             lines = set()
             lines.add(atk)
             for item in lines:
-                if item.startswith('DNS Dumpster'):
-                    f.writelines(''.join(item.replace(":", "\n")))
-                else:
-                    f.writelines(item)
+		f.writelines(item)
             f.write('\n-------------------------------------------------------------------------------------------\n')
         f.close()
         return False
@@ -283,7 +280,7 @@ def panel_find(server, adminList):
         for item in ax:
             lx = server + item
             x.request('GET', lx)
-            if x.status == '200' or x.status != 200:
+            if x.status == '200' or x.status == 200:
                 print("[-] Found Da Panel -> {}".format(lx))
 
 def iplocator(ip):
@@ -358,8 +355,7 @@ def exploit_db(file):
     except Exception as e:
         print("{}".format(e))
         return e
-
-# insert that fucntion here.
+#@todo add Network Pivot with NetSH, and a few others, because options.
 
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
@@ -544,7 +540,7 @@ if __name__ == '__main__':
                         print("[ !! ] Please input a path!! [ !! ]")
                         continue
             if options == '11':
-                question = str(input("[ + ] Please choose command to try\n"
+                question = str(input("[ + ] Please choose command to try\n"))
                 choice = str(input("[ + ] 1. Dynamic PortForwarding\n" \
                                    "[ + ] 2. Wireless\n"
                                    "[ + ] 3. Cleanup\n"
@@ -552,8 +548,10 @@ if __name__ == '__main__':
 
                 if choice == '1'
                     def netsh_pipe(iface, listenport, connectport, host):
-                        if port!="": port = port
-                        if port =="": port = port.random.rand(1, 1000)
+                        if port != "": 
+				port = port
+                        else:
+				port = port.random.rand(1, 1000)
 
                     subprocess.Popen('netsh interface portpory add v4 to v4 listenport="" connectport=" ", stdin=PIPE, stdout=PIPE')
                     continue
