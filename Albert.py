@@ -393,24 +393,24 @@ if __name__ == '__main__':
     while run == 't':
         try:
             os.system('cls')
-            options = str(input("\n\n\n\t[ + ]\n---> Recon Phase:\n\n" \
-                                "\t\t[ 1. ] Shodan\n" \
-                                "\t\t[ 2. ] Nmap(Targeted Scanning of host system written out to XML file)\n" \
-                                "\t\t[ 3. ] Subnet Discovery\n" \
-                                "\t\t[ 4. ] NMAP Scan of subnet hosts(ARP or ICMP ACK)\n" \
-                                "\t\t[ 5. ] DNSDumpster for invalid Domain setups\n" \
-                                "\t\t[ 6. ] Vulners DB Search API\n" \
-                                "\t\t[ 7. ] Admin Finder\n" \
-                                "\t\t[ 8. ] SMTP User Enum/Brute Force\n"\
-                                "\t\t[ 9. ] IP Locator\n"\
+	    options = str(input("\n\n\n\t[ + ]\n\t [ ?? ] Recon Phase:\n\n" \
+                                "\t\t > 1. Shodan\n" \
+                                "\t\t > 2. Nmap(Targeted Scanning of host system written out to XML file)\n" \
+                                "\t\t > 3. Subnet Discovery\n" \
+                                "\t\t > 4. NMAP Scan of subnet hosts(ARP or ICMP ACK)\n" \
+                                "\t\t > 5. DNSDumpster for invalid Domain setups\n" \
+                                "\t\t > 6. Vulners DB Search API\n" \
+                                "\t\t > 7. Admin Finder\n" \
+                                "\t\t > 8. SMTP User Enum/Brute Force\n"\
+                                "\t\t > 9. IP Locator\n"\
                                 "\t\t- > Press CTRL + C to return to the menu < -\n\n" \
                                 "\t --------------------------------------------------\n\n" \
-                                "\t---> Exploitation phase:\n"
-                                "\t\t [ E1 ] Exploit DB\n\n"\
+                                "\t  [ !! ] Exploitation phase:\n"
+                                "\t\t > E1 Exploit DB\n\n"\
                                 "\t --------------------------------------------------\n\n"\
-                                "\t ---> Post-Exploitation Phase:\n"\
-                                "\t\t[ P1 ] Windows API Manipulation\n" \
-                                "\t\t[ P2 ] Network Pivot with NetSH\n"\
+                                "\t [ ** ] Post-Exploitation Phase:\n"\
+                                "\t\t > P1 Windows API Manipulation\n" \
+                                "\t\t > P2 Network Pivot with NetSH\n"\
                                 "\n\n[ * ]Choice goes here: - >")).lower()
             if options == '1':
                 os.system('cls')
