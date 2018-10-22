@@ -382,6 +382,7 @@ if __name__ == '__main__':
                                 "\t\t[ 8. ] Admin Finder\n" \
                                 "\t\t[ 9. ] SMTP User Enum/Brute Force\n"\
                                 "\t\t[ 10. ] IP Locator\n"\
+				"\t\t[ 11. ] NetSH Pivot\n"\
                                 "\t\t- > Press CTRL + C to return to the menu < -\n\n" \
                                 "\t --------------------------------------------------\n\n" \
                                 "\t Exploitation phase:\n"
@@ -523,7 +524,7 @@ if __name__ == '__main__':
                 if ip != '': ip = ipaddress.ip_address(ip)
                 atk_log(iplocator(ip))
                 continue
-            if options == '11':
+            if options == 'e':
                 question = str(input("[ + ] Is the file outside of the default XML_Output directory? y/N\n->")).lower()
                 if question == 'n':
                     try:
@@ -542,11 +543,29 @@ if __name__ == '__main__':
                     if path == '':
                         print("[ !! ] Please input a path!! [ !! ]")
                         continue
-	# insert the option here, and all collected info from the user, passing it to netsh_pivot(option= ,iface= ,listenport= ,connectport= ,host= )
+            if options == '11':
+                question = str(input("[ + ] Please choose command to try\n"
+                choice = str(input("[ + ] 1. Dynamic PortForwarding\n" \
+                                   "[ + ] 2. Wireless\n"
+                                   "[ + ] 3. Cleanup\n"
+                                   "[ + ] - >"))
+
+                if choice == '1'
+                    def netsh_pipe(iface, listenport, connectport, host):
+                        if port!="": port = port
+                        if port =="": port = port.random.rand(1, 1000)
+
+                    subprocess.Popen('netsh interface portpory add v4 to v4 listenport="" connectport=" ", stdin=PIPE, stdout=PIPE')
+                    continue
+                if choice == '2'
+                    subprocess.Popen('netsh wlan show networks mode=bssid', stdin=PIPE, stdout=PIPE)
+                    continue
+                if choice == '3'
+                    subprocess.Popen('netsh interface portproxy del')
             if options == '':
                 os.system('cls')
                 print("[ ! ] Please enter a value! [ ! ]")
-                continue
+continue
 
         except KeyboardInterrupt:
             choice = str(input("[ + ] Would you like to exit? [ + ]\n->")).lower()
