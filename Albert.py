@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 try:
+    from subprocess import Popen, PIPE
     import urllib
     import pathlib
     import time
-    from vulnersapi import api_key
+    from vulnersapi import api
     from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
     import sched
     import random
@@ -96,8 +97,8 @@ def atk_log(atk):
             lines = set()
             lines.add(atk)
             for item in lines:
-		f.writelines(item)
-            f.write('\n-------------------------------------------------------------------------------------------\n')
+                f.writelines(item)
+            f.write('\n-----------------------------------------------------------------------------\n')
         f.close()
         return False
     except TypeError as e:
@@ -140,7 +141,6 @@ def list_reject(target=''):
 
 
 def nmapScan(tgtHost, tgtPort, args, file):  # Nmap function created
-    from subprocess import Popen, PIPE
     try:
         if args != '':
             print("[ + ] Using: {} [ + ]".format(args))
@@ -153,7 +153,7 @@ def nmapScan(tgtHost, tgtPort, args, file):  # Nmap function created
             state = nmScan[tgtHost]['tcp'][int(tgtPort)]['state']
             nmScan.csv()
             print("[ ! ]  {}\n TCP: {} \n UP/DOWN: {}\n".format(tgtHost, tgtPort, state))
-            return "Scan file is located at: ", file, "\nPlease copy this down."
+            return "Scan file is located at: ", file
     except FileNotFoundError:
         print("Please install Nmap on your system, and try this again.")
         return tgtHost, tgtPort
@@ -235,22 +235,24 @@ def dns_dumpster(domain):
 
 def smtp_enum(server, user, passwd):
     import smtplib
-    if passwd == '': passwd = pw_lists()
-    if user == '': user = usernames()
-    try:
-        userOpen = open(user, "r")
-        userWord = userOpen.readlines()
-        userOpen.close()
-    except IOError:
-        print("[-]No User file found: " + user)
-        pass
-    try:
-        passOpen = open(passwd, "r")
-        passWord = passOpen.readlines()
-        passOpen.close()
-    except IOError:
-        print("[-]No Password File Found")
-        pass
+    if user == '' and passwd == '':
+        user = usernames()
+        passwd = pw_lists()
+    else:
+        try:
+            userOpen = open(user, "r")
+            userWord = userOpen.readlines()
+            userOpen.close()
+        except IOError:
+            print("[-]No User file found: " + user)
+            pass
+        try:
+            passOpen = open(passwd, "r")
+            passWord = passOpen.readlines()
+            passOpen.close()
+        except IOError:
+            print("[-]No Password File Found")
+            pass
     try:
         smtpServer = smtplib.SMTP(server, port)
         smtpServer.ehlo()
@@ -280,7 +282,7 @@ def panel_find(server, adminList):
         for item in ax:
             lx = server + item
             x.request('GET', lx)
-            if x.status == '200' or x.status == 200:
+            if x.status == '200' or x.status != 200:
                 print("[-] Found Da Panel -> {}".format(lx))
 
 def iplocator(ip):
@@ -355,7 +357,31 @@ def exploit_db(file):
     except Exception as e:
         print("{}".format(e))
         return e
-#@todo add Network Pivot with NetSH, and a few others, because options.
+
+def netsh_pivot(option, iface, listenport, connectport, host):
+    from subprocess import Popen, PIPE
+    if option == '1':
+        # put the popen connamds in here
+        command = "{}{}{}".format(listenport, connectport, host)
+        Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        return
+
+def netsh_pipe(choice, iface, listenport, connectport, host):
+    if port == "":
+        listenport, connectport = random.randint(1, 1000)
+    else:
+        connectport = connectport
+        listenport = listenport
+    command_v4 = 'netsh {} portpory add v4 to v4 listenport={} connectport={}'.format(iface, listenport, connectport)
+    command_wlan = 'netsh wlan show networks mode=bssid'
+    command_del = 'netsh {} portproxy del'
+
+    if choice == '1':
+        Popen(command_v4, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    if choice == '2':
+        Popen(command_wlan, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    if choice == '3':
+        Popen(command_del, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
 if __name__ == '__main__':
     # @todo bring in a honeypot detection routine.
@@ -378,12 +404,14 @@ if __name__ == '__main__':
                                 "\t\t[ 8. ] Admin Finder\n" \
                                 "\t\t[ 9. ] SMTP User Enum/Brute Force\n"\
                                 "\t\t[ 10. ] IP Locator\n"\
-				"\t\t[ 11. ] NetSH Pivot\n"\
                                 "\t\t- > Press CTRL + C to return to the menu < -\n\n" \
                                 "\t --------------------------------------------------\n\n" \
                                 "\t Exploitation phase:\n"
-                                "\t [ E ] Exploit DB\n" \
-                                "\n\n[ * ]Choice goes here: - >"))
+                                "\t [ E1 ] Exploit DB\n"\
+                                "\t --------------------------------------------------\n\n"\
+                                "\t Post-Exploitation Phase:\n"\
+                                "\t\t[ P1 ] Network Pivot with NetSH\n"
+                                "\n\n[ * ]Choice goes here: - >")).lower()
             if options == '1':
                 os.system('cls')
                 choice = str(input("[ + ] Is this a file list, or a single IP:\n" \
@@ -422,7 +450,7 @@ if __name__ == '__main__':
                     host = str(input("[ + ] Please input host IP:\n->"))
                     port = str(input("[ + ] Please input port:\n->"))
                     try:
-                        atk_log(nmapScan(host, port, args=def_args))
+                        atk_log(nmapScan(host, port, args=def_args, file=''))
                     except KeyError as e:
                         print("[ !! ] IP Must not be a valid IP: \n{}".format(e))
                         continue
@@ -433,7 +461,7 @@ if __name__ == '__main__':
                     port = str(input("[ + ] Please input port:\n->"))
                     file = './XML_Output/{}.xml'.format(host)
                     def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC -S www.microsoft.com --data-length 180 -oX " \
-                               "./XML_Outpot/scan.xml -vvv --reason"
+                               "./XML_Outpot/{}.xml -vvv --reason".format(host)
                     args = str(
                         input("[ + ] Please enter the full commands:\n Example: -f -t 0 -n -Pn –data-length 200 -D" \
                               "\n->"))
@@ -517,10 +545,9 @@ if __name__ == '__main__':
             if options == '10':
                 import ipaddress
                 ip = str(input("[ + ] Please input an IP to locate [ + ]\n->"))
-                if ip != '': ip = ipaddress.ip_address(ip)
                 atk_log(iplocator(ip))
                 continue
-            if options == 'e':
+            if options == 'e1':
                 question = str(input("[ + ] Is the file outside of the default XML_Output directory? y/N\n->")).lower()
                 if question == 'n':
                     try:
@@ -539,31 +566,13 @@ if __name__ == '__main__':
                     if path == '':
                         print("[ !! ] Please input a path!! [ !! ]")
                         continue
-            if options == '11':
-                question = str(input("[ + ] Please choose command to try\n"))
-                choice = str(input("[ + ] 1. Dynamic PortForwarding\n" \
-                                   "[ + ] 2. Wireless\n"
-                                   "[ + ] 3. Cleanup\n"
-                                   "[ + ] - >"))
-
-                if choice == '1'
-                    def netsh_pipe(iface, listenport, connectport, host):
-                        if port != "": 
-				port = port
-                        else:
-				port = port.random.rand(1, 1000)
-
-                    subprocess.Popen('netsh interface portpory add v4 to v4 listenport="" connectport=" ", stdin=PIPE, stdout=PIPE')
-                    continue
-                if choice == '2'
-                    subprocess.Popen('netsh wlan show networks mode=bssid', stdin=PIPE, stdout=PIPE)
-                    continue
-                if choice == '3'
-                    subprocess.Popen('netsh interface portproxy del')
+            if options == 'p1':
+                print("[ + ] Still working on this and perfecting it! check back later! [ + ]")
+                continue
             if options == '':
                 os.system('cls')
                 print("[ ! ] Please enter a value! [ ! ]")
-continue
+                continue
 
         except KeyboardInterrupt:
             choice = str(input("[ + ] Would you like to exit? [ + ]\n->")).lower()
