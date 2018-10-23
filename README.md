@@ -70,7 +70,7 @@ Upon successful installation of the required packages, you will __NEED__ to acqu
     2. Also teach the AI to help with fuzzing to bypass WAF/IDS.
 8. DPKT for network level attacks such as, DNS Poisoning, ARP Poisoning, etc.
 9. Persistent:
-    1. Adding modules to be dropped onto a target system, for extended control through the penetration test.
+    1. Adding modules to be dropped onto a target system, for extended control through the penetration test, by modifying the registry, getting important OS info, and adding a special tunnel for our traffic to flow through while in the network.
 ---
 
 
