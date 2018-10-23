@@ -79,3 +79,8 @@ Upon successful installation of the required packages, you will __NEED__ to acqu
 If you enjoy this tool, say thank you to the crew of Freedom45, or, Chef, Root, and Johnny5.
 
 ---
+
+
+### Addendum:
+
+Do not be an idiot, do not do anything illegal with this tool. This tool has been made for professionals or for educational purposes to use in **LEGAL** penetration testing sessions. If you choose to use this tool, and get into trouble with it, **THE CREATORS OF THIS TOOL ARE NOT RESPONSIBLE FOR YOUR DECISIONS**, know the laws, and do not break them. 
