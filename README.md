@@ -69,6 +69,8 @@ Upon successful installation of the required packages, you will __NEED__ to acqu
     1. Teach the AI to recognize honeypots and docker containers, and to avoid them at all costs.
     2. Also teach the AI to help with fuzzing to bypass WAF/IDS.
 8. DPKT for network level attacks such as, DNS Poisoning, ARP Poisoning, etc.
+9. Persistent:
+    1. Adding modules to be dropped onto a target system, for extended control through the penetration test.
 ---
 
 
