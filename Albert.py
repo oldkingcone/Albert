@@ -2,12 +2,12 @@
 # for those of you who do not look at source code before trying a tool, tough. 
 # for those of you who do, there are some purposely coded errors, should be within the exploit_db method, and the nmap method.
 # those were placed there to ensure that this tool is not abused.
+# -*- coding: utf-8 -*-
 try:
     from subprocess import Popen, PIPE
     import urllib
     import pathlib
     import time
-    from vulnersapi import api
     from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
     import sched
     import random
@@ -15,7 +15,7 @@ try:
     import shodan
     import sys
     import nmap
-    from api import apikey
+    from api import apikey, vulners_api
     import time
     import base64
     import os
@@ -23,7 +23,6 @@ try:
     from termcolor import cprint
     from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
     import dpkt
-    import vulners
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
     sys.exit(1)
@@ -69,10 +68,13 @@ def usernames():
 
 def albert_faces():
     alberts = ''
-    albert = random.randint(1, 3)
+    albert = random.randint(1, 6)
     if albert == 1: alberts = "./art/albert_face.txt"
     if albert == 2: alberts = "./art/albert_face_2.txt"
     if albert == 3: alberts = "./art/fat_albert_3"
+    if albert == 4: alberts = "./art/memo_cat"
+    if albert == 5: alberts = "./art/memo_logo"
+    if albert == 6: alberts = "./art/memo_logo_2"
     face = open(alberts, "r")
     lulz = face.readlines()
     for line in lulz:
@@ -93,7 +95,7 @@ def write_file(line):
 
 def atk_log(atk):
     try:
-        with open(PATH, 'at') as f:
+        with open(PATH, 'a') as f:
             lines = set()
             lines.add(atk)
             for item in lines:
@@ -411,7 +413,15 @@ if __name__ == '__main__':
                                 "\t [ ** ] Post-Exploitation Phase:\n"\
                                 "\t\t > P1 Windows API Manipulation\n" \
                                 "\t\t > P2 Network Pivot with NetSH\n"\
+                                "\t -------------------------------------------------\n\n"\
+                                "\t\t [ && ] Automate Process:\n"\
+                                "\t\t > A1 Async Automation"
                                 "\n\n[ * ]Choice goes here: - >")).lower()
+            if options == 'a1':
+                import auto_albert
+                a = auto_albert
+                atk_log(a)
+
             if options == '1':
                 os.system('cls')
                 choice = str(input("[ + ] Is this a file list, or a single IP:\n" \
