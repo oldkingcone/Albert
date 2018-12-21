@@ -299,15 +299,17 @@ def progress_bar(duration):
         continue
 
 async def main(ip):
+    subnets = [ip+"/16", ip+"/24", ip+"/32"]
     passive = asyncio.create_task(Albert_api.list_reject(ip))
-    aggressive = asyncio.create_task(Albert_api.nmapScan(ip=ip))
+    for i in subnets:
+        await asyncio.gather(
+            asyncio.create_task(Albert_api.nmapScan(ip=i)))
     passiv_task = asyncio.create_task(Albert_api.subnet_discover(ip))
     pasiv_task = asyncio.create_task(Albert_api.dns_dumpster(ip))
     pas_task = asyncio.create_task(Albert_api.panel_find(ip, adminList=''))
     pa_task = asyncio.create_task(Albert_api.smtp_enum(ip))
     agre_task = asyncio.create_task(Albert_api.exploit_db())
     await passive
-    await aggressive
     await passiv_task
     await pasiv_task
     await pas_task
@@ -318,6 +320,6 @@ if __name__ == "__main__":
     ip = str(input("Enter destination IP or Host name:\n->"))
     start = time.time()
     print("[+] Welcome! Starting run at: {} [+]".format(start))
-    progress_bar(asyncio.run(main(ip)))
+    asyncio.run(main(ip))
     end = time.time()
     print("[+] Finished at: {} [+]\n[+] Thank you for playing [+]".format(end - start))
