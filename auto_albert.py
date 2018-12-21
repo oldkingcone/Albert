@@ -27,15 +27,16 @@ except (ImportError) as e:
     print("[✘] Something is terribly wrong:\n->{} [✘]".format(e))
     sys.exit(1)
 
-ip = str(input("Enter destination IP or Host name:\n->"))
-logging.basicConfig(filename="./atk_output/debug.txt",
-                    level=logging.DEBUG,
-                    format="%(asctime)s:%(levelname)s:%(message)s")
+
+
 PATH = './atk_output/'
 
 PW_PATH = "./data/main_pass.txt"
 NAMES_PATH = "./data/main_names.txt"
 class Albert_api:
+    logging.basicConfig(filename="./atk_output/debug.log",
+                    level=logging.DEBUG,
+                    format="%(asctime)s:%(levelname)s:%(message)s")
     def _pw_lists(path):
         logging.debug("Starting to import password lists, please be patient.\n")
         paths = path
@@ -296,7 +297,7 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
         Popen(command_del, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
 
-async def main(ip=ip):
+async def main(ip):
     passive = asyncio.create_task(Albert_api.list_reject(ip))
     aggressive = asyncio.create_task(Albert_api.nmapScan(ip=ip))
     passiv_task = asyncio.create_task(Albert_api.subnet_discover(ip))
@@ -306,8 +307,9 @@ async def main(ip=ip):
     agre_task = asyncio.create_task(Albert_api.exploit_db())
 
 if __name__ == "__main__":
+    ip = str(input("Enter destination IP or Host name:\n->"))
     start = time.time()
     logging.debug("[+] Welcome! Starting run at: {} [+]".format(start))
-    asyncio.run(main())
+    asyncio.run(main(ip))
     end = time.time()
     logging.debug("[+] Finished at: {} [+]\n[+] Thank you for playing [+]".format(end - start))
