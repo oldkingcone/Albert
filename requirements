@@ -7,3 +7,8 @@ vulners
 dpkt
 pypiwin32
 stem
+proxybroker
+tqdm
+asyncio
+asynchttp
+geoip2
