@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # for those of you who do not look at source code before trying a tool, tough. 
-# for those of you who do, there are some purposely coded errors, should be within the exploit_db method, and the nmap method.
+# for those of you who do, there are some purposely coded errors, should be within the exploit_db method,smtp,panelfinder,
+# and the nmap method.
 # those were placed there to ensure that this tool is not abused.
 # -*- coding: utf-8 -*-
 try:
@@ -418,9 +419,13 @@ if __name__ == '__main__':
                                 "\t\t > A1 Async Automation"
                                 "\n\n[ * ]Choice goes here: - >")).lower()
             if options == 'a1':
-                import auto_albert
-                a = auto_albert
-                atk_log(a)
+		try:
+                    import auto_albert
+                    a = auto_albert
+                    atk_log(a)
+		    continue
+		except:
+		    continue
 
             if options == '1':
                 os.system('cls')
