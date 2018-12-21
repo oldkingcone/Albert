@@ -305,9 +305,9 @@ async def main(ip=ip):
     pa_task = asyncio.create_task(Albert_api.smtp_enum(ip))
     agre_task = asyncio.create_task(Albert_api.exploit_db())
 
-
-start = time.time()
-logging.debug("[+] Welcome! Starting run at: {} [+]".format(start))
-asyncio.run(main())
-end = time.time()
-logging.debug("[+] Finished at: {} [+]\n[+] Thank you for playing [+]".format(end - start))
+if __name__ == "__main__":
+    start = time.time()
+    logging.debug("[+] Welcome! Starting run at: {} [+]".format(start))
+    asyncio.run(main())
+    end = time.time()
+    logging.debug("[+] Finished at: {} [+]\n[+] Thank you for playing [+]".format(end - start))
