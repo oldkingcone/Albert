@@ -28,41 +28,37 @@ except (ImportError) as e:
     sys.exit(1)
 
 
-
+logging.basicConfig(filename="./atk_output/debug.txt",
+                        level=print)
 PATH = './atk_output/'
-
 PW_PATH = "./data/main_pass.txt"
 NAMES_PATH = "./data/main_names.txt"
 class Albert_api:
-    logging.basicConfig(filename="./atk_output/debug.log",
-                    level=logging.DEBUG,
-                    format="%(asctime)s:%(levelname)s:%(message)s")
+
     def _pw_lists(path):
-        logging.debug("Starting to import password lists, please be patient.\n")
-        paths = path
+        print("Starting to import password lists, please be patient.\n")
         usersnames = set()
         try:
-            with open(paths, 'r') as ax:
+            with open(path, 'r') as ax:
                 sykes = ax.readlines()
                 for line in sykes:
                     usersnames.add(line.strip('\n'))
                 return usersnames
         except (IOError, FileNotFoundError) as e:
-            logging.debug("[✘] Password List collection failure: {} [✘]\n\n".format(e))
+            print("[✘] Password List collection failure: {} [✘]\n\n".format(e))
             return e
 
 
     def _usernames(path):
         passes = set()
-        paths = path
-        with open(paths, 'r') as a:
+        with open(path, 'r') as a:
             try:
                 style = a.readlines()
                 for line in style:
                     passes.add(line.strip('\n'))
                 return passes
             except (IOError, FileNotFoundError) as e:
-                logging.debug("[✘] Username collection routine failure: {} [✘]\n\n".format(e))
+                print("[✘] Username collection routine failure: {} [✘]\n\n".format(e))
                 return e
 
 
@@ -74,11 +70,10 @@ class Albert_api:
 
 
     async def list_reject(target=''):
-        logging.debug("--> Inside shodan scanner\n\n")
         api = shodan.Shodan(apikey)
         try:
             search = api.host(target)
-            logging.debug("""
+            print("""
 			    	IP: {}
 				    Organization: {}
 				    Operating System: {}
@@ -86,7 +81,7 @@ class Albert_api:
 
         # Print all banners
             for item in search['data']:
-                logging.debug("""
+                print("""
 				    		Port: {}
 					    	Banner: {}
 				    """.format(item['port'], item['data']))
@@ -95,73 +90,70 @@ class Albert_api:
                 return target
         except shodan.APIError as e:
             os.system('cls')
-            logging.debug('[✘] Shodan Scanner Failure: {} [✘]\n\n'.format(e))
+            print('[✘] Shodan Scanner Failure: {} [✘]\n\n'.format(e))
             option = input('[*] Shieeeet you wanna chagne that API Key? <Y/n>: ').lower()
             if option == ('y'):
                 file = open('api.py', 'w')
                 SHODAN_API_KEY = input('[*] Hey! Hey! Hey! Enter A Valid Shodan.io API Key: ')
                 oppsie = ["apikey= ", "\"", str(SHODAN_API_KEY), "\""]
                 file.write(''.join(oppsie))
-                logging.debug('[~] File Dropped Nigga: ./api.py')
+                print('[~] File Dropped Nigga: ./api.py')
                 file.close()
                 return target
 
 
     async def nmapScan(ip):  # Nmap function created
-        logging.debug("--> Inside Nmap scanning module\n\n")
         try:
             args = "-sS -p 15-6893 -sV --version-all -A -T2 -sC --data-length 180 -oX " \
                    "./XML_Outpot/{}.xml -vvv --reason".format(ip)
-            logging.debug("[ + ] Using: {} [ + ]".format(args))
+            print("[ + ] Using: {} [ + ]".format(args))
             command = 'nmap ' + ip + ' ' + args
             nmScanner = Popen([command], stdout=PIPE)
-            logging.debug(nmScanner.communicate())
+            print(nmScanner.communicate())
             return ip
         except Exception as e:
-            logging.debug("[✘] Nmap Failure: {} [✘]".format(e))
+            print("[✘] Nmap Failure: {} [✘]".format(e))
             return ip
 
 
     async def subnet_discover(ip):
-        logging.debug("--> Inside subnet discovery module\n\n")
         import netaddr
         try:
             question = netaddr.IPAddress(ip)
             response = netaddr.IPNetwork(ip).cidr
-            logging.debug("Reverse DNS {}".format(question.reverse_dns))
-            logging.debug("Subnet/CIDR: {}".format(response.cidr))
-            logging.debug("Private? {}".format(question.is_private))
-            logging.debug("Net Mask: {}".format(response.netmask))
-            logging.debug("Broad Cast: {}".format(response.broadcast))
-            logging.debug("Host Mask: {}".format(response.hostmask))
-            logging.debug("Multicast: {}".format(question.is_multicast))
+            print("Reverse DNS {}".format(question.reverse_dns))
+            print("Subnet/CIDR: {}".format(response.cidr))
+            print("Private? {}".format(question.is_private))
+            print("Net Mask: {}".format(response.netmask))
+            print("Broad Cast: {}".format(response.broadcast))
+            print("Host Mask: {}".format(response.hostmask))
+            print("Multicast: {}".format(question.is_multicast))
             return response
         except netaddr.core.AddrFormatError as es:
-            logging.debug("[✘] Sorry, that was not an IP [✘] \n\t\t-> {}".format(es))
+            print("[✘] Sorry, that was not an IP [✘] \n\t\t-> {}".format(es))
             return es
 
 
     def scapy_selection(net):
-        logging.debug("-->Inside Scapy scanning:\n\n")
         import datetime as dt
         from scapy.all import srp, ETHER_ANY, ARPHDR_ETHER, conf, IFACES
         try:
-            logging.debug("{}".format(IFACES.show(resolve_mac=True, print_result=True)))
+            print("{}".format(IFACES.show(resolve_mac=True, print_result=True)))
             interface = str(input("[ + ] Please choose an interface [ + ]\n->"))
             ip = net
             time_start = dt.datetime.now()
             conf.verb = 0
             ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(pdst=ip), timeout=2, iface=interface, inter=0.1)
-            logging.debug("MAC and IP\n")
+            print("MAC and IP\n")
             for snd, rcv in ans:
-                logging.debug(rcv.sprintf(r"%Ether.src% - %ARP.psrc%"))
+                print(rcv.sprintf(r"%Ether.src% - %ARP.psrc%"))
                 stop_time = dt.datetime.now()
                 total_time = time_start - stop_time
-                logging.debug("[ ** ] Complete! [ ** ]")
-                logging.debug("[ ** ] Finished in: {} [ ** ]".format(total_time))
+                print("[ ** ] Complete! [ ** ]")
+                print("[ ** ] Finished in: {} [ ** ]".format(total_time))
             return ip
         except Exception as e:
-            logging.debug("[✘] Scappy Failure: {} [✘]".format(e))
+            print("[✘] Scappy Failure: {} [✘]".format(e))
             return e
 
 
@@ -169,28 +161,28 @@ class Albert_api:
         try:
             res = DNSDumpsterAPI({'verbose': True}).search(domain)
             aks = ['DNS Dumpster results:', '\n', str(res), '\n']
-            logging.debug("[ + ] Searching for {} [ + ]".format(domain))
-            logging.debug("\n[ + ] DNS Servers [ + ]")
+            print("[ + ] Searching for {} [ + ]".format(domain))
+            print("\n[ + ] DNS Servers [ + ]")
             for entry in res['dns_records']['dns']:
-                logging.debug(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
-            logging.debug("\n[ + ] MX Records [ + ]")
+                print(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
+            print("\n[ + ] MX Records [ + ]")
             for entry in res['dns_records']['mx']:
-                logging.debug(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
-            logging.debug("\n[ + ] Host Records (A) [ + ]")
+                print(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
+            print("\n[ + ] Host Records (A) [ + ]")
             for entry in res['dns_records']['host']:
                 if entry['reverse_dns']:
-                    logging.debug(("{domain} ({reverse_dns}) ({ip}) {as} {provider} {country}".format(**entry)))
+                    print(("{domain} ({reverse_dns}) ({ip}) {as} {provider} {country}".format(**entry)))
                 else:
-                    logging.debug(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
-            logging.debug("\n[ + ] TXT Records [ + ]")
+                    print(("{domain} ({ip}) {as} {provider} {country}".format(**entry)))
+            print("\n[ + ] TXT Records [ + ]")
             for entry in res['dns_records']['txt']:
-                logging.debug("{}".format(entry))
+                print("{}".format(entry))
             image_retrieved = res['image_data'] is not None
-            logging.debug("\nRetrieved Network mapping image? {} (accessible in 'image_data')".format(image_retrieved))
-            logging.debug(repr(base64.b64decode(res['image_data'])[:20]) + '...')
+            print("\nRetrieved Network mapping image? {} (accessible in 'image_data')".format(image_retrieved))
+            print(repr(base64.b64decode(res['image_data'])[:20]) + '...')
             xls_retrieved = res['xls_data'] is not None
-            logging.debug("\nRetrieved XLS hosts? {} (accessible in 'xls_data')".format(xls_retrieved))
-            logging.debug(repr(base64.b64decode(res['xls_data'])[:20]) + '...')
+            print("\nRetrieved XLS hosts? {} (accessible in 'xls_data')".format(xls_retrieved))
+            print(repr(base64.b64decode(res['xls_data'])[:20]) + '...')
             return domain
         except Exception as e:
             print("[✘] DNS Dumpster Failure: {} [✘]".format(e))
@@ -198,6 +190,7 @@ class Albert_api:
 
 
     async def smtp_enum(server):
+        # self.server = str(server)
         import smtplib
         import pathlib
         port = '25'
@@ -207,18 +200,20 @@ class Albert_api:
             smtpServer = smtplib.SMTP(server, port)
             smtpServer.ehlo()
             smtpServer.starttls()
-        except:
-            logging.debug("[-] No server found [-]")
-            sys.exit(1)
-        for username, passe in user, passwd:
-            con = smtplib.SMTP()
-            try:
-                ex = con.login(username, passe)
-                logging.debug("[+] {} [+]".format(ex))
-                return ex
-            except Exception as e:
-                logging.debug("[✘] SMTP Enum failure: {} [✘]".format(e))
-                return e
+        except ConnectionRefusedError as e:
+            print("[-] SMPT Connection Refused: {} [-]".format(str(e)))
+            await asyncio.sleep(1)
+            return e
+        for username in user:
+            for passw in passwd:
+                con = smtplib.SMTP()
+                try:
+                    ex = con.login(username, passw)
+                    print("[+] {} [+]".format(ex))
+                    return ex
+                except Exception as e:
+                    print("[✘] SMTP Enum failure: {} [✘]".format(e))
+                    return e
 
 
     async def panel_find(server, adminList):
@@ -226,17 +221,18 @@ class Albert_api:
         if adminList == '': adminList = open("./data/adm_list", "r")
         for admin in adminList.readlines():
             ax = set()
-            ax.add(admin)
+            ax.add(admin.strip("\n"))
             x = urllib3.PoolManager()
             try:
                 for item in ax:
-                    lx = server + item
-                    x.request('GET', lx)
+                    lx = server + "/"+item
+                    print(lx)
+                    x.request('GET', lx, retries=False)
                     if x.status == '200' or x.status != 200:
-                        logging.debug("[-] Found Da Panel -> {}".format(lx))
+                        print("[-] Found Da Panel -> {}".format(lx))
                         return lx
-            except Exception as e:
-                logging.debug("[✘] Panel Find Failed: {} [✘]".format(str(e)))
+            except (BaseException, WindowsError) as e:
+                print("[✘] Panel Find Failed: {} [✘]".format(str(e)))
 
 
 # async def iplocator(ip):
@@ -264,9 +260,9 @@ class Albert_api:
             for item in scan:
                 command = 'searchsploit -x --nmap {}'.format(str(item))
                 db_search = Popen([command], stdout=PIPE, stderr=PIPE)
-                return logging.debug(db_search.communicate())
+                return print(db_search.communicate())
         except Exception as e:
-            logging.debug("[✘] Exploit DB Failure: {} [✘]".format(e))
+            print("[✘] Exploit DB Failure: {} [✘]".format(e))
             return e
 
 
@@ -296,6 +292,10 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
     if choice == '3':
         Popen(command_del, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
+def progress_bar(duration):
+    from tqdm import tqdm
+    for i in tqdm(range(int(duration), desc="Time till pwn", ascii=True, dynamic_ncols=True)):
+        time.sleep(1)
 
 async def main(ip):
     passive = asyncio.create_task(Albert_api.list_reject(ip))
@@ -305,11 +305,18 @@ async def main(ip):
     pas_task = asyncio.create_task(Albert_api.panel_find(ip, adminList=''))
     pa_task = asyncio.create_task(Albert_api.smtp_enum(ip))
     agre_task = asyncio.create_task(Albert_api.exploit_db())
+    await passive
+    await aggressive
+    await passiv_task
+    await pasiv_task
+    await pas_task
+    await pa_task
+    await agre_task
 
 if __name__ == "__main__":
     ip = str(input("Enter destination IP or Host name:\n->"))
     start = time.time()
-    logging.debug("[+] Welcome! Starting run at: {} [+]".format(start))
-    asyncio.run(main(ip))
+    print("[+] Welcome! Starting run at: {} [+]".format(start))
+    progress_bar(asyncio.run(main(ip)))
     end = time.time()
-    logging.debug("[+] Finished at: {} [+]\n[+] Thank you for playing [+]".format(end - start))
+    print("[+] Finished at: {} [+]\n[+] Thank you for playing [+]".format(end - start))
