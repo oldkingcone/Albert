@@ -299,7 +299,7 @@ def progress_bar(duration):
         continue
 
 async def main(ip):
-    subnets = [ip+"/16", ip+"/24", ip+"/32"]
+    subnets = [ip+"/10", ip+"/12",ip+"/16", ip+"/24", ip+"/32"]
     passive = asyncio.create_task(Albert_api.list_reject(ip))
     for i in subnets:
         await asyncio.gather(
