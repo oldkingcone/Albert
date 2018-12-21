@@ -228,6 +228,7 @@ class Albert_api:
                     lx = server + "/"+item
                     print(lx)
                     x.request('GET', lx, retries=False)
+                    await asyncio.sleep(1)
                     if x.status == '200' or x.status != 200:
                         print("[-] Found Da Panel -> {}".format(lx))
                         return lx
@@ -294,8 +295,8 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
 
 def progress_bar(duration):
     from tqdm import tqdm
-    for i in tqdm(range(int(duration), desc="Time till pwn", ascii=True, dynamic_ncols=True)):
-        time.sleep(1)
+    for i in tqdm(asyncio.as_completed(duration), total=len(duration), desc="Time to pwn :)"):
+        continue
 
 async def main(ip):
     passive = asyncio.create_task(Albert_api.list_reject(ip))
