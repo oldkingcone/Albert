@@ -1,17 +1,18 @@
 try:
-    import logging
+    from proxybroker import Broker
+    import aiohttp
+    from proxybroker import Broker, ProxyPool
+    from proxybroker.errors import NoProxyError
+    from urllib.parse import urlparse
     import geoip2
     from subprocess import Popen, PIPE
-    import urllib
     import pathlib
     import time
     from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
     import sched
     import random
-    import urllib
     import shodan
     import sys
-    import nmap
     from api import apikey, vulners_api
     import time
     import base64
@@ -19,17 +20,17 @@ try:
     from time import sleep
     from termcolor import cprint
     from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
-    import dpkt
+    # import dpkt
     import vulners
     import asyncio
-    import argparse
 except (ImportError) as e:
     print("[✘] Something is terribly wrong:\n->{} [✘]".format(e))
     sys.exit(1)
 
+# if os.getuid() != 0:
+#     cprint("Please run this as root.", 'red')
+#     sys.exit(1)
 
-logging.basicConfig(filename="./atk_output/debug.txt",
-                        level=print)
 PATH = './atk_output/'
 PW_PATH = "./data/main_pass.txt"
 NAMES_PATH = "./data/main_names.txt"
@@ -201,7 +202,7 @@ class Albert_api:
             smtpServer.ehlo()
             smtpServer.starttls()
         except ConnectionRefusedError as e:
-            print("[-] SMPT Connection Refused: {} [-]".format(str(e)))
+            print("[-] SMTP Connection Refused: {} [-]".format(str(e)))
             await asyncio.sleep(1)
             return e
         for username in user:
@@ -293,22 +294,23 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
     if choice == '3':
         Popen(command_del, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
-def progress_bar(duration):
-    from tqdm import tqdm
-    for i in tqdm(asyncio.as_completed(duration), total=len(duration), desc="Time to pwn :)"):
-        continue
-
 async def main(ip):
     subnets = [ip+"/10", ip+"/12",ip+"/16", ip+"/24", ip+"/32"]
+
     passive = asyncio.create_task(Albert_api.list_reject(ip))
+
     for i in subnets:
         await asyncio.gather(
             asyncio.create_task(Albert_api.nmapScan(ip=i)))
+
     passiv_task = asyncio.create_task(Albert_api.subnet_discover(ip))
+
     pasiv_task = asyncio.create_task(Albert_api.dns_dumpster(ip))
     pas_task = asyncio.create_task(Albert_api.panel_find(ip, adminList=''))
     pa_task = asyncio.create_task(Albert_api.smtp_enum(ip))
+
     agre_task = asyncio.create_task(Albert_api.exploit_db())
+
     await passive
     await passiv_task
     await pasiv_task
