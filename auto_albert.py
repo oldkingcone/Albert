@@ -267,33 +267,6 @@ class Albert_api:
             print("[✘] Exploit DB Failure: {} [✘]".format(e))
             return e
 
-
-def netsh_pivot(option, iface, listenport, connectport, host):
-    from subprocess import Popen, PIPE
-    if option == '1':
-        # put the popen connamds in here
-        command = "{}{}{}".format(listenport, connectport, host)
-        Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-        return
-
-
-def netsh_pipe(choice, iface, listenport, connectport, host):
-    if listenport == "" or connectport == "":
-        listenport, connectport = random.randint(1, 1000)
-    else:
-        connectport = connectport
-        listenport = listenport
-    command_v4 = 'netsh {} portpory add v4 to v4 listenport={} connectport={}'.format(iface, listenport, connectport)
-    command_wlan = 'netsh wlan show networks mode=bssid'
-    command_del = 'netsh {} portproxy del'
-
-    if choice == '1':
-        Popen(command_v4, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    if choice == '2':
-        Popen(command_wlan, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    if choice == '3':
-        Popen(command_del, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-
 async def main(ip):
     subnets = [ip+"/10", ip+"/12",ip+"/16", ip+"/24", ip+"/32"]
 
@@ -318,10 +291,9 @@ async def main(ip):
     await pa_task
     await agre_task
 
-if __name__ == "__main__":
-    ip = str(input("Enter destination IP or Host name:\n->"))
-    start = time.time()
-    print("[+] Welcome! Starting run at: {} [+]".format(start))
-    asyncio.run(main(ip))
-    end = time.time()
-    print("[+] Finished at: {} [+]\n[+] Thank you for playing [+]".format(end - start))
+ip = str(input("Enter destination IP or Host name:\n->"))
+start = time.time()
+print("[+] Welcome! Starting run at: {} [+]".format(start))
+asyncio.run(main(ip))
+end = time.time()
+print("[+] Finished at: {} [+]\n[+] Thank you for playing [+]".format(end - start))
