@@ -190,11 +190,10 @@ class Albert_api:
             return e
 
 
-    async def smtp_enum(server):
+    async def smtp_enum(server, port):
         # self.server = str(server)
         import smtplib
         import pathlib
-        port = '25'
         user = Albert_api._usernames(path=pathlib.Path(NAMES_PATH))
         passwd = Albert_api._pw_lists(path=pathlib.Path(PW_PATH))
         try:
@@ -269,6 +268,10 @@ class Albert_api:
 
 async def main(ip):
     subnets = [ip+"/10", ip+"/12",ip+"/16", ip+"/24", ip+"/32"]
+    smtp_ports = ["25", "2525", "465"]
+    pop3_ports = []
+    imap_ports = []
+    #@todo add imap and pop3 username enumeration.
 
     passive = asyncio.create_task(Albert_api.list_reject(ip))
 
@@ -280,7 +283,8 @@ async def main(ip):
 
     pasiv_task = asyncio.create_task(Albert_api.dns_dumpster(ip))
     pas_task = asyncio.create_task(Albert_api.panel_find(ip, adminList=''))
-    pa_task = asyncio.create_task(Albert_api.smtp_enum(ip))
+    for x in smtp_ports:
+    await asyncio.gather(asyncio.create_task(Albert_api.smtp_enum(ip, x)))
 
     agre_task = asyncio.create_task(Albert_api.exploit_db())
 
@@ -288,7 +292,6 @@ async def main(ip):
     await passiv_task
     await pasiv_task
     await pas_task
-    await pa_task
     await agre_task
 
 ip = str(input("Enter destination IP or Host name:\n->"))
