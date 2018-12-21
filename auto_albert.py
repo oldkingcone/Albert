@@ -284,7 +284,7 @@ async def main(ip):
     pasiv_task = asyncio.create_task(Albert_api.dns_dumpster(ip))
     pas_task = asyncio.create_task(Albert_api.panel_find(ip, adminList=''))
     for x in smtp_ports:
-    await asyncio.gather(asyncio.create_task(Albert_api.smtp_enum(ip, x)))
+        await asyncio.gather(asyncio.create_task(Albert_api.smtp_enum(ip, x)))
 
     agre_task = asyncio.create_task(Albert_api.exploit_db())
 
