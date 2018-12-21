@@ -49,6 +49,12 @@ Upon successful installation of the required packages, you will __NEED__ to acqu
 
 ---
 
+### Bugs:
+
+Please note, that currently there is a bug in the automated portion of this script that does not log properly. We are still working the kinks out on that portion and will have a working fully automated, logging capable, version soon.
+
+
+---
 
 ### Future Features:
 
