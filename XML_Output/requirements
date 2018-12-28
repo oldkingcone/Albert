@@ -1,0 +1,9 @@
+python-nmap
+scapy
+shodan
+termcolor
+netaddr
+vulners
+dpkt
+pypiwin32
+stem
