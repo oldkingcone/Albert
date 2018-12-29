@@ -1,0 +1,1 @@
+# create a startup item inside the registry hive, so our program starts on startup.
