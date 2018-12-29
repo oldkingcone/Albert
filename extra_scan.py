@@ -16,8 +16,8 @@ def extras_scan():
                 if file.endswith('.py'):
                     extras.extend(file)
         choice = input("Please enter your choice:\n->")
-        for index in persist:
-            if choice == index:
+        for entry in persist:
+            if choice == str(entry):
                 cprint("[ + ] You selected: [ + ]\n->{}".format(choice), "blue", attrs=["bold"])
                 Path(PATH + choice)
 
@@ -29,8 +29,8 @@ def extras_scan():
                 if file.endswith(".py"):
                     persist.extend(file)
         choice = input("Please enter your choice:\n->")
-        for index in persist:
-            if choice == index:
+        for entry in persist:
+            if choice == str(entry):
                 cprint("[ + ] You selected: [ + ]\n->{}".format(choice), "blue", attrs=["bold"])
 
 if __name__ == "__main__":
