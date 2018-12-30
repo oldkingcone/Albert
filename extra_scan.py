@@ -1,37 +1,30 @@
 def extras_scan():
+    import sqlite3
     import os
-    from termcolor import cprint, colored
     from pathlib import Path
-
+    sql_stmt = '''CREATE TABLE IF NOT EXISTS other_mods(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, mod_name TEXT)'''
+    mods_track = "INSERT INTO other_mods(mod_name) VALUES (?)"
+    conn = sqlite3.connect('./data/mods.sqlite')
+    alter = conn.cursor()
+    alter.execute(sql_stmt)
+    conn.commit()
     extras = list()
-    persist = list()
-    PATH = './data/scripts/'
-    PERSIST_SCRIPTS = './data/scripts/persistance'
-    decision = input("[ ! ] Please select a path:\n1 . ){} \n2 . ){}\n->".format(PATH, PERSIST_SCRIPTS))
-    if decision == '1':
-        print("[ + ] Available extras [ + ]")
-        for files in os.listdir('./data/scripts/'):
-            cprint("[ + ] {} [ + ]".format(files), "white", attrs=['blink', 'bold'])
-            for file in files:
-                if file.endswith('.py'):
-                    extras.extend(file)
-        choice = input("Please enter your choice:\n->")
-        for entry in persist:
-            if choice == str(entry):
-                cprint("[ + ] You selected: [ + ]\n->{}".format(choice), "blue", attrs=["bold"])
-                Path(PATH + choice)
-
-    if decision == '2':
-        print("[ + ] Persistance Modules: [ + ]")
-        for files in os.listdir('./data/scripts/persistance/'):
-            cprint("[ + ] {} [ + ]".format(files), "white", attrs=['blink', 'bold'])
-            for file in files:
-                if file.endswith(".py"):
-                    persist.extend(file)
-        choice = input("Please enter your choice:\n->")
-        for entry in persist:
-            if choice == str(entry):
-                cprint("[ + ] You selected: [ + ]\n->{}".format(choice), "blue", attrs=["bold"])
-
+    name_list = list()
+    DIRECTORIES = ['./data/scripts', './data/scripts/persistence', './data']
+    for entry in DIRECTORIES:
+        for file in os.listdir(Path(entry)):
+            if file.endswith('.py'):
+                extras.append(entry + '/' + file)
+            elif file.endswith('.txt'):
+                name_list.append(entry + '/' + file)
+    for item in extras:
+        extras.remove(item)
+        alter.execute(mods_track, [item])
+    for item in name_list:
+        name_list.remove(item)
+        alter.execute(mods_track, [item])
+    conn.commit()
+    conn.close()
 if __name__ == "__main__":
     extras_scan()
