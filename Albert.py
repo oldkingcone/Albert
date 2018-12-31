@@ -5,6 +5,7 @@
 # those were placed there to ensure that this tool is not abused.
 # -*- coding: utf-8 -*-
 try:
+    from extras_scan import extras_scan
     from subprocess import Popen, PIPE
     import urllib
     import pathlib
@@ -37,6 +38,16 @@ logo = '''
    \:.\ \  \ \\:\/___/\\::(_)  \ \\:\____/\\ \ `\ \ \ \::\ \  
     \__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
 is Restarting'''
+
+cprint("[ + ] Please wait, indexing extra modules. [ + ]", "white", attrs=['blink'])
+DIRECTORIES = ['./data/scripts', './data/scripts/persistence', './data']
+for item in DIRECTORIES:
+    purpose = ''
+    if item == './data/scripts': purpose = "Recon"
+    if item == './data/scripts/persistence': purpose = "Persist"
+    if item == './data': purpose = "General"
+    extras_scan(directory=item, purpose=purpose)
+
 
 def pw_lists():
     print("Starting to import password lists, please be patient.\n")
