@@ -5,7 +5,7 @@
 # those were placed there to ensure that this tool is not abused.
 # -*- coding: utf-8 -*-
 try:
-    from extra_scan import extra_scan
+    from extra_scan import extras_scan
     from subprocess import Popen, PIPE
     import urllib
     import pathlib
