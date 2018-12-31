@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 try:
     from proxybroker import Broker
     import aiohttp
