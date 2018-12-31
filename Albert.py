@@ -57,7 +57,6 @@ def pw_lists():
         with open(PATH_DIR, 'r') as ax:
                 sykes = ax.readlines()
                 for line in sykes:
-                    print(line.strip('\n'))
                     usersnames.add(line.strip('\n'))
                 return usersnames
     except (IOError, FileNotFoundError) as e:
@@ -71,7 +70,6 @@ def usernames():
         try:
             style = a.readlines()
             for line in style:
-                print(line.strip('\n'))
                 passes.add(line.strip('\n'))
             return passes
         except (IOError, FileNotFoundError) as e:
@@ -84,9 +82,6 @@ def albert_faces():
     if albert == 1: alberts = "./art/albert_face.txt"
     if albert == 2: alberts = "./art/albert_face_2.txt"
     if albert == 3: alberts = "./art/fat_albert_3"
-    if albert == 4: alberts = "./art/memo_cat"
-    if albert == 5: alberts = "./art/memo_logo"
-    if albert == 6: alberts = "./art/memo_logo_2"
     face = open(alberts, "r")
     lulz = face.readlines()
     for line in lulz:
