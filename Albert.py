@@ -25,6 +25,11 @@ try:
 except (ImportError) as e:
 	print("Something is terribly wrong:\n->{}".format(e))
 	sys.exit(1)
+system_test = os.uname()
+if system_test[0] == 'linux' or system_check == "Linux":
+	clear = 'clear'
+else:
+	clear = 'cls'
 PATH = './atk_output/' + str(time.time())
 logo = '''
  ________   __        _______   ______   ______   _________   
@@ -42,7 +47,7 @@ for item in DIRECTORIES:
 	if item == './data/scripts': purpose = "Recon"
 	if item == './data/scripts/persistence': purpose = "Persist"
 	if item == './data/lists': purpose = "General"
-	extras_scan(directory=item, purpose=purpose)
+	extras_scan(directory=str(item), purpose=purpose)
 
 
 def pw_lists():
