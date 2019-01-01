@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 try:
 	from extra_scan import extras_scan
@@ -25,11 +26,16 @@ try:
 except (ImportError) as e:
 	print("Something is terribly wrong:\n->{}".format(e))
 	sys.exit(1)
-system_test = os.uname()
-if system_test[0] == 'linux' or system_check == "Linux":
-	clear = 'clear'
-else:
+
+
+if os.uname() != 'linux' or os.uname() != "Linux":
 	clear = 'cls'
+else:
+	clear = 'clear'
+	if os.getuid() != 0:
+		cprint("[ !! ] Please make sure to run this script as sudo [ !! ]", "red", attrs=["blink"])
+		sys.exit(1)
+
 PATH = './atk_output/' + str(time.time())
 logo = '''
  ________   __        _______   ______   ______   _________   
