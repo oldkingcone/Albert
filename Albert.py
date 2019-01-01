@@ -29,12 +29,15 @@ except (ImportError) as e:
 
 
 if os.uname() != 'linux' or os.uname() != "Linux":
+	from subprocess import Popen, PIPE, CREATE_NEW_CONSOLE
 	clear = 'cls'
 else:
 	clear = 'clear'
+	from subprocess import Popen, PIPE
 	if os.getuid() != 0:
 		cprint("[ !! ] Please make sure to run this script as sudo [ !! ]", "red", attrs=["blink"])
 		sys.exit(1)
+
 
 PATH = './atk_output/' + str(time.time())
 logo = '''
