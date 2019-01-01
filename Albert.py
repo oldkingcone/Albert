@@ -3,7 +3,6 @@
 try:
 	from extra_scan import extras_scan
 	from sys import executable
-	from subprocess import Popen, PIPE, CREATE_NEW_CONSOLE
 	import urllib
 	import pathlib
 	import time
