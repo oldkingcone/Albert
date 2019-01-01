@@ -395,11 +395,20 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
 	if choice == '3':
 		Popen(command_del, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
-def extras_scan():
-	bust = os.scandir('./data/scripts')
-	for item in len(bust):
-		print(item)
-		print("Please enter your selection for the extras:\n->")
+def extra_mods(choice):
+	import sqlite3
+	conn = sqlite3.connect('./data/mods.sqlite')
+	extra = conn.cursor()
+	if choice == "python":
+		cprint("[ + ] Python modules:\n", "green", attrs=["blink"])
+		for row in extra.execute("SELECT * FROM other_mods WHERE lang = 'python'"):
+			print("-> {}\n".format(row))
+			#@todo will be adding in a way to select the entry/row
+	if choice == "ps":
+		cprint("[ + ] Powershell modules: \n", "green", attrs=["blink"])
+		for row in extra.execute("SELECT * FROM other_mods WHERE lang = 'powershell'"):
+			print("-> {}\n".format(row))
+
 		
 
 if __name__ == '__main__':
