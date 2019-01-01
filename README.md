@@ -32,6 +32,8 @@ __OR:__
 Upon successful installation of the required packages, you will __NEED__ to acquire an API key to use VulnersDB from:
 [https://www.vulners.com](https://www.vulners.com)
 
+To utilize the persistent python scripts within this module, you will need to install Pypiwin32.
+
 ---
 
 #### Usage:
