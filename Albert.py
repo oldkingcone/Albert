@@ -403,19 +403,17 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
 	if choice == '3':
 		Popen(command_del, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
-def extra_mods(choice):
-	import sqlite3
-	conn = sqlite3.connect('./data/mods.sqlite')
-	extra = conn.cursor()
-	if choice == "python":
-		cprint("[ + ] Python modules:\n", "green", attrs=["blink"])
-		for row in extra.execute("SELECT * FROM other_mods WHERE lang = 'python'"):
-			print("-> {}\n".format(row))
-			#@todo will be adding in a way to select the entry/row
-	if choice == "ps":
-		cprint("[ + ] Powershell modules: \n", "green", attrs=["blink"])
-		for row in extra.execute("SELECT * FROM other_mods WHERE lang = 'powershell'"):
-			print("-> {}\n".format(row))
+def extra_mods(lang, method=''):
+    import sqlite3
+    conn = sqlite3.connect('./data/mods.sqlite')
+    extra = conn.cursor()
+    modules = "[ + ] {} modules:\n".format(lang)
+    cprint(modules, "green", attrs=["blink"])
+    for row in extra.execute("SELECT * FROM other_mods WHERE lang = (?)", lang):
+        print("-> {}\n".format(row))
+        cprint("[ !! ] In order to add to these modules, simply add your new module into the ./data/scripts folder "
+               "and re-run the program. [ !! ]", "red", attrs=["bold"])
+        #@todo will be adding in a way to select the entry/row
 
 		
 
