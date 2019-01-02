@@ -21,11 +21,28 @@ def extras_scan(directory, purpose):
             extras.append(directory + '/' + file)
         elif file.endswith('.txt'):
             name_list.append(directory + '/' + file)
+        elif file.endswith('.xml'):
+            xml_file.append(directory + '/' + file)
+        elif file.endswith('.ps1'):
+            ps.append(directory + '/' + file)
+        else:
+            grouping = [directory + '/' + file]
+            
     for item in extras:
         extras.remove(item)
-        alter.execute("INSERT INTO other_mods(mod_name, short, purpose, lang) VALUES(?, ?, ?, ?)", (item, "Script", purpose, "Python"))
+        alter.execute("INSERT INTO other_mods(mod_name, short, purpose, lang) VALUES(?, ?, ?, ?)",
+                      (item, "Script", purpose, 'python'))
     for item in name_list:
         name_list.remove(item)
-        alter.execute("INSERT INTO other_mods(mod_name, short, purpose, lang) VALUES(?, ?, ?. ?)", (item, "List", purpose, "Plain_Text"))
+        alter.execute("INSERT INTO other_mods(mod_name, short, purpose, lang) VALUES(?, ?, ?, ?)",
+                      (item, "List", purpose, "text"))
+    for item in xml_file:
+        xml_file.remove(item)
+        alter.execute("INSERT INTO other_mods(date_time, mod_name, short, purpose, lang) VALUES ( ?, ?, ?, ?)",
+                      (item, "Scan", purpose, "XML"))
+    for item in ps:
+        ps.remove(item)
+        alter.execute("INSERT INTO other_mods(date_time, mod_name, short, purpose, lang) VALUES (?, ?, ?, ?)",
+                      (item, "Script", purpose, "Powershell"))
     conn.commit()
 
