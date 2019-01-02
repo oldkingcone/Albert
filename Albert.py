@@ -92,13 +92,10 @@ def usernames():
 
 def albert_faces():
     alberts = ''
-    albert = random.randint(1, 6)
+    albert = random.randint(1, 3)
     if albert == 1: alberts = "./art/albert_face.txt"
     if albert == 2: alberts = "./art/albert_face_2.txt"
     if albert == 3: alberts = "./art/fat_albert_3"
-    if albert == 4: alberts = "./art/memo_cat"
-    if albert == 5: alberts = "./art/memo_logo"
-    if albert == 6: alberts = "./art/memo_logo_2"
     face = open(alberts, "r")
     lulz = face.readlines()
     for line in lulz:
@@ -323,7 +320,7 @@ def iplocator(ip):
         else:
             print(x.data)
     except Exception as e:
-        print("[-} Did Not Work:\n{} [~]".format(e))
+        print("[-] Did Not Work:\n{} [~]".format(e))
 
 def vulners_api(option, term):
     vulners_search = vulners.Vulners(api_key=api)
