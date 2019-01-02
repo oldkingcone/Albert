@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 try:
-    from test import extras_scan
+    from extra_scan import extras_scan
     from sys import executable
     import urllib
     import pathlib
