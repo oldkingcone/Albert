@@ -415,7 +415,7 @@ def extra_mods(lang, method=''):
     cprint("\t\tPath\t\tFile Type\t\tPurpose\t\tLanguage\n\t------------------------------------------------", "blue",
            attrs=["bold"])
     for row in extra.execute("SELECT * FROM other_mods WHERE lang = (?)", [lang,]):
-        print("-> {}\n".format(row[2:]))
+        print("-> {}  |  {}  |  {}  |  {}\n".format(row[2], row[3], row[4], row[5]))
     choice = input("[ ? ] Please select your choice please use the full path. [ ? ]\n->").lower()
     if choice != '':
         for rows in extra.execute("SELECT * FROM other_mods WHERE mod_name = (?)", [choice,]):
