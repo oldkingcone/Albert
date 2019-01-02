@@ -79,6 +79,8 @@ Please note, that currently there is a bug in the automated portion of this scri
 8. DPKT for network level attacks such as, DNS Poisoning, ARP Poisoning, etc.
 9. Persistent:
     1. Adding modules to be dropped onto a target system, for extended control through the penetration test, by modifying the registry, getting important OS info, and adding a special tunnel for our traffic to flow through while in the network.
+10. ICS/SCADA:
+    1. Incorporate ICS/Scada testing and scanning.
 ---
 
 
