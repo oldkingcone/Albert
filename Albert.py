@@ -414,10 +414,14 @@ def extra_mods(lang, method=''):
     extra = conn.cursor()
     modules = "[ + ] {} modules:\n".format(lang)
     cprint(modules, "green", attrs=["blink"])
-    cprint("\t\tPath\t\tFile Type\t\tPurpose\t\tLanguage\n\t------------------------------------------------", "blue",
-           attrs=["bold"])
     for row in extra.execute("SELECT * FROM other_mods WHERE lang = (?)", [lang,]):
+        cprint("|------------------------------------------------------------------------------|\n", "white",
+               attrs=[ "bold" ])
+        cprint("\t|\t Path \t|\t File Type \t|\t Purpose \t|\t Language \t|\n", "blue",
+               attrs=[ "bold" ])
         print("-> {}  |  {}  |  {}  |  {}\n".format(row[2], row[3], row[4], row[5]))
+        cprint("|______________________________________________________________________________|\n", "white",
+               attrs=[ "bold" ])
     choice = input("[ ? ] Please select your choice please use the full path. [ ? ]\n->").lower()
     cprint("[ !! ] Or just press enter to return to the main menu. [ !! ]", "red")
     if choice != '':
