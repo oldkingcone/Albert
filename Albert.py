@@ -451,10 +451,10 @@ if __name__ == '__main__':
                                 "\t\t > P2 Network Pivot with NetSH\n"\
                                 "\t -------------------------------------------------\n\n"\
                                 "\t [ && ] Automate Process:\n"\
-                                "\t\t > A1 Async Automation"\
+                                "\t\t > A1 Async Automation\n"\
                                 "\t -------------------------------------------------\n\n"\
                                 "\t [ ++ ] Additive Module Search:\n"\
-                                "\t\t > M1 Extra Modules"
+                                "\t\t > M1 Extra Modules\n"
                                 "\n\n[ * ]Choice goes here: - >")).lower()
 
             if options == 'm1':
