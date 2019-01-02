@@ -435,7 +435,7 @@ if __name__ == '__main__':
     while run == 't':
         try:
             os.system(clear)
-            options = str(input("\n\n\n\t[ + ]\n\t [ ?? ] Recon Phase:\n\n" \
+            options = str(input("\n\n\n\t[ + ]\n\t  [ ?? ] Recon Phase:\n\n" \
                                 "\t\t > 1. Shodan\n" \
                                 "\t\t > 2. Nmap(Targeted Scanning of host system written out to XML file)\n" \
                                 "\t\t > 3. Subnet Discovery\n" \
@@ -458,7 +458,7 @@ if __name__ == '__main__':
                                 "\t -------------------------------------------------\n\n"\
                                 "\t [ ++ ] Additive Module Search:\n"\
                                 "\t\t > M1 Extra Modules\n"
-                                "\n\n[ * ]Choice goes here: - >")).lower()
+                                "\n\n[ * ] Choice goes here: - >")).lower()
 
             if options == 'm1':
                 cprint("[ ! ] Searching by language............. [ ! ]\n")
