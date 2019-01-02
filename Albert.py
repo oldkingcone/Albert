@@ -405,15 +405,19 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
 
 def extra_mods(lang, method=''):
     import sqlite3
+    os.system(clear)
+    cprint("[ !! ] In order to add to these modules, simply add your new module into the ./data/scripts folder "
+           "and re-run the program. [ !! ]", "red", attrs=[ "bold" ])
     conn = sqlite3.connect('./data/mods.sqlite')
     extra = conn.cursor()
     modules = "[ + ] {} modules:\n".format(lang)
     cprint(modules, "green", attrs=["blink"])
-    for row in extra.execute("SELECT * FROM other_mods WHERE lang = (?)", lang):
-        print("-> {}\n".format(row))
-        cprint("[ !! ] In order to add to these modules, simply add your new module into the ./data/scripts folder "
-               "and re-run the program. [ !! ]", "red", attrs=["bold"])
-        #@todo will be adding in a way to select the entry/row
+    for row in extra.execute("SELECT * FROM other_mods WHERE lang = (?)", [lang,]):
+        print("-> {}\n".format(row[2:]))
+    choice = input("[ ? ] Please select your choice please use the full path. [ ? ]\n->").lower()
+    if choice != '':
+        for rows in extra.execute("SELECT * FROM other_mods WHERE mod_name = (?)", [choice,]):
+            return rows[2]
 
 		
 
@@ -446,8 +450,20 @@ if __name__ == '__main__':
 								"\t\t > P2 Network Pivot with NetSH\n"\
 								"\t -------------------------------------------------\n\n"\
 								"\t [ && ] Automate Process:\n"\
-								"\t\t > A1 Async Automation"
+								"\t\t > A1 Async Automation"\
+				                                "\t -------------------------------------------------\n\n"\
+					    			"\t [ ++ ] Additive Module Search:\n"\
+					    			"\t\t > M1 Extra Modules"
 								"\n\n[ * ]Choice goes here: - >")).lower()
+			 if options == 'm1':
+                		cprint("[ ! ] Searching by language............. [ ! ]\n")
+                		lang = input("[ ? ] Which language module would you like to search for? [ ? ] \n->")
+                		try:
+                    			extra_mods(lang=lang, method='')
+                		except FileNotFoundError:
+                    			cprint("[ !!! ] Database not found! re-run the program to generate this please. [ !!! ]", "red",
+                           			attrs=["bold", "blink"])
+			
 			if options == 'a1':
 				import Albert_api
 				try:
