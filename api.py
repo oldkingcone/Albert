@@ -1,4 +1,4 @@
 apikey = '1'
-vulnersapi = ''
+vulners_api = ''
 
 # ttl guessing icmp packet to determine ttl.
