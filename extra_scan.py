@@ -3,7 +3,7 @@ import sqlite3
 conn = sqlite3.connect('./data/mods.sqlite')
 alter = conn.cursor()
 sql_stmt = '''CREATE TABLE IF NOT EXISTS other_mods(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, mod_name TEXT, short TEXT, purpose TEXT)'''
+                date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, mod_name TEXT, short TEXT, purpose TEXT, lang TEXT)'''
 alter.execute(sql_stmt)
 conn.commit()
 alter.execute("DELETE FROM other_mods")
@@ -23,9 +23,9 @@ def extras_scan(directory, purpose):
             name_list.append(directory + '/' + file)
     for item in extras:
         extras.remove(item)
-        alter.execute("INSERT INTO other_mods(mod_name, short, purpose) VALUES(?, ?, ?)", (item, "Script", purpose))
+        alter.execute("INSERT INTO other_mods(mod_name, short, purpose, lang) VALUES(?, ?, ?, ?)", (item, "Script", purpose, "Python"))
     for item in name_list:
         name_list.remove(item)
-        alter.execute("INSERT INTO other_mods(mod_name, short, purpose) VALUES(?, ?, ?)", (item, "List", purpose))
+        alter.execute("INSERT INTO other_mods(mod_name, short, purpose, lang) VALUES(?, ?, ?. ?)", (item, "List", purpose, "Plain_Text"))
     conn.commit()
 
