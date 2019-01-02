@@ -417,7 +417,7 @@ def extra_mods(lang, method=''):
     for row in extra.execute("SELECT * FROM other_mods WHERE lang = (?)", [lang,]):
         print("-> {}  |  {}  |  {}  |  {}\n".format(row[2], row[3], row[4], row[5]))
     choice = input("[ ? ] Please select your choice please use the full path. [ ? ]\n->").lower()
-    cprint("[ !! ] Press enter to return to the main menu. [ !! ]", "red")
+    cprint("[ !! ] Or just press enter to return to the main menu. [ !! ]", "red")
     if choice != '':
         for rows in extra.execute("SELECT * FROM other_mods WHERE mod_name = (?)", [choice,]):
             return rows[2]
