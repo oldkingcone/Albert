@@ -16,6 +16,7 @@ def extras_scan(directory, purpose):
     from pathlib import Path
     extras = list()
     name_list = list()
+    ps = list()
     for file in os.listdir(Path(directory)):
         if file.endswith('.py'):
             extras.append(directory + '/' + file)
