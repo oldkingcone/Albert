@@ -464,7 +464,7 @@ if __name__ == '__main__':
                                 "\t -------------------------------------------------\n\n"\
                                 "\t [ ++ ] Additive Module Search:\n"\
                                 "\t\t > M1 Extra Modules\n"
-                                "\n\n[ * ] Choice goes here: - >")).lower()
+                                "\n\n[ * ] Choice goes here: \n->")).lower()
 
             if options == 'm1':
                 cprint("[ ! ] Searching by language............. [ ! ]\n")
@@ -646,7 +646,7 @@ if __name__ == '__main__':
                 continue
 
         except KeyboardInterrupt:
-            choice = str(input("[ + ] Would you like to exit? [ + ]\n->")).lower()
+            choice = str(input("\n[ + ] Would you like to exit? [ + ]\n->")).lower()
             if choice != "y":
                 continue
             if choice == 'y':
