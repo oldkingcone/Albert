@@ -49,11 +49,11 @@ logo = '''
     \__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
 is Restarting'''
 cprint("[ + ] Please wait, indexing extra modules. [ + ]", "white", attrs=['blink'])
-DIRECTORIES = ['./data/scripts', './data/scripts/persistence', './data/lists', './XML_Output/']
+DIRECTORIES = ['./data/scripts', './data/scripts/persistance', './data/lists', './XML_Output/']
 for item in DIRECTORIES:
     purpose = ''
     if item == './data/scripts': purpose = "Recon"
-    elif item == './data/scripts/persistence': purpose = "Persist"
+    elif item == './data/scripts/persistance': purpose = "Persist"
     elif item == './data/lists': purpose = "General"
     elif item == './XML_Output': purpose = "Scan_Result"
     extras_scan(directory=item, purpose=purpose)
