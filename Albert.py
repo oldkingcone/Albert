@@ -28,7 +28,7 @@ except (ImportError) as e:
     sys.exit(1)
 try:
     system_check = os.uname()
-    if system_check != 'linux' or system_check != "Linux":
+    if system_check[0] != 'linux' or system_check[0] != "Linux":
         from subprocess import Popen, PIPE, CREATE_NEW_CONSOLE
         clear = 'cls'
     else:
@@ -52,13 +52,13 @@ logo = '''
     \__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
 is Restarting'''
 cprint("[ + ] Please wait, indexing extra modules. [ + ]", "white", attrs=['blink'])
-DIRECTORIES = ['./data/scripts', './data/scripts/persistence', './data/lists']
+DIRECTORIES = ['./data/scripts', './data/scripts/persistance', './data/lists']
 for item in DIRECTORIES:
     purpose = ''
     if item == './data/scripts': purpose = "Recon"
     if item == './data/scripts/persistence': purpose = "Persist"
     if item == './data/lists': purpose = "General"
-    extras_scan(directory=item, purpose=purpose)
+    extras_scan(directory=str(item), purpose=purpose)
 
 
 def pw_lists():
