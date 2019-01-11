@@ -13,7 +13,7 @@ try:
     import shodan
     import sys
     import nmap
-    from api import apikey, vulners_api
+    from api import apikey, vulners_api_key
     import time
     import base64
     import vulners
@@ -28,7 +28,7 @@ except (ImportError) as e:
     sys.exit(1)
 try:
     system_check = os.uname()
-    from subprocess import Popen, PIPE, CREATE_NEW_CONSOLE
+    from subprocess import Popen, PIPE
     clear = 'clear'
     from subprocess import Popen, PIPE
     if os.getuid() != 0:
@@ -475,7 +475,7 @@ if __name__ == '__main__':
                     cprint("[ !!! ] Database not found! re-run the program to generate this please. [ !!! ]", "red",
                            attrs=["bold", "blink"])
             if options == 'a1':
-                import Albert_api
+                import auto_albert
                 try:
                     a = Albert_api
                     atk_log(a)
