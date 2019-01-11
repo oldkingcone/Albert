@@ -56,7 +56,7 @@ for item in DIRECTORIES:
     elif item == './data/scripts/persistance': purpose = "Persist"
     elif item == './data/lists': purpose = "General"
     elif item == './XML_Output': purpose = "Scan_Result"
-    extras_scan(directory=item, purpose=purpose)
+    extras_scan(directory=str(item), purpose=purpose)
 
 
 
