@@ -77,11 +77,11 @@ class Sploit:
                     constraint albert_tools_pkey
                         primary key,
                 datetime         timestamp with time zone default CURRENT_TIMESTAMP not null,
-                operating_system text,
+                lang             text,
                 path             text
                     constraint albert_tools_path_key
                         unique,
-                type             text,
+                types             text,
                 purpose          text
             );
 
