@@ -126,8 +126,8 @@ class Sploit:
     def query_Sploits(tech, version, host):
         sel_stmt = "SELECT albert_sploits(cve) FROM albert_sploits WHERE albert_sploits(tech) = (?) AND albert_sploits(version) = (?)"
         for row in curs.execute(sel_stmt):
-            curs.execute("UPDATE albert_loot(best_cve) WHERE albert_loot(host) = (?)", (row[0], host))
-            print(f"Possible best exploit to use would be: {row[0]}\n For Host: {host}")
+            curs.execute("UPDATE albert_loot(best_cve) WHERE albert_loot(host) = (?)", (row[1], host))
+            print(f"Possible best exploit to use would be: {row[1]}\n For Host: {host}")
             print(
                 f"There is an entry in the database located at: SELECT albert_loot(best_cve) FROM albert_loot WHERE albert_loot(host) = {host}")
         return True
