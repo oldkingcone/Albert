@@ -42,11 +42,14 @@ create table albert_loots
     host             text,
     local_path       text,
     type_of_loot     text,
+    best_cve         text,
+    used_cve         text,
     persist          boolean
 );
 
 alter table albert_loots
     owner to albert;
+
 
 -- auto-generated definition
 create table albert_tools
