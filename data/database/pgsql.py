@@ -188,5 +188,24 @@ class Sploit:
         except (psycopg2.DatabaseError, psycopg2.OperationalError):
             return False
 
+    def queryTools(lang, method=''):
+        cprint("[ !! ] In order to add to these modules, simply add your new module into the ./data/scripts folder "
+               "and re-run the program. [ !! ]", "red", attrs=["bold"])
+        modules = "[ + ] {} modules:\n".format(lang)
+        cprint(modules, "green", attrs=["blink"])
+        for row in curs.execute("SELECT * FROM albert_tools WHERE lang = (%s)", [lang, ]):
+            cprint("|------------------------------------------------------------------------------|\n", "white",
+                   attrs=["bold"])
+            cprint("\t|\t Path \t|\t File Type \t|\t Purpose \t|\t Language \t|\n", "blue",
+                   attrs=["bold"])
+            print(f"->{row[2]}  |  {row[3]}  |  {row[4]}  |  {row[5]}\n")
+            cprint("|______________________________________________________________________________|\n", "white",
+                   attrs=["bold"])
+        choice = input("[ ? ] Please select your choice please use the full path. [ ? ]\n->").lower()
+        cprint("[ !! ] Or just press enter to return to the main menu. [ !! ]", "red")
+        if choice != '':
+            for rows in curs.execute("SELECT * FROM albert_tools WHERE mod_name = (%s)", [choice, ]):
+                return rows[2]
+
 
 
