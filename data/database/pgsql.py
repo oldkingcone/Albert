@@ -177,5 +177,16 @@ class Sploit:
 
     def insertTimeruns(what):
         curs.execute("INSERT INTO albert_data(when_run) VALUES(?)")
+        
+    def checkForRun():
+        try:
+            for row in curs.execute("SELECT albert_data.when_run FROM albert_data WHERE when_run = 'today'"):
+                if row[0] != "":
+                    return True
+                else:
+                    return False
+        except (psycopg2.DatabaseError, psycopg2.OperationalError):
+            return False
+
 
 
