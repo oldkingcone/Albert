@@ -17,7 +17,7 @@ try:
         password=passw,
         host=host
     )
-    con.cursor()
+    curs = con.cursor()
 except Exception as e:
     import os
 
@@ -143,21 +143,21 @@ class Sploit:
 
                 for item in extras:
                     extras.remove(item)
-                    curs.execute("INSERT INTO albert_tools(path, types, purpose, lang) VALUES (? ? ? ?)",
+                    curs.execute("INSERT INTO albert_tools(path, types, purpose, lang) VALUES (%s,%s,%s,%s)",
                                   (item, "Script", purpose, 'python'))
                 for item in name_list:
                     name_list.remove(item)
-                    curs.execute("INSERT INTO albert_tools(path, types, purpose, lang) VALUES (? ? ? ?)",
+                    curs.execute("INSERT INTO albert_tools(path, types, purpose, lang) VALUES (%s,%s,%s,%s)",
                                   (item, "List", purpose, "text"))
                 for item in xml_file:
                     xml_file.remove(item)
                     curs.execute(
-                        "INSERT INTO albert_tools(path, types, purpose, lang) VALUES (? ? ? ?)",
+                        "INSERT INTO albert_tools(path, types, purpose, lang) VALUES (%s,%s,%s,%s)",
                         (item, "Scan", purpose, "XML"))
                 for item in ps:
                     ps.remove(item)
                     curs.execute(
-                        "INSERT INTO albert_tools(path, types, purpose, lang) VALUES (? ? ? ?)",
+                        "INSERT INTO albert_tools(path, types, purpose, lang) VALUES (%s,%s,%s,%s)",
                         (item, "Script", purpose, "Powershell"))
                 con.commit()
         except psycopg2.OperationalError as e:
