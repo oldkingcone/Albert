@@ -409,29 +409,9 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
         Popen(command_del, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
 def extra_mods(lang, method=''):
-    import sqlite3
-    os.system(clear)
-    cprint("[ !! ] In order to add to these modules, simply add your new module into the ./data/scripts folder "
-           "and re-run the program. [ !! ]", "red", attrs=[ "bold" ])
-    conn = sqlite3.connect('./data/mods.sqlite')
-    extra = conn.cursor()
-    modules = "[ + ] {} modules:\n".format(lang)
-    cprint(modules, "green", attrs=["blink"])
-    for row in extra.execute("SELECT * FROM other_mods WHERE lang = (?)", [lang,]):
-        cprint("|------------------------------------------------------------------------------|\n", "white",
-               attrs=[ "bold" ])
-        cprint("\t|\t Path \t|\t File Type \t|\t Purpose \t|\t Language \t|\n", "blue",
-               attrs=[ "bold" ])
-        print("-> {}  |  {}  |  {}  |  {}\n".format(row[2], row[3], row[4], row[5]))
-        cprint("|______________________________________________________________________________|\n", "white",
-               attrs=[ "bold" ])
-    choice = input("[ ? ] Please select your choice please use the full path. [ ? ]\n->").lower()
-    cprint("[ !! ] Or just press enter to return to the main menu. [ !! ]", "red")
-    if choice != '':
-        for rows in extra.execute("SELECT * FROM other_mods WHERE mod_name = (?)", [choice,]):
-            return rows[2]
+    Sploit.queryTools(lang=lang, method=method)
 
-        #@todo will be adding in a way to select the entry/row
+        # @todo will be adding in a way to select the entry/row
 
 
 if __name__ == '__main__':
