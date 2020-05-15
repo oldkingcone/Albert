@@ -1,7 +1,9 @@
 import psycopg2
 import yaml
 
-main_cfg = yaml.safe_load("../configs/db_config.yml")
+
+settings_seam = open("data/configs/db_config.yml", "r")
+main_cfg = yaml.safe_load(settings_seam)
 user = main_cfg["pgsql"]["user"]
 passw = main_cfg["pgsql"]["pass"]
 host = main_cfg["pgsql"]["host"]
@@ -48,12 +50,92 @@ class Sploit:
 
     def makeDB(stmt):
         try:
-            curs.execute(stmt)
+            curs.execute('''CREATE DATABASE IF NOT EXISTS albert_data''')
+            curs.execute('''
+            create table if not exists public.albert_sploits
+            (
+                id       serial                                             not null
+                    constraint albert_sploits_pkey
+                        primary key,
+                datetime timestamp with time zone default CURRENT_TIMESTAMP not null,
+                tech     text,
+                version  text,
+                cve      text
+                    constraint albert_sploits_cve_key
+                        unique,
+                path     text
+                    constraint albert_sploits_path_key
+                        unique
+            );
+
+            alter table public.albert_sploits
+                owner to albert;
+
+            create table if not exists public.albert_tools
+            (
+                id               serial                                             not null
+                    constraint albert_tools_pkey
+                        primary key,
+                datetime         timestamp with time zone default CURRENT_TIMESTAMP not null,
+                operating_system text,
+                path             text
+                    constraint albert_tools_path_key
+                        unique,
+                type             text,
+                purpose          text
+            );
+
+            alter table public.albert_tools
+                owner to albert;
+
+            create table if not exists public.albert_loots
+            (
+                id               serial                                             not null
+                    constraint albert_loots_pkey
+                        primary key,
+                datetime         timestamp with time zone default CURRENT_TIMESTAMP not null,
+                operating_system text,
+                host             text,
+                local_path       text,
+                type_of_loot     text,
+                persist          boolean,
+                best_cve         text,
+                used_cve         text
+            );
+
+            alter table public.albert_loots
+                owner to albert;
+
+            create table if not exists public.albert_data
+            (
+                id       serial                                             not null
+                    constraint albert_data_pkey
+                        primary key,
+                dtg      timestamp with time zone default CURRENT_TIMESTAMP not null,
+                when_run text
+            );
+
+            alter table public.albert_data
+                owner to albert; ''')
         except psycopg2.OperationalError:
             print("Critical! DB Was not created!")
 
     def buildSploits(path, name, tech, version):
         print("Still working......")
 
-    def query_Sploits(tech, version):
-        sel_stmt = "SELECT * FROM albert WHERE albert.version LIKE (?) AND albert.tech LIKE (?)"
+    def query_Sploits(tech, version, host):
+        sel_stmt = "SELECT albert_sploits(cve) FROM albert_sploits WHERE albert_sploits(tech) = (?) AND albert_sploits(version) = (?)"
+        for row in curs.execute(sel_stmt):
+            curs.execute("UPDATE albert_loot(best_cve) WHERE albert_loot(host) = (?)", (row[0], host))
+            print(f"Possible best exploit to use would be: {row[0]}\n For Host: {host}")
+            print(
+                f"There is an entry in the database located at: SELECT albert_loot(best_cve) FROM albert_loot WHERE albert_loot(host) = {host}")
+        return True
+
+    def insertLewts(lewt, os, cve_used, best_guessed_cve, are_we_persisting, what_did_we_take):
+        print("coming soon.")
+
+    def insertTimeruns(what):
+        curs.execute("INSERT INTO albert_data(when_run) VALUES(?)")
+
+
