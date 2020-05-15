@@ -38,6 +38,9 @@ except AttributeError:
     clear = 'cls'
     pass
 
+if Sploit.checkForRun():
+    cprint("[ + ] Please wait, building database if this is the first run.. [ + ]", "white", attrs=["blink"])
+    Sploit.makeDB()
 PATH = './atk_output/' + str(time.time())
 logo = '''
  ________   __        _______   ______   ______   _________   
@@ -56,7 +59,10 @@ for item in DIRECTORIES:
     elif item == './data/scripts/persistance': purpose = "Persist"
     elif item == './data/lists': purpose = "General"
     elif item == './XML_Output': purpose = "Scan_Result"
-    extras_scan(directory=str(item), purpose=purpose)
+    Sploit.buildToolsList(directory=str(item), purpose=purpose)
+
+Sploit.insertTimeruns(what="initial")
+
 
 
 
