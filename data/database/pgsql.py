@@ -123,6 +123,46 @@ class Sploit:
     def buildSploits(path, name, tech, version):
         print("Still working......")
 
+    def buildToolsList(directory, purpose):
+        try:
+            extras = list()
+            name_list = list()
+            ps = list()
+            xml_file = list()
+            for file in os.listdir(directory):
+                if file.endswith('.py'):
+                    extras.append(directory + '/' + file)
+                elif file.endswith('.txt'):
+                    name_list.append(directory + '/' + file)
+                elif file.endswith('.xml'):
+                    xml_file.append(directory + '/' + file)
+                elif file.endswith('.ps1'):
+                    ps.append(directory + '/' + file)
+                else:
+                    grouping = [directory + '/' + file]
+
+                for item in extras:
+                    extras.remove(item)
+                    curs.execute("INSERT INTO albert_tools(path, types, purpose, lang) VALUES (? ? ? ?)",
+                                  (item, "Script", purpose, 'python'))
+                for item in name_list:
+                    name_list.remove(item)
+                    curs.execute("INSERT INTO albert_tools(path, types, purpose, lang) VALUES (? ? ? ?)",
+                                  (item, "List", purpose, "text"))
+                for item in xml_file:
+                    xml_file.remove(item)
+                    curs.execute(
+                        "INSERT INTO albert_tools(path, types, purpose, lang) VALUES (? ? ? ?)",
+                        (item, "Scan", purpose, "XML"))
+                for item in ps:
+                    ps.remove(item)
+                    curs.execute(
+                        "INSERT INTO albert_tools(path, types, purpose, lang) VALUES (? ? ? ?)",
+                        (item, "Script", purpose, "Powershell"))
+                con.commit()
+        except psycopg2.OperationalError as e:
+            print(f"Error happened when populating the database..\n->{e}")
+
     def query_Sploits(tech, version, host):
         sel_stmt = "SELECT albert_sploits(cve) FROM albert_sploits WHERE albert_sploits(tech) = (?) AND albert_sploits(version) = (?)"
         for row in curs.execute(sel_stmt):
