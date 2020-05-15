@@ -176,7 +176,7 @@ class Sploit:
         print("coming soon.")
 
     def insertTimeruns(what):
-        curs.execute("INSERT INTO albert_data(when_run) VALUES(%s)", (what))
+        curs.execute("INSERT INTO albert_data(when_run) VALUES(%s)", (what,))
         
     def checkForRun():
         try:
