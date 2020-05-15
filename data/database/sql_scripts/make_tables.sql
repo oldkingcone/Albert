@@ -1,23 +1,9 @@
--- auto-generated definition
-create table albert_data
+create table public.albert_sploits
 (
-    id       serial not null
-        constraint albert_data_pkey
-            primary key,
-    datetime timestamp with time zone,
-    when_run text
-);
-
-alter table albert_data
-    owner to albert;
-
--- auto-generated definition
-create table albert_sploits
-(
-    id       serial not null
+    id       serial                                             not null
         constraint albert_sploits_pkey
             primary key,
-    datetime timestamp with time zone,
+    datetime timestamp with time zone default CURRENT_TIMESTAMP not null,
     tech     text,
     version  text,
     cve      text
@@ -28,36 +14,15 @@ create table albert_sploits
             unique
 );
 
-alter table albert_sploits
+alter table public.albert_sploits
     owner to albert;
 
--- auto-generated definition
-create table albert_loots
+create table public.albert_tools
 (
-    id               serial not null
-        constraint albert_loots_pkey
-            primary key,
-    datetime         timestamp with time zone,
-    operating_system text,
-    host             text,
-    local_path       text,
-    type_of_loot     text,
-    best_cve         text,
-    used_cve         text,
-    persist          boolean
-);
-
-alter table albert_loots
-    owner to albert;
-
-
--- auto-generated definition
-create table albert_tools
-(
-    id               serial not null
+    id               serial                                             not null
         constraint albert_tools_pkey
             primary key,
-    datetime         timestamp with time zone,
+    datetime         timestamp with time zone default CURRENT_TIMESTAMP not null,
     operating_system text,
     path             text
         constraint albert_tools_path_key
@@ -66,6 +31,36 @@ create table albert_tools
     purpose          text
 );
 
-alter table albert_tools
+alter table public.albert_tools
+    owner to albert;
+
+create table public.albert_loots
+(
+    id               serial                                             not null
+        constraint albert_loots_pkey
+            primary key,
+    datetime         timestamp with time zone default CURRENT_TIMESTAMP not null,
+    operating_system text,
+    host             text,
+    local_path       text,
+    type_of_loot     text,
+    persist          boolean,
+    best_cve         text,
+    used_cve         text
+);
+
+alter table public.albert_loots
+    owner to albert;
+
+create table public.albert_data
+(
+    id       serial                                             not null
+        constraint albert_data_pkey
+            primary key,
+    dtg      timestamp with time zone default CURRENT_TIMESTAMP not null,
+    when_run text
+);
+
+alter table public.albert_data
     owner to albert;
 
