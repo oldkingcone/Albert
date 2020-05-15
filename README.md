@@ -9,6 +9,8 @@
   
   This tool will also make an attempt to retrieve the Geo Location data for a specified IP address. And to top it all off, this program will attempt to enumerate SMTP username's and password's, leveraging the power of SecLists. Or your own custom password/user name lists, this project is designed to grow and be fully extensible. 
   
+  __This application in future versions will no longer support SQLite.__
+  
   All username/password lists are stored here: [data](https://github.com/oldkingcone/Albert/tree/master/data). The functions that leverage the wordlists within this directory are:
   
   - [pw_list](https://github.com/oldkingcone/Albert/blob/418dffe85eecd06c4a75b589792fc7d1055df561/Albert.py#L37)
