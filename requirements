@@ -10,3 +10,5 @@ proxybroker
 tqdm
 asyncio
 geoip2
+psycopg2
+dnsdumpster
