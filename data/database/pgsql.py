@@ -180,7 +180,7 @@ class Sploit:
         
     def checkForRun():
         try:
-            for row in curs.execute("SELECT albert_data.when_run FROM albert_data WHERE when_run = 'today'"):
+            for row in curs.execute("SELECT albert_data.when_run FROM albert_data WHERE when_run = 'initial'"):
                 if row[0] != "":
                     return True
                 else:
