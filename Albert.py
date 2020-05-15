@@ -41,6 +41,7 @@ except AttributeError:
 if Sploit.checkForRun():
     cprint("[ + ] Please wait, building database if this is the first run.. [ + ]", "white", attrs=["blink"])
     Sploit.makeDB()
+    Sploit.insertTimeruns(what="initial")
 PATH = './atk_output/' + str(time.time())
 logo = '''
  ________   __        _______   ______   ______   _________   
@@ -60,10 +61,6 @@ for item in DIRECTORIES:
     elif item == './data/lists': purpose = "General"
     elif item == './XML_Output': purpose = "Scan_Result"
     Sploit.buildToolsList(directory=str(item), purpose=purpose)
-
-Sploit.insertTimeruns(what="initial")
-
-
 
 
 def pw_lists():
