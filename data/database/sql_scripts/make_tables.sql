@@ -1,4 +1,4 @@
-create table public.albert_sploits
+create table if not exists public.albert_sploits
 (
     id       serial                                             not null
         constraint albert_sploits_pkey
@@ -17,7 +17,7 @@ create table public.albert_sploits
 alter table public.albert_sploits
     owner to albert;
 
-create table public.albert_tools
+create table if not exists public.albert_tools
 (
     id               serial                                             not null
         constraint albert_tools_pkey
@@ -34,7 +34,7 @@ create table public.albert_tools
 alter table public.albert_tools
     owner to albert;
 
-create table public.albert_loots
+create table if not exists public.albert_loots
 (
     id               serial                                             not null
         constraint albert_loots_pkey
@@ -52,7 +52,7 @@ create table public.albert_loots
 alter table public.albert_loots
     owner to albert;
 
-create table public.albert_data
+create table if not exists public.albert_data
 (
     id       serial                                             not null
         constraint albert_data_pkey
