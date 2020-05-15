@@ -180,12 +180,12 @@ class Sploit:
         
     def checkForRun():
         try:
-            for row in curs.execute("SELECT albert_data.when_run FROM albert_data WHERE when_run = 'initial'"):
-                if row[0] != "":
+            for row in curs.execute('SELECT albert_data.when_run FROM albert_data WHERE when_run = "initial"'):
+                if row[0] is not None:
                     return True
                 else:
                     return False
-        except (psycopg2.DatabaseError, psycopg2.OperationalError):
+        except (psycopg2.DatabaseError, psycopg2.OperationalError, TypeError):
             return False
 
     def queryTools(lang, method=''):
