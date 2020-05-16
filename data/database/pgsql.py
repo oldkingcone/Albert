@@ -218,12 +218,12 @@ class Sploit:
         text = curs.fetchone()
         curs.execute("SELECT COUNT(*) FROM (select lang from albert_tools WHERE lang = 'powershell') AS TEMP;")
         psh = curs.fetchone()
-        curs.execute("SELECT COUNT(*) FROM (select purpose from albert_tools WHERE purpose = 'Persist') AS TEMP;")
+        curs.execute("SELECT COUNT(*) FROM (select purpose from albert_tools WHERE purpose = 'persistance') AS TEMP;")
         persi = curs.fetchone()
-        curs.execute("SELECT COUNT(*) FROM (select purpose from albert_tools WHERE purpose = 'Recon') AS TEMP;")
+        curs.execute("SELECT COUNT(*) FROM (select purpose from albert_tools WHERE purpose = 'recon') AS TEMP;")
         recon = curs.fetchone()
-        curs.execute("SELECT COUNT(*) FROM (select purpose from albert_tools WHERE purpose = 'General') AS TEMP;")
+        curs.execute("SELECT COUNT(*) FROM (select purpose from albert_tools WHERE purpose = 'general') AS TEMP;")
         gener = curs.fetchone()
-        cprint(f"Total Python Mods: {python[0]} Total Lists: {text[0]} Total persistence mods: {persi[0]}\n"
-               f"Total Powershell Mods: {psh[0]} Total Recon Mods: {recon[0]} Total General Items: {gener[0]}", "green", attrs=["bold"])
-
+        cprint(f"| Total Python Mods: {python[0]} | Total Lists: {text[0]} | Total persistence mods: {persi[0]} "
+               f"| Total Powershell Mods: {psh[0]} | Total Recon Mods: {recon[0]} | Total general Items: {gener[0]} |",
+               "green", attrs=["bold"])
