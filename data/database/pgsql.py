@@ -207,5 +207,19 @@ class Sploit:
             for rows in curs.execute("SELECT * FROM albert_tools WHERE mod_name = (%s)", [choice, ]):
                 return rows[2]
 
-
+    def modCount():
+        curs.execute("SELECT COUNT(*) FROM (select lang from albert_tools WHERE lang = 'python') AS TEMP;")
+        python = curs.fetchone()
+        curs.execute("SELECT COUNT(*) FROM (select lang from albert_tools WHERE lang = 'text') AS TEMP;")
+        text = curs.fetchone()
+        curs.execute("SELECT COUNT(*) FROM (select lang from albert_tools WHERE lang = 'powershell') AS TEMP;")
+        psh = curs.fetchone()
+        curs.execute("SELECT COUNT(*) FROM (select purpose from albert_tools WHERE purpose = 'Persist') AS TEMP;")
+        persi = curs.fetchone()
+        curs.execute("SELECT COUNT(*) FROM (select purpose from albert_tools WHERE purpose = 'Recon') AS TEMP;")
+        recon = curs.fetchone()
+        curs.execute("SELECT COUNT(*) FROM (select purpose from albert_tools WHERE purpose = 'General') AS TEMP;")
+        gener = curs.fetchone()
+        cprint(f"Total Python Mods: {python[0]} Total Lists: {text[0]} Total persistence mods: {persi[0]}\n"
+               f"Total Powershell Mods: {psh[0]} Total Recon Mods: {recon[0]} Total General Items: {gener[0]}", "green", attrs=["bold"])
 
