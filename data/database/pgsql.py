@@ -193,19 +193,23 @@ class Sploit:
                "and re-run the program. [ !! ]", "red", attrs=["bold"])
         modules = "[ + ] {} modules:\n".format(lang)
         cprint(modules, "green", attrs=["blink"])
-        for row in curs.execute("SELECT * FROM albert_tools WHERE lang = (%s)", [lang, ]):
-            cprint("|------------------------------------------------------------------------------|\n", "white",
+        sel_STMT = "SELECT lang, path, purpose, types from albert_tools where albert_tools.lang LIKE %s ESCAPE ''"
+        choice_Select = """SELECT * FROM albert_tools WHERE albert_tools.path = %s ESCAPE ''"""
+        curs.execute(sel_STMT, (lang,))
+        choice_dict = {}
+        i = 0
+        for row in curs.fetchall():
+            choice_dict.update({i: row[2]})
+            cprint("|------------------------------------------------------------------------------|\n", "green",
                    attrs=["bold"])
-            cprint("\t|\t Path \t|\t File Type \t|\t Purpose \t|\t Language \t|\n", "blue",
+            cprint(f"{i}->{row[1]}  |  {row[3]}  |  {row[2]}  |  {row[0]}", "blue", attrs=["bold"])
+            cprint("|______________________________________________________________________________|\n", "green",
                    attrs=["bold"])
-            print(f"->{row[2]}  |  {row[3]}  |  {row[4]}  |  {row[5]}\n")
-            cprint("|______________________________________________________________________________|\n", "white",
-                   attrs=["bold"])
-        choice = input("[ ? ] Please select your choice please use the full path. [ ? ]\n->").lower()
-        cprint("[ !! ] Or just press enter to return to the main menu. [ !! ]", "red")
+            i += 1
+        cprint("[ !! ] Press enter to return to the main menu. [ !! ]", "red", attrs=["bold", "blink"])
+        choice = int(input("[ ? ] Please select your choice. [ ? ]\n->"))
         if choice != '':
-            for rows in curs.execute("SELECT * FROM albert_tools WHERE mod_name = (%s)", [choice, ]):
-                return rows[2]
+            return choice_dict[choice]
 
     def modCount():
         curs.execute("SELECT COUNT(*) FROM (select lang from albert_tools WHERE lang = 'python') AS TEMP;")
