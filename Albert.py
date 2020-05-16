@@ -419,10 +419,12 @@ if __name__ == '__main__':
     # @todo a way to avoid docker containers like the plague.
     # @todo, Scapy routine, list available interfaces.
     # @todo, add packet sniffing on the fly. <- debating on using this.
+    os.system(clear)
     run = albert_faces()
     sleep(0.4)
     while run == 't':
         try:
+            Sploit.modCount()
             os.system(clear)
             options = str(input("\n\n\n\t[ + ]\n\t  [ ?? ] Recon Phase:\n\n" \
                                 "\t\t > 1. Shodan\n" \
