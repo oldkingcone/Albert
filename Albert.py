@@ -23,14 +23,14 @@ try:
     from termcolor import cprint
     from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
     import dpkt
+    import sqlite3
+    from subprocess import Popen, PIPE
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
     sys.exit(1)
 try:
     system_check = os.uname()
-    from subprocess import Popen, PIPE
     clear = 'clear'
-    from subprocess import Popen, PIPE
     if os.getuid() != 0:
         cprint("[ !! ] Please make sure to run this script as sudo [ !! ]", "red", attrs=["blink"])
         sys.exit(1)
@@ -41,8 +41,9 @@ except AttributeError:
 if Sploit.checkForRun():
     cprint("[ + ] Please wait, building database if this is the first run.. [ + ]", "white", attrs=["blink"])
     Sploit.makeDB()
-    Sploit.insertTimeruns(what="initial")
-PATH = './atk_output/' + str(time.time())
+    Sploit.insertTimeruns(what=str('initial'))
+api = vulners_api_key
+PATH = './data/atk_output/' + str(time.time())
 logo = '''
  ________   __        _______   ______   ______   _________   
 /_______/\ /_/\     /_______/\ /_____/\ /_____/\ /________/\  
@@ -63,21 +64,22 @@ for dirpath, dirnames, filenames in os.walk('data/tools', topdown=True):
 
 def pw_lists():
     print("Starting to import password lists, please be patient.\n")
-    PATH_DIR = './data/main_pass.txt'
+    PATH_DIR = './data/tools/lists/main_pass.txt'
     usersnames = set()
     try:
         with open(PATH_DIR, 'r') as ax:
-                sykes = ax.readlines()
-                for line in sykes:
-                    print(line.strip('\n'))
-                    usersnames.add(line.strip('\n'))
-                return usersnames
+            sykes = ax.readlines()
+            for line in sykes:
+                print(line.strip('\n'))
+                usersnames.add(line.strip('\n'))
+            return usersnames
     except (IOError, FileNotFoundError) as e:
         print("{}".format(e))
         return e
 
+
 def usernames():
-    PATH_DIR = './data/main_names.txt'
+    PATH_DIR = './data/tools/lists/main_names.txt'
     passes = set()
     with open(PATH_DIR, 'r') as a:
         try:
@@ -90,12 +92,13 @@ def usernames():
             print("{}".format(e))
             return e
 
+
 def albert_faces():
     alberts = ''
     albert = random.randint(1, 3)
-    if albert == 1: alberts = "./art/albert_face.txt"
-    if albert == 2: alberts = "./art/albert_face_2.txt"
-    if albert == 3: alberts = "./art/fat_albert_3"
+    if albert == 1: alberts = "./data/art/albert_face.txt"
+    if albert == 2: alberts = "./data/art/albert_face_2.txt"
+    if albert == 3: alberts = "./data/art/fat_albert_3"
     face = open(alberts, "r")
     lulz = face.readlines()
     for line in lulz:
@@ -106,6 +109,7 @@ def albert_faces():
     sleep(0.5)
     cprint("Gr33ts: Chef Gordon, Root, Johnny 5", 'red')
     return "t"
+
 
 def write_file(line):
     with open('hosts_list', 'at') as f:
@@ -153,7 +157,7 @@ def list_reject(target=''):
         print('[✘] Errpr: %s' % e)
         option = input('[*] Shieeeet you wanna chagne that API Key? <Y/n>: ').lower()
         if option == ('y'):
-            file = open('api.py', 'w')
+            file = open('data/api_keys/api.py', 'w')
             SHODAN_API_KEY = input('[*] Hey! Hey! Hey! Enter A Valid Shodan.io API Key: ')
             oppsie = ["apikey= ", "\"", str(SHODAN_API_KEY), "\""]
             file.write(''.join(oppsie))
@@ -202,7 +206,7 @@ def subnet_discover(ip):
 
 def scapy_selection(net):
     import datetime as dt
-    from scapy.all import srp, ETHER_ANY, ARPHDR_ETHER, conf, IFACES
+    from scapy.all import srp, conf, IFACES
     try:
         print("{}".format(IFACES.show(resolve_mac=True, print_result=True)))
         interface = str(input("[ + ] Please choose an interface [ + ]\n->"))
@@ -295,9 +299,10 @@ def smtp_enum(server, user, passwd):
             print("{}".format(e))
             return e
 
+
 def panel_find(server, adminList):
     import urllib3
-    if adminList == '':adminList = open("./data/adm_list", "r")
+    if adminList == '': adminList = open("./data/adm_list", "r")
     for admin in adminList.readlines():
         ax = set()
         ax.add(admin)
@@ -308,9 +313,10 @@ def panel_find(server, adminList):
             if x.status == '200' or x.status != 200:
                 print("[-] Found Da Panel -> {}".format(lx))
 
+
 def iplocator(ip):
     import urllib3
-    url = "http://ip-api.com/json/"+ip
+    url = "http://ip-api.com/json/" + ip
     try:
         u = urllib3.PoolManager()
         x = u.request('GET', url)
@@ -321,6 +327,7 @@ def iplocator(ip):
             print(x.data)
     except Exception as e:
         print("[-] Did Not Work:\n{} [~]".format(e))
+
 
 def vulners_api(option, term):
     vulners_search = vulners.Vulners(api_key=api)
@@ -366,7 +373,7 @@ def vulners_api(option, term):
 
 def exploit_db(file):
     from subprocess import PIPE, Popen
-    default = './XML_Output/scan.xml'
+    default = './data/XML_Output/scan.xml'
     try:
         if file == '':
             command = 'searchsploit -x --nmap {}'.format(default)
@@ -374,12 +381,13 @@ def exploit_db(file):
             atk_log(print(db_search.communicate()))
         if file != '':
             fil = file
-            command = 'searchsploit -x --nmap {}' .format(fil)
+            command = 'searchsploit -x --nmap {}'.format(fil)
             db_search = Popen([command], stdout=PIPE, stderr=PIPE)
             atk_log(print(db_search.communicate()))
     except Exception as e:
         print("{}".format(e))
         return e
+
 
 def netsh_pivot(option, iface, listenport, connectport, host):
     from subprocess import Popen, PIPE
@@ -388,6 +396,7 @@ def netsh_pivot(option, iface, listenport, connectport, host):
         command = "{}{}{}".format(listenport, connectport, host)
         Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         return
+
 
 def netsh_pipe(choice, iface, listenport, connectport, host):
     if port == "":
@@ -406,6 +415,7 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
     if choice == '3':
         Popen(command_del, stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
+
 def extra_mods(lang, method=''):
     Sploit.queryTools(lang=lang, method=method)
 
@@ -416,12 +426,12 @@ if __name__ == '__main__':
     # @todo, Scapy routine, list available interfaces.
     # @todo, add packet sniffing on the fly. <- debating on using this.
     os.system(clear)
-    run = albert_faces()
-    sleep(0.4)
-    while run == 't':
+    # run = albert_faces()
+    # sleep(0.4)
+    while True:
         try:
-            Sploit.modCount()
             os.system(clear)
+            Sploit.modCount()
             options = str(input("\n\n\n\t[ + ]\n\t  [ ?? ] Recon Phase:\n\n" \
                                 "\t\t > 1. Shodan\n" \
                                 "\t\t > 2. Nmap(Targeted Scanning of host system written out to XML file)\n" \
@@ -430,21 +440,22 @@ if __name__ == '__main__':
                                 "\t\t > 5. DNSDumpster for invalid Domain setups\n" \
                                 "\t\t > 6. Vulners DB Search API\n" \
                                 "\t\t > 7. Admin Finder\n" \
-                                "\t\t > 8. SMTP User Enum/Brute Force\n"\
-                                "\t\t > 9. IP Locator\n"\
+                                "\t\t > 8. SMTP User Enum/Brute Force\n" \
+                                "\t\t > 9. IP Locator\n" \
                                 "\t --------------------------------------------------\n\n" \
                                 "\t  [ !! ] Exploitation phase:\n"
-                                "\t\t > E1 Exploit DB\n\n"\
-                                "\t --------------------------------------------------\n\n"\
-                                "\t [ ** ] Post-Exploitation Phase:\n"\
+                                "\t\t > E1 Exploit DB\n\n" \
+                                "\t --------------------------------------------------\n\n" \
+                                "\t [ ** ] Post-Exploitation Phase:\n" \
                                 "\t\t > P1 Windows API Manipulation\n" \
-                                "\t\t > P2 Network Pivot with NetSH\n"\
-                                "\t -------------------------------------------------\n\n"\
-                                "\t [ && ] Automate Process:\n"\
-                                "\t\t > A1 Async Automation\n"\
-                                "\t -------------------------------------------------\n\n"\
-                                "\t [ ++ ] Additive Module Search:\n"\
-                                "\t\t > M1 Extra Modules\n"
+                                "\t\t > P2 Network Pivot with NetSH\n" \
+                                "\t -------------------------------------------------\n\n" \
+                                "\t [ && ] Automate Process:\n" \
+                                "\t\t > A1 Async Automation\n" \
+                                "\t -------------------------------------------------\n\n" \
+                                "\t [ ++ ] Additive Module Search:\n" \
+                                "\t\t > M1 Extra Modules\n" \
+                                "\t [ !! ] TO QUIT, KEY IN q [ !! ]\n"
                                 "\n\n[ * ] Choice goes here: \n->")).lower()
 
             if options == 'm1':
@@ -456,9 +467,10 @@ if __name__ == '__main__':
                     cprint("[ !!! ] Database not found! re-run the program to generate this please. [ !!! ]", "red",
                            attrs=["bold", "blink"])
             if options == 'a1':
-                import auto_albert
+                from data.tools.scripts.automation import auto_albert
+
                 try:
-                    a = Albert_api
+                    a = auto_albert.Albert_api
                     atk_log(a)
                     continue
                 except Exception as e:
@@ -495,7 +507,7 @@ if __name__ == '__main__':
 
             if options == '2':
                 def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC --data-length 180 -oX " \
-                           "./XML_Outpot/scan.xml -vvv --reason"
+                           "./data/XML_Outpot/scan.xml -vvv --reason"
                 print("Default Args: \n{}".format(def_args))
                 question = str(input("[ + ] Would you like to use custom args with the nmap scan? [ + ] \n->")).lower()
                 if question == 'n':
@@ -512,9 +524,9 @@ if __name__ == '__main__':
                     os.system(clear)
                     host = str(input("[ + ] Please input host IP:\n->"))
                     port = str(input("[ + ] Please input port:\n->"))
-                    file = './XML_Output/{}.xml'.format(host)
+                    file = './data/XML_Output/{}.xml'.format(host)
                     def_args = "-sW -p 15-6893 -sV --version-all -A -T2 -sC --data-length 180 -oX " \
-                               "./XML_Outpot/{}.xml -vvv --reason".format(host)
+                               "./data/XML_Outpot/{}.xml -vvv --reason".format(host)
                     args = str(
                         input("[ + ] Please enter the full commands:\n Example: -f -t 0 -n -Pn –data-length 200 -D" \
                               "\n->"))
@@ -578,8 +590,10 @@ if __name__ == '__main__':
                     continue
             if options == '7':
                 from pathlib import Path
+
                 server = str(input("[ + ] Please input the server address [ + ]\n->"))
-                admlist = str(input("[ + ] Please tell me where the admin list is, or leave blank for default [ + ]\n->"))
+                admlist = str(
+                    input("[ + ] Please tell me where the admin list is, or leave blank for default [ + ]\n->"))
                 if server != '' and admlist != '':
                     atk_log(panel_find(server, adminList=Path(admlist)))
                     continue
@@ -593,6 +607,7 @@ if __name__ == '__main__':
                 continue
             if options == '9':
                 import ipaddress
+
                 ip = str(input("[ + ] Please input an IP to locate [ + ]\n->"))
                 atk_log(iplocator(ip))
                 continue
@@ -600,7 +615,7 @@ if __name__ == '__main__':
                 question = str(input("[ + ] Is the file outside of the default XML_Output directory? y/N\n->")).lower()
                 if question == 'n':
                     try:
-                        default_path = './XML_Output/scan.xml'
+                        default_path = 'data/tools/output/XML_Output/scan.xml'
                         atk_log(exploit_db(default_path))
                         continue
                     except FileNotFoundError as e:
@@ -609,6 +624,7 @@ if __name__ == '__main__':
                     path = str(input("[ + ] Please put the full path to the file:\n->"))
                     if path != '':
                         from pathlib import Path
+
                         lib = Path(path)
                         atk_log(exploit_db(lib))
                         continue
@@ -625,6 +641,9 @@ if __name__ == '__main__':
                 os.system(clear)
                 print("[ ! ] Please enter a value! [ ! ]")
                 continue
+            if options == 'q':
+                print("[ !! ] Good-Bye! [ !! ]")
+                sys.exit(1)
 
         except KeyboardInterrupt:
             choice = str(input("\n[ + ] Would you like to exit? [ + ]\n->")).lower()
