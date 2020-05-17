@@ -17,7 +17,7 @@ def get(url):
 
         for inputs in soup.select('input'):
 
-            if str(forms['method']) == "get":
+            if str(forms['method']).lower() == "get":
                 print("[SQL] >> GET REQUEST - " + str(forms['action'] + "?" + str(inputs['name']) + "=" + errors[1]))
 
                 # Checks if action is the base URL.
@@ -30,11 +30,12 @@ def get(url):
                         r = s.get(url + str(forms['action'] + "?" + str(inputs['name']) + "=" + error))
                         output = BeautifulSoup(r.text, "html.parser")
 
-            elif str(form['method']) == "post":
-                s.post(str(forms['action']), data=formdata)
+            elif str(forms['method']).lower() == "post":
+                print("POST")
+                #s.post(str(forms['action']), data=formdata)
 
             else:
                 print("[SQL] >> Method for Form: " + str(forms['id']) + " could not be found?")
         
 
-get("127.0.0.1:8080")
+get("http://0.0.0.0:6779")
