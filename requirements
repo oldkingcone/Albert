@@ -13,6 +13,6 @@ geoip2
 psycopg2
 dnsdumpster
 mechanize==0.2.5
-beautifulsoup4==4.4.1
+bs4
 argparse==1.2.1
 requests
