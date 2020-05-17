@@ -426,9 +426,9 @@ if __name__ == '__main__':
     # @todo, Scapy routine, list available interfaces.
     # @todo, add packet sniffing on the fly. <- debating on using this.
     os.system(clear)
-    # run = albert_faces()
-    # sleep(0.4)
-    while True:
+    run = albert_faces()
+    sleep(0.4)
+    while run == 't':
         try:
             os.system(clear)
             Sploit.modCount()
