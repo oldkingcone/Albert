@@ -17,25 +17,24 @@ def get(url):
 
         for inputs in soup.select('input'):
 
-            if str(forms['method']).lower() == "get":
-                print("[SQL] >> GET REQUEST - " + str(forms['action'] + "?" + str(inputs['name']) + "=" + errors[1]))
+            for error in errors:
 
-                # Checks if action is the base URL.
-                if str(forms['action']).startswith("http://") or str(forms['action']).startswith("https://"):
-                    for error in errors:
-                        r = s.get(str(forms['action'] + "?" + str(inputs['name']) + "=" + error))
+                if str(forms['method']).lower() == "get":
+                    print("[SQL] >> GET REQUEST - " + str(forms['action'] + "?" + str(inputs.get('name')) + "=" + errors[1]))
+
+                    # Checks if action is the base URL.
+                    if str(forms['action']).startswith("http://") or str(forms['action']).startswith("https://"):
+                        r = s.get(str(forms['action'] + "?" + str(inputs.get('name')) + "=" + error))
                         output = BeautifulSoup(r.text, "html.parser")
+                    else:
+                        r = s.get(url + str(forms['action'] + "?" + str(inputs.get('name')) + "=" + error))
+                        output = BeautifulSoup(r.text, "html.parser")
+
+                elif str(forms['method']).lower() == "post":
+                    s.post(url, data={str(inputs.get('name')) : error})
+
                 else:
-                    for error in errors:
-                        r = s.get(url + str(forms['action'] + "?" + str(inputs['name']) + "=" + error))
-                        output = BeautifulSoup(r.text, "html.parser")
-
-            elif str(forms['method']).lower() == "post":
-                print("POST")
-                #s.post(str(forms['action']), data=formdata)
-
-            else:
-                print("[SQL] >> Method for Form: " + str(forms['id']) + " could not be found?")
+                    print("[SQL] >> Method for Form: " + str(forms['id']) + " could not be found?")
         
 
 get("http://0.0.0.0:6779")
