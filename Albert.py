@@ -425,6 +425,7 @@ if __name__ == '__main__':
     # @todo a way to avoid docker containers like the plague.
     # @todo, Scapy routine, list available interfaces.
     # @todo, add packet sniffing on the fly. <- debating on using this.
+    # @todo add custom version detection and protocol decoding, for added stealth.
     os.system(clear)
     run = albert_faces()
     sleep(0.4)
