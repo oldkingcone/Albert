@@ -14,7 +14,7 @@ try:
     import shodan
     import sys
     import nmap
-    from api import apikey, vulners_api_key
+    from data.api_keys.api import apikey, vulners_api_key
     import time
     import base64
     import vulners
