@@ -23,7 +23,6 @@ try:
     from termcolor import cprint
     from scapy.all import sr, srp, IP, UDP, ICMP, TCP, ARP, Ether
     import dpkt
-    import sqlite3
 except (ImportError) as e:
     print("Something is terribly wrong:\n->{}".format(e))
     sys.exit(1)
