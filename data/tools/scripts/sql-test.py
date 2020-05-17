@@ -4,7 +4,7 @@ import requests
 import re
 
 errors = [
-    '"=""'
+    "' OR ''='"
 ]
 
 def get(url):
