@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Just a test
 try:
     from pathlib import Path
     from data.database.pgsql import Sploit
