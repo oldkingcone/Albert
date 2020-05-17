@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 try:
-    from extra_scan import extras_scan
+    from pathlib import Path
+    from data.database.pgsql import Sploit
     from sys import executable
     import urllib
     import pathlib
@@ -53,14 +54,12 @@ logo = '''
     \__\/\__\/ \_____\/ \_______\/ \_____\/ \_\/ \_\/  \__\/ 
 is Restarting'''
 cprint("[ + ] Please wait, indexing extra modules. [ + ]", "white", attrs=['blink'])
-DIRECTORIES = ['./data/scripts', './data/scripts/persistance', './data/lists', './XML_Output/']
-for item in DIRECTORIES:
-    purpose = ''
-    if item == './data/scripts': purpose = "Recon"
-    elif item == './data/scripts/persistance': purpose = "Persist"
-    elif item == './data/lists': purpose = "General"
-    elif item == './XML_Output': purpose = "Scan_Result"
-    Sploit.buildToolsList(directory=str(item), purpose=purpose)
+
+for dirpath, dirnames, filenames in os.walk('data/tools', topdown=True):
+    for fname in filenames:
+        files = os.path.join(dirpath, fname)
+        purpose = dirpath.split(os.path.sep)[-1]
+        Sploit.buildToolsList(directory=str(files), purpose=purpose)
 
 
 def pw_lists():
@@ -410,8 +409,6 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
 
 def extra_mods(lang, method=''):
     Sploit.queryTools(lang=lang, method=method)
-
-        # @todo will be adding in a way to select the entry/row
 
 
 if __name__ == '__main__':
