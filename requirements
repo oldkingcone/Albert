@@ -16,3 +16,4 @@ mechanize==0.2.5
 bs4
 argparse==1.2.1
 requests
+requests_html
