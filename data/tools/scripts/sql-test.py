@@ -20,7 +20,7 @@ def get(url):
     soup = BeautifulSoup(res.text, "html.parser")
     return soup.find_all("form")
 
-def prepare(form, inject):
+def prepare(form):
 
     payload = {}
 
@@ -33,7 +33,7 @@ def prepare(form, inject):
 
         input_type = input_tag.attrs.get("type", "text")
         input_name = input_tag.attrs.get("name")
-        input_value = inject # Value
+        input_value = input_tag.attrs.get("value", "") # Value
         inputs.append({"type": input_type, "name": input_name, "value": input_value})
 
     payload["action"] = action
@@ -42,11 +42,29 @@ def prepare(form, inject):
 
     return payload
 
+url = "http://localhost:8080/sql.php"
 
-for error in errors:
+forms = get(url)
 
-    forms = get("http://localhost:8080/sql.php")
+for form in forms:
 
-    for i, form in enumerate(forms, start=1):
-        form_details = prepare(form, error)
-        print(form_details)
+    form_details = prepare(form)
+
+    data = {}
+
+    for input_tag in form_details["inputs"]:
+
+        for error in errors:
+
+            if input_tag["type"] == "hidden":
+                data[input_tag["name"]] = input_tag["value"]
+            elif input_tag["type"] != "submit":
+                value = error
+                data[input_tag["name"]] = value
+
+            if form_details["method"] == "post":
+                res = session.post(url, data=data)
+                print(res.text)
+            elif form_details["method"] == "get":
+                res = session.get(url, params=data)
+                print(res.text)
