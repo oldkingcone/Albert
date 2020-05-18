@@ -17,7 +17,8 @@ session = HTMLSession()
 def get(url):
     # GET request
     res = session.get(url)
-    soup = BeautifulSoup(res.text, "html.parser")
+    res.html.render()
+    soup = BeautifulSoup(res.html.html, "html.parser")
     return soup.find_all("form")
 
 def prepare(form):
