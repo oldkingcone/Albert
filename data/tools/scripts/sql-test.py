@@ -19,8 +19,8 @@ session = HTMLSession()
 def get(url):
     # GET request
     res = session.get(url)
-    soup = BeautifulSoup(res.html.html, "html.parser")
-    prepare(soup.find_all("form"))
+    soup = BeautifulSoup(res.text, "html.parser")
+    prepare(soup.find("form"))
 
 def prepare(form):
 
@@ -28,17 +28,27 @@ def prepare(form):
 
     payload = {}
 
-    action = form.get("action").lower()
-    method = form.get("method").lower()
+    action = str(form.attrs.get("action")).lower()
+    method = str(form.attrs.get("method")).lower()
 
     inputs = []
 
-    for input_name in form.find_all("input"):
+    for input_tag in form.select("input"):
         # For each error based SQL input
         for error in errors:
+            input_type = input_tag.attrs.get("type", "text")
+            input_name = input_tag.attrs.get("name")
+            input_value = error
+            inputs.append({"type": input_type, "name": input_name, "value": input_value})
 
-            print(error)
-        
+            payload["action"] = action
+            payload["method"] = method
+            payload["inputs"] = inputs
+
+            print(payload)
+            
+            return payload
+
         else:
             print("[SQL] >> No error based input defined?")
 
