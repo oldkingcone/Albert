@@ -12,8 +12,6 @@ errors = [
     "test"
 ]
 
-inputs = []
-
 session = HTMLSession()
 
 def get(url):
@@ -26,14 +24,16 @@ def prepare(form):
 
     print(form)
 
-    payload = {}
-
-    action = form.attrs.get("action")
-    method = form.attrs.get("method")
-
-    inputs = []
     # For each error based SQL input
     for error in errors:
+
+        payload = {}
+
+        action = form.attrs.get("action")
+        method = form.attrs.get("method")
+
+        inputs = []
+
         for input_tag in form.select("input"):
 
             input_type = input_tag.attrs.get("type", "text")
@@ -51,5 +51,6 @@ def prepare(form):
 
         else:
             print("[SQL] >> No error based input defined?")
+
 
 get("http://0.0.0.0:6779")
