@@ -52,9 +52,9 @@ for form in forms:
 
     data = {}
 
-    for input_tag in form_details["inputs"]:
+    for error in errors:
 
-        for error in errors:
+        for input_tag in form_details["inputs"]:
 
             if input_tag["type"] == "hidden":
                 data[input_tag["name"]] = input_tag["value"]
