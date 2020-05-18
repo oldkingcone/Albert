@@ -33,7 +33,7 @@ def prepare(form):
 
     inputs = []
 
-    for input_tag in form.find_all("input"):
+    for input_name in form.find_all("input"):
         # For each error based SQL input
         for error in errors:
 
