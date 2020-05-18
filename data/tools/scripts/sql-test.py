@@ -28,14 +28,14 @@ def prepare(form):
 
     payload = {}
 
-    action = str(form.attrs.get("action")).lower()
-    method = str(form.attrs.get("method")).lower()
+    action = form.attrs.get("action")
+    method = form.attrs.get("method")
 
     inputs = []
+    # For each error based SQL input
+    for error in errors:
+        for input_tag in form.select("input"):
 
-    for input_tag in form.select("input"):
-        # For each error based SQL input
-        for error in errors:
             input_type = input_tag.attrs.get("type", "text")
             input_name = input_tag.attrs.get("name")
             input_value = error
@@ -46,7 +46,7 @@ def prepare(form):
             payload["inputs"] = inputs
 
             print(payload)
-            
+
             return payload
 
         else:
