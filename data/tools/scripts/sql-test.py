@@ -34,8 +34,6 @@ def prepare(form):
     params["method"] = method
     params["inputs"] = inputs
 
-    #print(str(params["inputs"][1])) # Debugging.
-
     # Return dictonary of values.
     return params
 
@@ -47,23 +45,26 @@ forms = get(url)
 
 # For each form.
 for form in forms:
+
+    sqlmap = []
+
     # Parse information.
     form_details = prepare(form)
     # Dictonary of values.
     data = {}
     # Handle the form inputs and their values.
     for input_tag in form_details["inputs"]:
-        # If input is hidden, leave value the same.
-        if input_tag["type"] == "hidden":
-            data[input_tag["name"]] = input_tag["value"]
-        # If the input is not a submittion, assign new value.
-        elif input_tag["type"] != "submit":
-            value = "x"
-            data[input_tag["name"]] = value
+        
+        data[input_tag["name"]] = input_tag["value"]
+
+        if input_tag["type"] != "submit":
+            sqlmap.append(input_tag["name"] + "=" + input_tag["value"])
+
+    sqlmapData = '&'.join(sqlmap)
 
     if form_details["method"] == "post":
         # SQLMap POST command.
-        print("POST")
+        print(sqlmapData)
     elif form_details["method"] == "get":
         # SQLMap GET command.
-        print("GET")
+        print(sqlmapData)
