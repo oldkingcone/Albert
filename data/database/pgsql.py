@@ -241,3 +241,11 @@ class Sploit:
         cprint(f"| Total Python Mods: {python[0]} | Total Lists: {text[0]} | Total persistence mods: {persi[0]} "
                f"| Total Powershell Mods: {psh[0]} | Total Recon Mods: {recon[0]} | Total general Items: {gener[0]} |",
                "green", attrs=["bold"])
+
+    def rollingAlbertLog(user, function, target, outfile):
+        stmt = "INSERT INTO albert_log(albert_user, albert_function_used, target, where_is_result) VALUES(%s, %s, %s, %s)"
+        if user is not None:
+            curs.execute(stmt, (user, function, target, outfile))
+        else:
+            user = os.getlogin()
+            curs.execute(stmt, (user, function, target, outfile))        
