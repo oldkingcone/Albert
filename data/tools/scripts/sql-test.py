@@ -26,7 +26,7 @@ def prepare(form):
         # Categorize and get input value.
         input_type = input_tag.attrs.get("type", "text")
         input_name = input_tag.attrs.get("name")
-        input_value = input_tag.attrs.get("value", "") # Value
+        input_value = input_tag.attrs.get("value", "a") # Value
         inputs.append({"type": input_type, "name": input_name, "value": input_value})
 
     # Append to dictonary.
@@ -34,7 +34,7 @@ def prepare(form):
     params["method"] = method
     params["inputs"] = inputs
 
-    # Return dictonary of values.
+    # Return dictonary of values, so we can use all the information to structure an SQLMap command.
     return params
 
 # URL
