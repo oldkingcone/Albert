@@ -70,6 +70,20 @@ class Sploit:
 
             alter table public.albert_sploits
                 owner to albert;
+            
+            create table if not exists public.albert_log
+            (
+                id                   serial not null
+                                            constraint albert_log_pk
+                                            primary key,
+                albert_user          text   not null,
+                albert_function_used text,
+                target               text,
+                where_is_result      text
+            );
+
+            alter table public.albert_log
+                owner to albert;
 
             create table if not exists public.albert_tools
             (
