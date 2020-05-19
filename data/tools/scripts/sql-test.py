@@ -46,25 +46,23 @@ forms = get(url)
 # For each form.
 for form in forms:
 
-    sqlmap = []
+    # Store parameters for SQLMap data command.
+    command = []
 
-    # Parse information.
+    # Grab information.
     form_details = prepare(form)
-    # Dictonary of values.
-    data = {}
-    # Handle the form inputs and their values.
+    
+    # Handle the form inputs and their values from the form.
     for input_tag in form_details["inputs"]:
         
-        data[input_tag["name"]] = input_tag["value"]
-
         if input_tag["type"] != "submit":
-            sqlmap.append(input_tag["name"] + "=" + input_tag["value"])
+            command.append(input_tag["name"] + "=" + input_tag["value"])
 
-    sqlmapData = '&'.join(sqlmap)
+    sqlmap = '&'.join(command)
 
     if form_details["method"] == "post":
         # SQLMap POST command.
-        print(sqlmapData)
+        print(sqlmap)
     elif form_details["method"] == "get":
         # SQLMap GET command.
-        print(sqlmapData)
+        print(sqlmap)
