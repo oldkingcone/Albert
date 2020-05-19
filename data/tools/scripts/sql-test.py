@@ -5,7 +5,7 @@ import requests
 import re
 
 errors = [
-    "' OR ''='",
+    "SELECT @@version",
     "query",
     "admin",
     "1234",
