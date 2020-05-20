@@ -65,7 +65,6 @@ for dirpath, dirnames, filenames in os.walk('data/tools', topdown=True):
 def pw_lists():
     print("Starting to import password lists, please be patient.\n")
     PATH_DIR = './data/tools/lists/main_pass.txt'
-    Sploit.rollingAlbertLog(user=opName, function='Built Password List', target='Null', outfile=PATH_DIR)
     usersnames = set()
     try:
         with open(PATH_DIR, 'r') as ax:
@@ -81,7 +80,6 @@ def pw_lists():
 
 def usernames():
     PATH_DIR = './data/tools/lists/main_names.txt'
-    Sploit.rollingAlbertLog(user=opName, function='Built User Name List', target='Null', outfile=PATH_DIR)
     passes = set()
     with open(PATH_DIR, 'r') as a:
         try:
@@ -97,10 +95,12 @@ def usernames():
 
 def albert_faces():
     alberts = ''
-    albert = random.randint(1, 3)
+    albert = random.randint(1, 5)
     if albert == 1: alberts = "./data/art/albert_face.txt"
     if albert == 2: alberts = "./data/art/albert_face_2.txt"
     if albert == 3: alberts = "./data/art/fat_albert_3"
+    if albert == 4: alberts = "./data/art/albert_face_4"
+    if albert == 5: alberts = "./data/art/albert_face_5"
     face = open(alberts, "r")
     lulz = face.readlines()
     for line in lulz:
@@ -138,7 +138,6 @@ def atk_log(atk):
 def list_reject(target=''):
     api = shodan.Shodan(apikey)
     try:
-        Sploit.rollingAlbertLog(user=opName, function='Executed Shodan Scan', target=target, outfile='')
         search = api.host(target)
         print("""
                 IP: {}
@@ -172,7 +171,6 @@ def list_reject(target=''):
 
 def nmapScan(tgtHost, tgtPort, args, file):  # Nmap function created
     try:
-        Sploit.rollingAlbertLog(user=opName, function='Executed Nmap Scan', target=tgtHost, outfile=file)
         if args != '':
             print("[ + ] Using: {} [ + ]".format(args))
             command = 'nmap ' + tgtHost + ' ' + args
@@ -193,7 +191,6 @@ def nmapScan(tgtHost, tgtPort, args, file):  # Nmap function created
 def subnet_discover(ip):
     import netaddr
     try:
-        Sploit.rollingAlbertLog(user=opName, function='Calculated Subnet using Subnet Discover', target=ip, outfile='Null')
         question = netaddr.IPAddress(ip)
         response = netaddr.IPNetwork(ip).cidr
         print("Reverse DNS {}".format(question.reverse_dns))
@@ -213,8 +210,6 @@ def scapy_selection(net):
     import datetime as dt
     from scapy.all import srp, conf, IFACES
     try:
-        Sploit.rollingAlbertLog(user=opName, function='Ran Scapy against target', target=net,
-                                outfile='Null')
         print("{}".format(IFACES.show(resolve_mac=True, print_result=True)))
         interface = str(input("[ + ] Please choose an interface [ + ]\n->"))
         ip = net
@@ -236,7 +231,6 @@ def scapy_selection(net):
 
 def dns_dumpster(domain):
     try:
-        Sploit.rollingAlbertLog(user=opName, function='dns_dumpster', target=domain, outfile='')
         res = DNSDumpsterAPI({'verbose': True}).search(domain)
         aks = ['DNS Dumpster results:', '\n', str(res), '\n']
         atk_log(''.join(aks))
@@ -270,7 +264,6 @@ def dns_dumpster(domain):
 
 def smtp_enum(server, user, passwd):
     import smtplib
-    Sploit.rollingAlbertLog(user=opName, function='smtp_enum', target=server, outfile='')
     if user == '' and passwd == '':
         user = usernames()
         passwd = pw_lists()
@@ -311,9 +304,7 @@ def smtp_enum(server, user, passwd):
 
 def panel_find(server, adminList):
     import urllib3
-    if adminList == '': 
-        adminList = open("./data/adm_list", "r")
-    Sploit.rollingAlbertLog(user=opName, function='panel_finder', target=server, outfile='')
+    if adminList == '': adminList = open("./data/adm_list", "r")
     for admin in adminList.readlines():
         ax = set()
         ax.add(admin)
@@ -328,7 +319,6 @@ def panel_find(server, adminList):
 def iplocator(ip):
     import urllib3
     url = "http://ip-api.com/json/" + ip
-    Sploit.rollingAlbertLog(user=opName, function='IP Locator', target=ip, outfile='')
     try:
         u = urllib3.PoolManager()
         x = u.request('GET', url)
@@ -343,7 +333,6 @@ def iplocator(ip):
 
 def vulners_api(option, term):
     vulners_search = vulners.Vulners(api_key=api)
-    Sploit.rollingAlbertLog(user=opName, function='Vulners API', target=term, outfile='')
     if api == '':
         file = open('vulnersapi.py', 'w')
         VULNERS_API_KEY = input('[*] Hey! Hey! Hey! Enter A Valid VulnersCom API Key: ')
@@ -387,7 +376,6 @@ def vulners_api(option, term):
 def exploit_db(file):
     from subprocess import PIPE, Popen
     default = './data/XML_Output/scan.xml'
-    Sploit.rollingAlbertLog(user=opName, function='Exploit DB', target=file, outfile=file)
     try:
         if file == '':
             command = 'searchsploit -x --nmap {}'.format(default)
@@ -406,7 +394,6 @@ def exploit_db(file):
 def netsh_pivot(option, iface, listenport, connectport, host):
     from subprocess import Popen, PIPE
     if option == '1':
-        Sploit.rollingAlbertLog(user=opName, function='NetSH Pivot', target=host, outfile='')
         # put the popen connamds in here
         command = "{}{}{}".format(listenport, connectport, host)
         Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
@@ -419,7 +406,6 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
     else:
         connectport = connectport
         listenport = listenport
-    Sploit.rollingAlbertLog(user=opName, function='NetSH Pipe', target='Null', outfile='Null')
     command_v4 = 'netsh {} portpory add v4 to v4 listenport={} connectport={}'.format(iface, listenport, connectport)
     command_wlan = 'netsh wlan show networks mode=bssid'
     command_del = 'netsh {} portproxy del'
@@ -433,7 +419,6 @@ def netsh_pipe(choice, iface, listenport, connectport, host):
 
 
 def extra_mods(lang, method=''):
-    Sploit.rollingAlbertLog(user=opName, function='Checked for Extra Functions', target=lang, outfile='')
     Sploit.queryTools(lang=lang, method=method)
 
 
@@ -446,7 +431,6 @@ if __name__ == '__main__':
     os.system(clear)
     run = albert_faces()
     sleep(0.4)
-    Sploit.rollingAlbertLog(user=opName, function='Albert Tool Initial Run', target='Null', outfile='Null')
     while run == 't':
         try:
             os.system(clear)

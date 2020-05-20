@@ -1,0 +1,7 @@
+tox
+pytest
+pytest-aiohttp
+coverage
+pre-commit
+safety
+bandit
