@@ -151,7 +151,7 @@ class Albert_api:
                 print("[ ** ] Finished in: {} [ ** ]".format(total_time))
             return ip
         except Exception as e:
-            print("[✘] Scappy Failure: {} [✘]".format(e))
+            print("[✘] Scapy Failure: {} [✘]".format(e))
             return e
 
     async def dns_dumpster(domain):
