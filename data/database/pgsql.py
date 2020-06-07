@@ -50,7 +50,7 @@ class Sploit:
 
     def makeDB(stmt):
         try:
-            curs.execute('''CREATE DATABASE IF NOT EXISTS albert''')
+            #curs.execute('''CREATE DATABASE IF NOT EXISTS albert''')
             curs.execute('''
             create table if not exists public.albert_sploits
             (
