@@ -52,24 +52,24 @@ class Sploit:
         try:
             #curs.execute('''CREATE DATABASE IF NOT EXISTS albert''')
             curs.execute('''
-            create table if not exists public.albert_sploits
-            (
-                id       serial                                             not null
-                    constraint albert_sploits_pkey
-                        primary key,
-                datetime timestamp with time zone default CURRENT_TIMESTAMP not null,
-                tech     text,
-                version  text,
-                cve      text
-                    constraint albert_sploits_cve_key
-                        unique,
-                path     text
-                    constraint albert_sploits_path_key
-                        unique
-            );
+                create table albert_sploits
+                (
+                    id         serial                                             not null
+                        constraint albert_sploits_pkey
+                            primary key,
+                    datetime   timestamp with time zone default CURRENT_TIMESTAMP not null,
+                    version    text,
+                    cve        text
+                        constraint albert_sploits_cve_key
+                            unique,
+                    path       text
+                        constraint albert_sploits_path_key
+                            unique,
+                    desciption text                                               not null
+                );
 
-            alter table public.albert_sploits
-                owner to albert;
+                alter table albert_sploits
+                    owner to albert;
             
             create table if not exists public.albert_log
             (
@@ -134,8 +134,25 @@ class Sploit:
         except psycopg2.OperationalError:
             print("Critical! DB Was not created!")
 
-    def buildSploits(path, name, tech, version):
-        print("Still working......")
+    def buildSploits(path):
+        if path is not None:
+            for dirpath, dirname, filenames in os.walk(path):
+                for fname in filenames:
+                    if fname.endswith('json'):
+                        fullName = os.path.join(dirpath, fname)
+                        with open(fullName, "r", encoding="utf-8") as exp:
+                            try:
+                                for key in json.load(exp):
+                                    if key['name']:
+                                        name = key['name']
+                                    if key['html_url']:
+                                        gh_path = key['html_url']
+                                    if key['description']:
+                                        desc = key['description']
+                                    curs.execute('''INSERT INTO albert_sploits(version, cve, path, desciption) VALUES(%s,%s,%s,%s)''', ('No Data', name, gh_path, desc))
+                            except (KeyError, psycopg2.IntegrityError) as e:
+                                print(f"[ !! ] Appears as though, we have a key error: \n-> {e}")
+                                pass
 
     def buildToolsList(directory, purpose):
         try:
