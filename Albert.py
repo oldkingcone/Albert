@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 try:
     from pathlib import Path
     from data.database.pgsql import Sploit
@@ -41,6 +39,7 @@ except AttributeError:
 if Sploit.checkForRun():
     cprint("[ + ] Please wait, building database if this is the first run.. [ + ]", "white", attrs=["blink"])
     Sploit.makeDB()
+    Sploit.buildSploits("data/tools/exploits")
     Sploit.insertTimeruns(what=str('initial'))
 api = vulners_api_key
 PATH = './data/atk_output/' + str(time.time())
