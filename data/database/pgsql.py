@@ -130,7 +130,29 @@ class Sploit:
             );
 
             alter table public.albert_data
-                owner to albert; ''')
+                owner to albert; 
+                            create table albert_evaders
+            (
+                id             serial                              not null,
+                dategroup      timestamp default CURRENT_TIMESTAMP not null,
+                evadername     text,
+                evaderdoes     text,
+                evadercommands text,
+                evaderpath     text,
+                evaderfulldesc text
+            );
+            
+            alter table albert_evaders
+                owner to albert;
+            
+            create unique index albert_evaders_evadercommands_uindex
+                on albert_evaders (evadercommands);
+            
+            create unique index albert_evaders_evadername_uindex
+                on albert_evaders (evadername);
+            
+            create unique index albert_evaders_evaderpath_uindex
+                on albert_evaders (evaderpath);''')
         except psycopg2.OperationalError:
             print("Critical! DB Was not created!")
 
