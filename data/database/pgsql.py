@@ -154,6 +154,32 @@ class Sploit:
                                 print(f"[ !! ] Appears as though, we have a key error: \n-> {e}")
                                 pass
 
+
+    def buildEvasionList(path):
+        if path is not None:
+            for dirpath, dirname, filenames in os.walk(path):
+                for fname in filenames:
+                    if fname.endswith('yml'):
+                        evaderName = os.path.join(dirpath, fname)
+                        with open(evaderName, 'r', encoding='utf-8') as evad:
+                            evaderLoad = yaml.load(evad)
+                            try:
+                                if evaderLoad['Name']:
+                                    evName = evaderLoad['Name']
+                                if evaderLoad['Description']:
+                                    evDoes = evaderLoad['Description']
+                                if evaderLoad['Commands']:
+                                    evComms = evaderLoad['Commands'][0]['Command']
+                                    evDescrip = evaderLoad['Commands'][0]['Description']
+                                if evaderLoad['Full_Path']:
+                                    evPath = evaderLoad['Full_Path']
+                                curs.execute('''INSERT INTO albert_evaders(evadername, evaderdoes, evadercommands, evaderpath, evaderfulldesc) VALUES (%s, %s, %s, %s, %s)''', (evName, evDoes, evComms, evDescrip, evPath))
+                            except (KeyError, psycopg2.IntegrityError, psycopg2.ProgrammingError, yaml.composer.ComposerError) as e:
+                                print(f"->\n{e}")
+                                pass
+
+
+
     def buildToolsList(directory, purpose):
         try:
             extras = list()
