@@ -36,6 +36,18 @@ except AttributeError:
     clear = 'cls'
     pass
 
+
+
+#this is super hacky, and very bad. this will add the methods in these directories into the database. still working.
+#@todo add a more streamlined method to add each method into the database, and not just what is limited in these directories.
+lolbas_bin = [
+    'data/tools/evasion/LOLBAS/yml/LOLUtilz/OSBinaries',
+    'data/tools/evasion/LOLBAS/yml/LOLUtilz/OtherBinaries',
+    'data/tools/evasion/LOLBAS/yml/LOLUtilz/OtherMSBinaries',
+    'data/tools/evasion/LOLBAS/yml/LOLUtilz/OtherScripts'
+]
+for i in lolbas_bin:
+    Sploit.buildEvasionList(i)
 if Sploit.checkForRun():
     cprint("[ + ] Please wait, building database if this is the first run.. [ + ]", "white", attrs=["blink"])
     Sploit.makeDB()
