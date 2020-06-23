@@ -17,6 +17,9 @@
   - [usernames](https://github.com/oldkingcone/Albert/blob/418dffe85eecd06c4a75b589792fc7d1055df561/Albert.py#L52)
   
   On top of all those cool features, this project will enumerate a subnet for hosts connected to the subnet, by 1 of 2 ways. An ARP scan of the entire subnet, __You will need to choose an interface for this__, or `ICMP ACK` scans(still being developed), if the target allows such scans from outside the network to occur. Found hosts can be used for a zombie scan, or for later implimentations push directly into network pivoting, the choice is yours.
+  
+  
+  There is currently a work in progress toward integrating LOLBas into this tool suite, I am running into an issue with "multiple" documents being loaded into the yml loader, for parsing. Once this gets worked out, I will be uploading that function into the script. 
 
 -----
 
