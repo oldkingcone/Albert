@@ -6,6 +6,19 @@ import os
 import re
 import time
 
+```The author of this script is this guy:
+██████╗ ██████╗ ██╗   ██╗     ██╗   ██╗███████╗████████╗
+██╔══██╗██╔══██╗██║   ██║     ╚██╗ ██╔╝╚══███╔╝╚══██╔══╝
+██║  ██║██████╔╝██║   ██║█████╗╚████╔╝   ███╔╝    ██║   
+██║  ██║██╔═══╝ ██║   ██║╚════╝ ╚██╔╝   ███╔╝     ██║   
+██████╔╝██║     ╚██████╔╝        ██║   ███████╗   ██║   
+╚═════╝ ╚═╝      ╚═════╝         ╚═╝   ╚══════╝   ╚═╝   
+
+Reverse shell >> Usage ./akhyls.py -R <PORT>
+Bind shell >> Usage ./akhyls.py -B <Ip> <PORT>
+Author:ibrahim @via Gizem Bulut
+    
+    ```
 
 def rvrscnnct(ip, port):
     try:
