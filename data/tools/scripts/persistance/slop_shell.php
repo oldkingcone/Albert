@@ -1,4 +1,5 @@
 <?php
+//first attempt at a php version webshell, do not judge me.
 function checkSystem()
 {
     $os = array();
@@ -213,5 +214,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 </div>
 </body>
 </html>
-
-//first attempt at a php version webshell, do not judge me.
