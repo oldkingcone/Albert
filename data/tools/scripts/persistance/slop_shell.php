@@ -186,7 +186,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         <tr><?=
                 $safemode = ini_get('safe_mode');
                 if ($safemode){
-                    echo implode("<p> <b>Safe Mode: </b><font color='red'>".$safemode."</font></p>");
+                    echo "<p> <b>Safe Mode: </b><font color='red'>".$safemode."</font></p>";
                 }else{
                     echo "<p> <b>Safe Mode is: </b><font style='text-color:green;background-color:lightgrey;'>off.</font</p>";
                 }
