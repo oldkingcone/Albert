@@ -1,4 +1,5 @@
 try:
+    from data.art import albertLogo
     from pathlib import Path
     from data.database.pgsql import Sploit
     from sys import executable
