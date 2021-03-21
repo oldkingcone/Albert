@@ -109,4 +109,8 @@ venv.bak/
 
 #Sqlite databases and logs
 *.sqlite
-./atk_output/*
+data/tools/output
+data/tools/C2
+data/tools/Remote Access
+data/tools/Phishing
+data/tools/stub_generation
