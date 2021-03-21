@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+data/tools/C2/*
+.idea/*
+
 # Distribution / packaging
 .Python
 build/
@@ -21,6 +24,7 @@ sdist/
 var/
 wheels/
 *.egg-info/
+venv/
 .installed.cfg
 *.egg
 MANIFEST
