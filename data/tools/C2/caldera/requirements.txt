@@ -5,7 +5,7 @@ aiohttp-security==0.4.0
 jinja2==2.11.3
 pyyaml>=5.1
 cryptography==3.3.2
-websockets==8.1
+websockets==9.1
 Sphinx==2.4.4
 sphinx_rtd_theme==0.4.3
 recommonmark==0.6.0
